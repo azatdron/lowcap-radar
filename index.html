@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Lowcap Radar AI v4.1</title>
+<title>Lowcap Radar AI v4.2</title>
 <link rel="manifest" href="manifest.json">
 <style>
 :root{
@@ -26,8 +26,8 @@ input,select{width:100%;background:#08101f;border:1px solid #243354;border-radiu
 .controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:17px}
 .scan{background:linear-gradient(135deg,#5cf2a0,#3ee779);color:#03120a}.ghost{background:#15213a;color:#fff;border:1px solid #2b3e63}
-.modebar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0}
-.mode{background:#0a1020;border:1px solid #243354;border-radius:14px;padding:10px;color:#a8b3c5;text-align:center;font-weight:900;font-size:13px}
+.modebar{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.mode{background:#0a1020;border:1px solid #243354;border-radius:16px;padding:12px;color:#a8b3c5;text-align:center;font-weight:900;font-size:14px}
 .mode.active{background:#1d2b49;color:#fff}
 .tokenTop{display:flex;gap:12px;align-items:center}.avatar{width:54px;height:54px;border-radius:16px;object-fit:cover;background:#1a2741}.fallback{display:grid;place-items:center;color:#fff;font-weight:900}
 .name{font-size:22px;font-weight:1000;line-height:1.03}.sym{color:#95a7bf;margin-top:5px;font-size:14px}
@@ -48,7 +48,7 @@ button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:17px}
 <div class="app">
   <div class="head">
     <div class="logo"></div>
-    <div><h1>Lowcap Radar AI</h1><div class="sub">v4.1 • Live Narrative Radar</div></div>
+    <div><h1>Lowcap Radar AI</h1><div class="sub">v4.2 • Clean Source Engine</div></div>
     <div id="status" class="status">ready</div>
   </div>
 
@@ -59,13 +59,12 @@ button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:17px}
     </div>
 
     <div class="modebar">
-      <div class="mode active" onclick="setMode('narrative',this)">Narrative</div>
-      <div class="mode" onclick="setMode('ecosystem',this)">Ecosystem</div>
-      <div class="mode" onclick="setMode('micro',this)">Micro</div>
+      <div class="mode active" onclick="setMode('narrative',this)">Narrative Mode</div>
+      <div class="mode" onclick="setMode('gem',this)">Gem Mode</div>
     </div>
 
     <div class="controls">
-      <div><div class="label">Сектор</div>
+      <div><div class="label">Сектор / Narrative</div>
         <select id="sector">
           <option value="ai">AI / DePIN / Compute</option>
           <option value="rwa">RWA</option>
@@ -75,23 +74,23 @@ button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:17px}
           <option value="meme">Meme</option>
         </select>
       </div>
-      <div><div class="label">Max Market Cap</div><input id="maxcap" value="500000000"></div>
+      <div><div class="label" id="capLabel">Max Market Cap</div><input id="maxcap" value="500000000"></div>
       <div><div class="label">Min 24h Volume</div><input id="minvol" value="500000"></div>
       <div><div class="label">CoinGecko Demo Key</div><input id="cgkey" placeholder="optional"></div>
     </div>
 
     <div style="height:12px"></div>
     <div class="controls">
-      <button class="scan" onclick="scan()">Narrative Scan</button>
+      <button class="scan" onclick="scan()">Start Scan</button>
       <button class="ghost" onclick="saveKey()">Save key</button>
     </div>
 
-    <div class="note">
-      При открытии список пустой. Монеты появляются только после нажатия Scan и берутся из реальных источников.
+    <div class="note" id="modeNote">
+      Narrative Mode: фундаментальные монеты по чистым источникам CoinGecko. Пример логики AKT: AI/DePIN + объём + market cap + rank.
     </div>
   </div>
 
-  <div id="results"><div class="empty">Нажми Narrative Scan, чтобы загрузить реальные данные.</div></div>
+  <div id="results"><div class="empty">Нажми Start Scan. Мы не показываем заранее вставленные монеты — только результат после запроса к источникам.</div></div>
 </div>
 
 <div class="tabs"><div class="tab active">Радар</div><div class="tab">Watchlist</div><div class="tab">Sources</div></div>
@@ -107,7 +106,13 @@ const SECTORS={
  meme:{ids:["pepe","dogwifcoin","bonk","floki","mog-coin","popcat"],q:"meme"}
 };
 window.addEventListener("load",()=>{document.getElementById("cgkey").value=localStorage.getItem("cg_demo_key")||"";});
-function setMode(m,el){MODE=m;document.querySelectorAll('.mode').forEach(x=>x.classList.remove('active'));el.classList.add('active');}
+function setMode(m,el){
+ MODE=m;
+ document.querySelectorAll('.mode').forEach(x=>x.classList.remove('active'));el.classList.add('active');
+ const cap=document.getElementById("maxcap"), vol=document.getElementById("minvol"), note=document.getElementById("modeNote"), capLabel=document.getElementById("capLabel");
+ if(MODE==="gem"){cap.value="8000000";vol.value="40000";capLabel.textContent="Max FDV";note.textContent="Gem Mode: ранние lowcap DEX-пары из DexScreener. Это high-risk режим, не фундаментальный список."}
+ else{cap.value="500000000";vol.value="500000";capLabel.textContent="Max Market Cap";note.textContent="Narrative Mode: фундаментальные монеты по чистым источникам CoinGecko. Пример логики AKT: AI/DePIN + объём + market cap + rank."}
+}
 function saveKey(){localStorage.setItem("cg_demo_key",document.getElementById("cgkey").value.trim());alert("Ключ сохранён только на этом iPhone")}
 function fmt(n){n=Number(n||0);if(n>=1e9)return"$"+(n/1e9).toFixed(1)+"B";if(n>=1e6)return"$"+(n/1e6).toFixed(1)+"M";if(n>=1e3)return"$"+Math.round(n/1e3)+"K";return"$"+Math.round(n)}
 function pct(n){n=Number(n||0);return (n>0?"+":"")+n.toFixed(1)+"%"}
@@ -160,31 +165,31 @@ async function scanDex(){
 }
 function render(list){
  const r=document.getElementById("results");document.getElementById("found").textContent=list.length;document.getElementById("avg").textContent=list.length?Math.round(list.reduce((a,b)=>a+b._score,0)/list.length):"—";r.innerHTML="";
- if(!list.length){r.innerHTML='<div class="empty">Ничего не найдено. Для Narrative попробуй снизить Min Volume или Max Market Cap. Для Micro — снизь Max FDV.</div>';return}
+ if(!list.length){r.innerHTML='<div class="empty">Ничего не найдено. Для Narrative снизь Min Volume или Max Market Cap. Для Gem — снизь Max FDV.</div>';return}
  list.forEach(x=>r.appendChild(x._type==="cg"?cardCG(x):cardDex(x)));
 }
 function cardCG(c){
  let cls=c._score<55?"bad":c._score<72?"mid":"", zone=c._score>78?"GOLD ZONE":c._score>62?"WATCH":"EARLY WATCH";
  let change=c.price_change_percentage_24h||0;
- let el=document.createElement("div");el.className="token";el.innerHTML=`<div class="tokenTop"><img class="avatar" src="${c.image||''}"><div><div class="name">${c.name}</div><div class="sym">${(c.symbol||'').toUpperCase()} • CoinGecko</div></div><div class="score ${cls}">${c._score}</div></div>
+ let el=document.createElement("div");el.className="token";el.innerHTML=`<div class="tokenTop"><img class="avatar" src="${c.image||''}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${(c.symbol||'?').slice(0,3).toUpperCase()}</div>'"><div><div class="name">${c.name}</div><div class="sym">${(c.symbol||'').toUpperCase()} • CoinGecko</div></div><div class="score ${cls}">${c._score}</div></div>
  <div class="badges"><div class="badge safe">${zone}</div><div class="badge eco">${c._sector.toUpperCase()}</div><div class="badge source">CoinGecko</div><div class="badge">Rank ${c.market_cap_rank||"n/a"}</div></div>
  <div class="thesis">🧠 Thesis: ${thesisCG(c,c._sector)}</div>
  <div class="grid" style="margin-top:12px"><div class="box"><div class="label">Market Cap · CoinGecko</div><div class="val">${fmt(c.market_cap)}</div></div><div class="box"><div class="label">Volume 24h · CoinGecko</div><div class="val">${fmt(c.total_volume)}</div></div><div class="box"><div class="label">Price</div><div class="val">${pf(c.current_price)}</div></div><div class="box"><div class="label">24h</div><div class="val ${pctClass(change)}">${pct(change)}</div></div></div>
- <div class="buybox"><div class="buytitle">Guide</div><div class="buyrow">🛒 Где искать: CoinGecko → Markets / CEX-DEX pairs</div><div class="buyrow">👛 Хранить: зависит от сети токена</div><div class="mini">Это narrative radar. Перед покупкой проверь сеть, контракт, unlocks и ликвидность.</div></div>`;
+ <div class="buybox"><div class="buytitle">Guide</div><div class="buyrow">🛒 Где искать: CoinGecko → Markets / CEX-DEX pairs</div><div class="buyrow">👛 Хранить: зависит от сети токена</div><div class="mini">Narrative Mode: фундаментал и сектор. Перед покупкой проверь сеть, контракт, unlocks и ликвидность.</div></div>`;
  return el;
 }
 function cardDex(p){
  let name=p.baseToken?.name||"Unknown",sym=p.baseToken?.symbol||"?",chain=(p.chainId||"").toUpperCase(),img=p.info?.imageUrl||"",cls=p._score<55?"bad":p._score<72?"mid":"";
- let el=document.createElement("div");el.className="token";el.innerHTML=`<div class="tokenTop">${img?`<img class="avatar" src="${img}">`:`<div class="avatar fallback">${sym.slice(0,3)}</div>`}<div><div class="name">${name}</div><div class="sym">${sym} • ${chain}</div></div><div class="score ${cls}">${p._score}</div></div>
- <div class="badges"><div class="badge safe">MICRO GEM</div><div class="badge source">DexScreener</div><div class="badge">FDV ${fmt(p.fdv)}</div></div>
- <div class="thesis">🧠 Thesis: DEX microcap · live volume/liquidity · high risk segment</div>
+ let el=document.createElement("div");el.className="token";el.innerHTML=`<div class="tokenTop">${img?`<img class="avatar" src="${img}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${sym.slice(0,3)}</div>'">`:`<div class="avatar fallback">${sym.slice(0,3)}</div>`}<div><div class="name">${name}</div><div class="sym">${sym} • ${chain}</div></div><div class="score ${cls}">${p._score}</div></div>
+ <div class="badges"><div class="badge risk">GEM MODE</div><div class="badge source">DexScreener</div><div class="badge">FDV ${fmt(p.fdv)}</div></div>
+ <div class="thesis">🧠 Thesis: DEX microcap · live volume/liquidity · high-risk segment</div>
  <div class="grid" style="margin-top:12px"><div class="box"><div class="label">Liquidity</div><div class="val">${fmt(p.liquidity?.usd)}</div></div><div class="box"><div class="label">Volume 24h</div><div class="val">${fmt(p.volume?.h24)}</div></div><div class="box"><div class="label">Price</div><div class="val">${pf(p.priceUsd)}</div></div><div class="box"><div class="label">FDV</div><div class="val">${fmt(p.fdv)}</div></div></div>
  <div class="linkrow"><a class="linkbtn" href="${p.url||'#'}" target="_blank">DexScreener</a><a class="linkbtn" href="#" onclick="alert('Добавлено в watchlist');return false;">Watchlist</a></div>`;
  return el;
 }
 async function scan(){
  document.getElementById("status").textContent="scan...";document.getElementById("results").innerHTML='<div class="empty">Сканирую реальные источники...</div>';localStorage.setItem("cg_demo_key",document.getElementById("cgkey").value.trim());
- try{let list=MODE==="micro"?await scanDex():await scanCG();document.getElementById("status").textContent="live";render(list)}catch(e){console.error(e);document.getElementById("status").textContent="api error";document.getElementById("results").innerHTML='<div class="empty">Источник временно недоступен или нужен CoinGecko Demo Key. Попробуй снизить фильтры или включить Micro.</div>'}
+ try{let list=MODE==="gem"?await scanDex():await scanCG();document.getElementById("status").textContent="live";render(list)}catch(e){console.error(e);document.getElementById("status").textContent="api error";document.getElementById("results").innerHTML='<div class="empty">Источник временно недоступен или нужен CoinGecko Demo Key. Попробуй снизить фильтры или переключись на Gem Mode.</div>'}
 }
 </script>
 </body>

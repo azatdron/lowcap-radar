@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Lowcap Radar AI v3.4</title>
+<title>Lowcap Radar AI v3.4.1</title>
 <link rel="manifest" href="manifest.json">
 <style>
 :root{--bg:#050816;--card:#111827;--box:#080d1a;--line:#213457;--text:#f8fafc;--muted:#93a4bd;--green:#5cf2a0;--yellow:#ffd166;--red:#ff6b8a}
@@ -23,7 +23,7 @@ h1{font-size:31px;margin:0;line-height:1}.sub{color:var(--muted);margin-top:5px;
 <div class="app">
   <div class="head">
     <div class="logo"></div>
-    <div><h1>Lowcap Radar AI</h1><div class="sub">v3.4 • AI Risk Engine</div></div>
+    <div><h1>Lowcap Radar AI</h1><div class="sub">v3.4.1 • AI Risk Engine</div></div>
     <div id="apiStatus" class="status">ready</div>
   </div>
 
@@ -44,7 +44,7 @@ h1{font-size:31px;margin:0;line-height:1}.sub{color:var(--muted);margin-top:5px;
       <button class="scan" onclick="scan()">AI Risk Scan</button>
       <button class="demo" onclick="loadDemo()">Demo</button>
     </div>
-    <div class="note">v3.4 жёстче отсеивает wrapped/bridged/top-copy токены и снижает score за подозрительные метрики. DYOR, не финсовет.</div>
+    <div class="note">v3.4.1 исправляет ошибку вывода результата и жёстче отсеивает wrapped/bridged/top-copy токены. DYOR, не финсовет.</div>
   </div>
 
   <div id="results"></div>
@@ -56,105 +56,19 @@ const BLOCK = new Set(["BTC","WBTC","ETH","WETH","SOL","WSOL","BNB","WBNB","USDT
 const BAD = ["wrapped","wormhole","bridged","coinbase wrapped","universal","tether","usd coin","binance","wrapped sol","wrapped eth","wrapped btc","wrapped doge","wrapped ada","wrapped ltc","wrapped mega","wrapped xrp"];
 const COPY = ["bitcoin","ethereum","solana","dogecoin","litecoin","cardano","xrp","coinbase","chainbase token"];
 const QSETS=["meme","ai agent","base meme","solana meme","bsc meme","new pair","depin","rwa","cat token","dog token","frog meme","trenches","pumpfun","lowcap"];
-
 function fmt(n){n=Number(n||0); if(n>=1e9)return "$"+(n/1e9).toFixed(1)+"B"; if(n>=1e6)return "$"+(n/1e6).toFixed(1)+"M"; if(n>=1e3)return "$"+Math.round(n/1e3)+"K"; return "$"+Math.round(n)}
 function priceFmt(n){n=Number(n||0); if(n>=1)return "$"+n.toFixed(3); if(n>0)return "$"+n.toPrecision(3); return "—"}
 function ageDays(ms){if(!ms)return null; return Math.max(.05,(Date.now()-ms)/86400000)}
 function ageText(ms){let a=ageDays(ms); if(!a)return "—"; return a<1?Math.round(a*24)+"h":Math.floor(a)+"d"}
 function norm(s){return (s||"").toLowerCase().replace(/[^a-z0-9]/g,"")}
-function isBadToken(p){
- const sym=(p.baseToken?.symbol||"").toUpperCase().replace(/\s/g,"");
- const name=(p.baseToken?.name||"").toLowerCase();
- const ns=norm(name), ss=norm(sym);
- if(!sym||BLOCK.has(sym)) return true;
- if(BAD.some(w=>name.includes(w))) return true;
- if(COPY.some(w=>ns.includes(norm(w)))) return true;
- if(ss.startsWith("cb") && ["ada","doge","ltc","eth","btc","xrp","pepe","mega","sol"].some(x=>ss.includes(x))) return true;
- if(name===(p.quoteToken?.name||"").toLowerCase()) return true;
- return false;
-}
+function isBadToken(p){const sym=(p.baseToken?.symbol||"").toUpperCase().replace(/\s/g,"");const name=(p.baseToken?.name||"").toLowerCase();const ns=norm(name),ss=norm(sym);if(!sym||BLOCK.has(sym))return true;if(BAD.some(w=>name.includes(w)))return true;if(COPY.some(w=>ns.includes(norm(w))))return true;if(ss.startsWith("cb")&&["ada","doge","ltc","eth","btc","xrp","pepe","mega","sol"].some(x=>ss.includes(x)))return true;if(name===(p.quoteToken?.name||"").toLowerCase())return true;return false}
 function uniquePairs(pairs){const seen=new Set(),out=[];for(const p of pairs){const addr=(p.baseToken?.address||p.pairAddress||"").toLowerCase();if(!addr||seen.has(addr))continue;seen.add(addr);out.push(p)}return out}
-function analyze(p){
- const fdv=+(p.fdv||p.marketCap||0), liq=+(p.liquidity?.usd||0), vol=+(p.volume?.h24||0);
- const buys=+(p.txns?.h24?.buys||0), sells=+(p.txns?.h24?.sells||0), tx=buys+sells;
- const age=ageDays(p.pairCreatedAt);
- const reasons=[]; let risk=0; let gem=35;
- if(isBadToken(p)){risk+=80; reasons.push("wrapped/top-copy")}
- if(fdv<=0){risk+=40; reasons.push("no FDV")}
- if(fdv>10000000){risk+=18; reasons.push("FDV high")}
- if(liq<20000){risk+=25; reasons.push("low liquidity")} else {gem+=10}
- if(liq>50000)gem+=8; if(liq>150000)gem+=5;
- if(vol<30000){risk+=14; reasons.push("low volume")} else {gem+=8}
- if(vol>150000)gem+=8; if(vol>500000)gem+=5;
- const vl=vol/Math.max(liq,1);
- if(vl>30){risk+=35; reasons.push("fake-volume risk")}
- else if(vl>0.5 && vl<15){gem+=10}
- if(liq/fdv>0.75){risk+=25; reasons.push("bad liq/fdv ratio")}
- if(age){ if(age<0.25){risk+=22; reasons.push("too new")} else if(age<3){gem+=8; reasons.push("fresh")} else if(age<30){gem+=10} else if(age>180){risk+=12; reasons.push("old pair")} } else {risk+=10; reasons.push("age unknown")}
- if(tx>100)gem+=5; if(tx>350)gem+=6; if(sells>buys*2 && tx>50){risk+=18; reasons.push("sell pressure")}
- gem = Math.max(1, Math.min(99, Math.round(gem - risk*.55)));
- let label="SAFE", cls="safe"; if(risk>=50||gem<45){label="DANGER";cls="danger"} else if(risk>=25||gem<68){label="RISKY";cls="risky"}
- return {gem,risk,label,cls,reasons};
-}
-function passes(p,maxMc,minLiq,minVol){
- const fdv=+(p.fdv||p.marketCap||0), liq=+(p.liquidity?.usd||0), vol=+(p.volume?.h24||0);
- if(isBadToken(p)) return false;
- if(fdv<=0||fdv>maxMc) return false;
- if(liq<minLiq||vol<minVol) return false;
- const a=analyze(p);
- if(a.label==="DANGER") return false;
- return true;
-}
-function render(list){
- const res=document.getElementById("results");
- document.getElementById("found").textContent=list.length;
- document.getElementById("avg").textContent=list.length?Math.round(list.reduce((a,b)=>a._ai.gem+b._ai.gem,0)/list.length):"—";
- if(!list.length){res.innerHTML='<div class="empty">Ничего не прошло AI Risk фильтр. Ослабь Min volume/liquidity или Max FDV.</div>';return}
- res.innerHTML="";
- list.forEach((p,i)=>{
-  const ai=p._ai, name=p.baseToken?.name||"Unknown", sym=(p.baseToken?.symbol||"?").slice(0,10), chain=(p.chainId||"unknown").toUpperCase();
-  const liq=p.liquidity?.usd||0, vol=p.volume?.h24||0, fdv=p.fdv||p.marketCap||0, img=p.info?.imageUrl;
-  const sc=ai.gem>=68?"":ai.gem>=45?"mid":"bad";
-  const color=["#37275f","#173c55","#214533","#4a2637","#27395d"][i%5];
-  const el=document.createElement("div"); el.className="token";
-  el.innerHTML=`
-   <div class="tokenTop">
-    ${img?`<img class="avatar" src="${img}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${sym.slice(0,3)}</div>'">`:`<div class="avatar fallback" style="background:${color}">${sym.slice(0,3)}</div>`}
-    <div><div class="name">${name}</div><div class="sym">${sym} • ${chain}</div></div>
-    <div class="score ${sc}">${ai.gem}</div>
-   </div>
-   <div class="badges">
-    <span class="badge ${ai.cls}">${ai.label}</span><span class="badge">DEX: ${p.dexId||"—"}</span><span class="badge">Age: ${ageText(p.pairCreatedAt)}</span><span class="badge">Risk ${ai.risk}</span>
-   </div>
-   <div class="reasons">${ai.reasons.length?"Флаги: "+ai.reasons.join(" · "):"Флаги: чисто по базовым фильтрам"}</div>
-   <div class="grid" style="margin-top:12px">
-    <div class="box"><div class="label">Liquidity</div><div class="val">${fmt(liq)}</div></div>
-    <div class="box"><div class="label">Volume 24h</div><div class="val">${fmt(vol)}</div></div>
-    <div class="box"><div class="label">Price</div><div class="val">${priceFmt(p.priceUsd)}</div></div>
-    <div class="box"><div class="label">FDV / MC</div><div class="val">${fmt(fdv)}</div></div>
-   </div>
-   <div class="actions"><a class="linkbtn" href="${p.url||'#'}" target="_blank">DexScreener</a><a class="linkbtn" href="#" onclick="saveWatch('${name.replaceAll("'","")}','${sym}');return false;">Watchlist</a></div>`;
-  res.appendChild(el);
- });
-}
+function analyze(p){const fdv=+(p.fdv||p.marketCap||0),liq=+(p.liquidity?.usd||0),vol=+(p.volume?.h24||0);const buys=+(p.txns?.h24?.buys||0),sells=+(p.txns?.h24?.sells||0),tx=buys+sells;const age=ageDays(p.pairCreatedAt);const reasons=[];let risk=0,gem=35;if(isBadToken(p)){risk+=80;reasons.push("wrapped/top-copy")}if(fdv<=0){risk+=40;reasons.push("no FDV")}if(fdv>10000000){risk+=18;reasons.push("FDV high")}if(liq<20000){risk+=25;reasons.push("low liquidity")}else{gem+=10}if(liq>50000)gem+=8;if(liq>150000)gem+=5;if(vol<30000){risk+=14;reasons.push("low volume")}else{gem+=8}if(vol>150000)gem+=8;if(vol>500000)gem+=5;const vl=vol/Math.max(liq,1);if(vl>30){risk+=35;reasons.push("fake-volume risk")}else if(vl>0.5&&vl<15){gem+=10}if(fdv>0&&liq/fdv>0.75){risk+=25;reasons.push("bad liq/fdv ratio")}if(age){if(age<0.25){risk+=22;reasons.push("too new")}else if(age<3){gem+=8;reasons.push("fresh")}else if(age<30){gem+=10}else if(age>180){risk+=12;reasons.push("old pair")}}else{risk+=10;reasons.push("age unknown")}if(tx>100)gem+=5;if(tx>350)gem+=6;if(sells>buys*2&&tx>50){risk+=18;reasons.push("sell pressure")}gem=Math.max(1,Math.min(99,Math.round(gem-risk*.55)));let label="SAFE",cls="safe";if(risk>=50||gem<45){label="DANGER";cls="danger"}else if(risk>=25||gem<68){label="RISKY";cls="risky"}return{gem,risk,label,cls,reasons}}
+function passes(p,maxMc,minLiq,minVol){const fdv=+(p.fdv||p.marketCap||0),liq=+(p.liquidity?.usd||0),vol=+(p.volume?.h24||0);if(isBadToken(p))return false;if(fdv<=0||fdv>maxMc)return false;if(liq<minLiq||vol<minVol)return false;const a=analyze(p);if(a.label==="DANGER")return false;return true}
+function render(list){const res=document.getElementById("results");document.getElementById("found").textContent=list.length;document.getElementById("avg").textContent=list.length?Math.round(list.reduce((sum,p)=>sum+p._ai.gem,0)/list.length):"—";if(!list.length){res.innerHTML='<div class="empty">Ничего не прошло AI Risk фильтр. Ослабь Min volume/liquidity или Max FDV.</div>';return}res.innerHTML="";list.forEach((p,i)=>{const ai=p._ai,name=p.baseToken?.name||"Unknown",sym=(p.baseToken?.symbol||"?").slice(0,10),chain=(p.chainId||"unknown").toUpperCase();const liq=p.liquidity?.usd||0,vol=p.volume?.h24||0,fdv=p.fdv||p.marketCap||0,img=p.info?.imageUrl;const sc=ai.gem>=68?"":ai.gem>=45?"mid":"bad";const color=["#37275f","#173c55","#214533","#4a2637","#27395d"][i%5];const el=document.createElement("div");el.className="token";el.innerHTML=`<div class="tokenTop">${img?`<img class="avatar" src="${img}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${sym.slice(0,3)}</div>'">`:`<div class="avatar fallback" style="background:${color}">${sym.slice(0,3)}</div>`}<div><div class="name">${name}</div><div class="sym">${sym} • ${chain}</div></div><div class="score ${sc}">${ai.gem}</div></div><div class="badges"><span class="badge ${ai.cls}">${ai.label}</span><span class="badge">DEX: ${p.dexId||"—"}</span><span class="badge">Age: ${ageText(p.pairCreatedAt)}</span><span class="badge">Risk ${ai.risk}</span></div><div class="reasons">${ai.reasons.length?"Флаги: "+ai.reasons.join(" · "):"Флаги: чисто по базовым фильтрам"}</div><div class="grid" style="margin-top:12px"><div class="box"><div class="label">Liquidity</div><div class="val">${fmt(liq)}</div></div><div class="box"><div class="label">Volume 24h</div><div class="val">${fmt(vol)}</div></div><div class="box"><div class="label">Price</div><div class="val">${priceFmt(p.priceUsd)}</div></div><div class="box"><div class="label">FDV / MC</div><div class="val">${fmt(fdv)}</div></div></div><div class="actions"><a class="linkbtn" href="${p.url||'#'}" target="_blank">DexScreener</a><a class="linkbtn" href="#" onclick="saveWatch('${name.replaceAll("'","")}','${sym}');return false;">Watchlist</a></div>`;res.appendChild(el)})}
 function saveWatch(n,s){const w=JSON.parse(localStorage.getItem("watch")||"[]");w.push({n,s,t:Date.now()});localStorage.setItem("watch",JSON.stringify(w));alert("Добавлено: "+n)}
-async function scan(){
- const status=document.getElementById("apiStatus"); status.textContent="scan...";
- document.getElementById("results").innerHTML='<div class="empty">AI Risk Engine: отсеиваю wrapped/copy/top/fake-volume...</div>';
- const q=document.getElementById("query").value.trim();
- const maxMc=+document.getElementById("maxMc").value||10000000, minLiq=+document.getElementById("minLiq").value||0, minVol=+document.getElementById("minVol").value||0;
- try{
-  const queries=[q,...QSETS].filter(Boolean); const all=[];
-  for(const qq of queries){const r=await fetch("https://api.dexscreener.com/latest/dex/search?q="+encodeURIComponent(qq),{cache:"no-store"}); const d=await r.json(); all.push(...(d.pairs||[])); await new Promise(res=>setTimeout(res,85))}
-  let list=uniquePairs(all).filter(p=>passes(p,maxMc,minLiq,minVol)).map(p=>({...p,_ai:analyze(p)})).sort((a,b)=>b._ai.gem-a._ai.gem).slice(0,35);
-  status.textContent="live"; render(list);
- }catch(e){status.textContent="api error";document.getElementById("results").innerHTML='<div class="empty">API временно недоступен. Нажми Demo или попробуй позже.</div>'}
-}
-function loadDemo(){const demo=[
- {baseToken:{name:"Nexa AI",symbol:"NEXA"},chainId:"base",dexId:"uniswap",liquidity:{usd:180000},volume:{h24:920000},fdv:1800000,priceUsd:.0042,pairCreatedAt:Date.now()-2*86400000,url:"#"},
- {baseToken:{name:"Swatch Memes",symbol:"SWATCH"},chainId:"solana",dexId:"pumpswap",liquidity:{usd:39000},volume:{h24:872000},fdv:176000,priceUsd:.000176,pairCreatedAt:Date.now()-1*86400000,url:"#"},
- {baseToken:{name:"Meme Guy",symbol:"MEMEGUY"},chainId:"bsc",dexId:"pancakeswap",liquidity:{usd:59000},volume:{h24:197000},fdv:267000,priceUsd:.000267,pairCreatedAt:Date.now()-6*86400000,url:"#"}
-].map(p=>({...p,_ai:analyze(p)}));document.getElementById("apiStatus").textContent="demo";render(demo)}
+async function scan(){const status=document.getElementById("apiStatus");status.textContent="scan...";document.getElementById("results").innerHTML='<div class="empty">AI Risk Engine: отсеиваю wrapped/copy/top/fake-volume...</div>';const q=document.getElementById("query").value.trim();const maxMc=+document.getElementById("maxMc").value||10000000,minLiq=+document.getElementById("minLiq").value||0,minVol=+document.getElementById("minVol").value||0;try{const queries=[q,...QSETS].filter(Boolean);const all=[];for(const qq of queries){const r=await fetch("https://api.dexscreener.com/latest/dex/search?q="+encodeURIComponent(qq),{cache:"no-store"});const d=await r.json();all.push(...(d.pairs||[]));await new Promise(res=>setTimeout(res,85))}let list=uniquePairs(all).filter(p=>passes(p,maxMc,minLiq,minVol)).map(p=>({...p,_ai:analyze(p)})).sort((a,b)=>b._ai.gem-a._ai.gem).slice(0,35);status.textContent="live";render(list)}catch(e){console.error(e);status.textContent="api error";document.getElementById("results").innerHTML='<div class="empty">API временно недоступен или браузер заблокировал запрос. Нажми Demo или попробуй позже.</div>'}}
+function loadDemo(){const demo=[{baseToken:{name:"Nexa AI",symbol:"NEXA"},chainId:"base",dexId:"uniswap",liquidity:{usd:180000},volume:{h24:920000},fdv:1800000,priceUsd:.0042,pairCreatedAt:Date.now()-2*86400000,url:"#"},{baseToken:{name:"Swatch Memes",symbol:"SWATCH"},chainId:"solana",dexId:"pumpswap",liquidity:{usd:39000},volume:{h24:872000},fdv:176000,priceUsd:.000176,pairCreatedAt:Date.now()-1*86400000,url:"#"},{baseToken:{name:"Meme Guy",symbol:"MEMEGUY"},chainId:"bsc",dexId:"pancakeswap",liquidity:{usd:59000},volume:{h24:197000},fdv:267000,priceUsd:.000267,pairCreatedAt:Date.now()-6*86400000,url:"#"}].map(p=>({...p,_ai:analyze(p)}));document.getElementById("apiStatus").textContent="demo";render(demo)}
 if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js")}
 </script>
 </body>

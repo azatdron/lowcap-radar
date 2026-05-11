@@ -3,210 +3,90 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lowcap Radar AI v3.6</title>
+<title>Lowcap Radar AI v3.7</title>
 <link rel="manifest" href="manifest.json">
 <style>
-:root{--bg:#050816;--card:#111827;--box:#080d1a;--line:#213457;--text:#f8fafc;--muted:#93a4bd;--green:#5cf2a0;--yellow:#ffd166;--red:#ff6b8a}
+:root{--bg:#050816;--card:#111827;--box:#080d1a;--line:#213457;--text:#f8fafc;--muted:#93a4bd;--green:#5cf2a0;--yellow:#ffd166;--red:#ff6b8a;--blue:#7dd3fc}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,#0b1830 0,#050816 40%,#02040a 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding-bottom:110px}
-.app{max-width:520px;margin:auto;padding:18px}
-.head{display:flex;gap:12px;align-items:center;margin:14px 0}
-.logo{width:58px;height:58px;border-radius:18px;background:#121b2e;border:1px solid #2d416a;display:grid;place-items:center;box-shadow:0 0 30px #36f29a33}
-.logo:before{content:"⌁";font-size:40px;color:#5cf2a0;font-weight:900}
-h1{margin:0;font-size:33px;line-height:1}
-.sub{font-size:14px;color:#9fb0c8;margin-top:4px}
-.status{margin-left:auto;background:#092216;border:1px solid #235f45;color:#5cf2a0;padding:9px 12px;border-radius:999px;font-size:13px}
-.panel,.token{background:#101827dd;border:1px solid #24385d;border-radius:26px;padding:16px;margin:14px 0}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.box{background:#08101f;border:1px solid #1f3154;border-radius:18px;padding:13px}
-.label{font-size:12px;color:#93a4bd}.val{font-size:18px;font-weight:900;margin-top:4px}
-input{width:100%;background:#08101f;border:1px solid #243354;border-radius:15px;padding:13px;color:#fff;font-size:16px}
-.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:17px}
-.scan{background:linear-gradient(135deg,#5cf2a0,#3ee779);color:#03120a}
-.demo{background:#15213a;color:#fff;border:1px solid #2b3e63}
-.tokenTop{display:flex;gap:12px;align-items:center}
-.avatar{width:54px;height:54px;border-radius:16px;object-fit:cover;background:#1a2741}
-.fallback{display:grid;place-items:center;color:#fff;font-weight:900}
-.name{font-size:24px;font-weight:1000;line-height:1.02}
-.sym{color:#95a7bf;margin-top:5px}
-.score{margin-left:auto;font-size:36px;color:#5cf2a0;font-weight:1000}
-.badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
-.badge{padding:6px 10px;border-radius:999px;background:#142039;border:1px solid #273b62;font-size:12px;color:#d6e0ef}
-.buybox{margin-top:12px;background:#0a1222;border:1px solid #23385f;border-radius:18px;padding:12px}
-.buytitle{font-size:13px;color:#9db0c8;margin-bottom:8px}
-.buyrow{font-size:14px;margin:5px 0}
-.linkrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.linkbtn{text-decoration:none;background:#15213a;border:1px solid #2b3f67;color:#fff;padding:13px;border-radius:16px;text-align:center;font-weight:900}
-.note{font-size:13px;color:#9fb0c8;text-align:center;line-height:1.45;margin-top:14px}
-.tabs{position:fixed;left:18px;right:18px;bottom:18px;max-width:500px;margin:auto;background:#0f172a;border:1px solid #26385f;border-radius:28px;padding:8px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.tab{padding:13px;text-align:center;border-radius:20px;color:#9fb0c8;font-weight:900}
-.tab.active{background:#1d2b49;color:#fff}
-.empty{border:1px dashed #32466f;border-radius:24px;padding:24px;text-align:center;color:#9fb0c8}
+.app{max-width:520px;margin:auto;padding:18px}.head{display:flex;gap:12px;align-items:center;margin:14px 0}.logo{width:58px;height:58px;border-radius:18px;background:#121b2e;border:1px solid #2d416a;display:grid;place-items:center;box-shadow:0 0 30px #36f29a33}.logo:before{content:"⌁";font-size:40px;color:#5cf2a0;font-weight:900}
+h1{margin:0;font-size:32px;line-height:1}.sub{font-size:14px;color:#9fb0c8;margin-top:4px}.status{margin-left:auto;background:#092216;border:1px solid #235f45;color:#5cf2a0;padding:9px 12px;border-radius:999px;font-size:13px}
+.panel,.token{background:#101827dd;border:1px solid #24385d;border-radius:26px;padding:16px;margin:14px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.box{background:#08101f;border:1px solid #1f3154;border-radius:18px;padding:13px}.label{font-size:12px;color:#93a4bd}.val{font-size:18px;font-weight:900;margin-top:4px}
+input,select{width:100%;background:#08101f;border:1px solid #243354;border-radius:15px;padding:13px;color:#fff;font-size:16px}.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:17px}.scan{background:linear-gradient(135deg,#5cf2a0,#3ee779);color:#03120a}.demo{background:#15213a;color:#fff;border:1px solid #2b3e63}
+.modebar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0}.mode{background:#0a1020;border:1px solid #243354;border-radius:14px;padding:10px;color:#a8b3c5;text-align:center;font-weight:900;font-size:13px}.mode.active{background:#1d2b49;color:#fff}
+.tokenTop{display:flex;gap:12px;align-items:center}.avatar{width:54px;height:54px;border-radius:16px;object-fit:cover;background:#1a2741}.fallback{display:grid;place-items:center;color:#fff;font-weight:900}.name{font-size:23px;font-weight:1000;line-height:1.02}.sym{color:#95a7bf;margin-top:5px}.score{margin-left:auto;font-size:36px;color:#5cf2a0;font-weight:1000}.score.mid{color:var(--yellow)}.score.bad{color:var(--red)}
+.badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.badge{padding:6px 10px;border-radius:999px;background:#142039;border:1px solid #273b62;font-size:12px;color:#d6e0ef}.eco{color:var(--blue)}.safe{color:var(--green)}.risk{color:var(--yellow)}
+.thesis{margin-top:10px;color:#b6c6dc;font-size:13px;line-height:1.45;background:#0a1222;border:1px solid #20355d;border-radius:15px;padding:10px}
+.buybox{margin-top:12px;background:#0a1222;border:1px solid #23385f;border-radius:18px;padding:12px}.buytitle{font-size:13px;color:#9db0c8;margin-bottom:8px}.buyrow{font-size:14px;margin:5px 0}
+.linkrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.linkbtn{text-decoration:none;background:#15213a;border:1px solid #2b3f67;color:#fff;padding:13px;border-radius:16px;text-align:center;font-weight:900}.note{font-size:13px;color:#9fb0c8;text-align:center;line-height:1.45;margin-top:14px}
+.tabs{position:fixed;left:18px;right:18px;bottom:18px;max-width:500px;margin:auto;background:#0f172a;border:1px solid #26385f;border-radius:28px;padding:8px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.tab{padding:13px;text-align:center;border-radius:20px;color:#9fb0c8;font-weight:900}.tab.active{background:#1d2b49;color:#fff}.empty{border:1px dashed #32466f;border-radius:24px;padding:24px;text-align:center;color:#9fb0c8}
 </style>
 </head>
 <body>
 <div class="app">
 <div class="head">
 <div class="logo"></div>
-<div><h1>Lowcap Radar AI</h1><div class="sub">v3.6 • GEM GUIDE</div></div>
-<div id="status" class="status">live</div>
+<div><h1>Lowcap Radar AI</h1><div class="sub">v3.7 • Narrative Gold Mines</div></div>
+<div id="status" class="status">ready</div>
 </div>
 
 <div class="panel">
 <div class="grid">
-<div class="box"><div class="label">AI Gems</div><div id="found" class="val">0</div></div>
+<div class="box"><div class="label">Narrative gems</div><div id="found" class="val">0</div></div>
 <div class="box"><div class="label">Средний score</div><div id="avg" class="val">—</div></div>
 </div>
 
-<div style="height:12px"></div>
-<div class="controls">
-<div><div class="label">Narrative</div><input id="query" value="meme ai base solana"></div>
-<div><div class="label">Max FDV</div><input id="maxfdv" value="8000000"></div>
+<div class="modebar">
+<div class="mode active" onclick="setEco('base',this)">Base</div>
+<div class="mode" onclick="setEco('solana',this)">Solana</div>
+<div class="mode" onclick="setEco('ai',this)">AI/RWA</div>
 </div>
 
+<div class="controls">
+<div><div class="label">Narrative</div><input id="query" value="base meme ai agent"></div>
+<div><div class="label">Max FDV</div><input id="maxfdv" value="8000000"></div>
+</div>
 <div style="height:12px"></div>
 <div class="controls">
-<button class="scan" onclick="scan()">AI Gem Scan</button>
+<button class="scan" onclick="scan()">Find Gold Mines</button>
 <button class="demo" onclick="demo()">Demo</button>
 </div>
 
 <div class="note">
-v3.6 добавляет mini guide:
-где купить токен, через какой DEX, какой кошелёк использовать и где безопаснее хранить.
+v3.7 ищет не просто дешёвые токены, а токены в “золотых жилах”: сильная сеть + narrative + ликвидность + ранний momentum.
 </div>
 </div>
 
 <div id="results"></div>
 </div>
 
-<div class="tabs">
-<div class="tab active">Радар</div>
-<div class="tab">Watchlist</div>
-<div class="tab">Guide</div>
-</div>
+<div class="tabs"><div class="tab active">Радар</div><div class="tab">Watchlist</div><div class="tab">Guide</div></div>
 
 <script>
+let ECO="base";
+function setEco(v,el){ECO=v;document.querySelectorAll('.mode').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('query').value=v==="base"?"base meme ai agent":v==="solana"?"solana meme pumpfun ai":"ai agent rwa depin base";}
+
 const BLOCK=["BTC","ETH","SOL","DOGE","ADA","XRP","LTC","BNB","USDT","USDC","WETH","WBTC","WSOL","WBNB","CBADA","CBDOGE","CBLTC","CBETH","CBBTC"];
+const BAD=["wrapped","coinbase wrapped","bridged","wormhole","shit","piss","skin","sex","porn","scam","rug","hitler"];
 function fmt(n){n=Number(n||0);if(n>=1e9)return"$"+(n/1e9).toFixed(1)+"B";if(n>=1e6)return"$"+(n/1e6).toFixed(1)+"M";if(n>=1e3)return"$"+Math.round(n/1e3)+"K";return"$"+Math.round(n)}
 function pf(n){n=Number(n||0);if(n>=1)return"$"+n.toFixed(3);if(n>0)return"$"+n.toPrecision(3);return"—"}
-function age(ms){if(!ms)return"—";let d=(Date.now()-ms)/86400000;return d<1?Math.round(d*24)+"h":Math.floor(d)+"d"}
-function wallet(chain){
-chain=(chain||"").toLowerCase();
-if(chain.includes("sol"))return"Phantom / Solflare";
-if(chain.includes("base"))return"MetaMask / Coinbase Wallet";
-if(chain.includes("bsc"))return"Trust Wallet / MetaMask";
-return"MetaMask";
-}
-function dexGuide(d){
-d=(d||"").toLowerCase();
-if(d.includes("ray"))return"Raydium";
-if(d.includes("pump"))return"PumpSwap";
-if(d.includes("cake"))return"PancakeSwap";
-if(d.includes("uni"))return"Uniswap";
-if(d.includes("aero"))return"Aerodrome";
-return d||"DEX";
-}
-function analyze(p){
-let fdv=+(p.fdv||0),liq=+(p.liquidity?.usd||0),vol=+(p.volume?.h24||0);
-let s=55;
-if(fdv<300000)s+=18; else if(fdv<1500000)s+=12;
-if(liq>25000)s+=10;
-if(vol>50000)s+=10;
-if(vol>200000)s+=7;
-let days=(Date.now()-p.pairCreatedAt)/86400000;
-if(days<20)s+=10;
-if(days>180)s-=15;
-return Math.max(1,Math.min(99,Math.round(s)));
-}
-function ok(p,maxfdv){
-let sym=(p.baseToken?.symbol||"").toUpperCase();
-if(BLOCK.includes(sym))return false;
-if((p.fdv||0)>maxfdv)return false;
-if((p.liquidity?.usd||0)<20000)return false;
-return true;
-}
-function card(p){
-let score=analyze(p);
-let name=p.baseToken?.name||"Unknown";
-let sym=p.baseToken?.symbol||"?";
-let chain=(p.chainId||"").toUpperCase();
-let dex=dexGuide(p.dexId);
-let liq=p.liquidity?.usd||0;
-let vol=p.volume?.h24||0;
-let fdv=p.fdv||0;
-let img=p.info?.imageUrl||"";
-let buy=dex;
-let store=wallet(chain);
-let launch=age(p.pairCreatedAt);
-let el=document.createElement("div");
-el.className="token";
-el.innerHTML=`
-<div class="tokenTop">
-${img?`<img class="avatar" src="${img}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${sym.slice(0,3)}</div>'">`:`<div class="avatar fallback">${sym.slice(0,3)}</div>`}
-<div><div class="name">${name}</div><div class="sym">${sym} • ${chain}</div></div>
-<div class="score">${score}</div>
-</div>
-
-<div class="badges">
-<div class="badge">SAFE</div>
-<div class="badge">${dex}</div>
-<div class="badge">Age: ${launch}</div>
-<div class="badge">x-potential</div>
-</div>
-
-<div class="grid" style="margin-top:12px">
-<div class="box"><div class="label">Liquidity</div><div class="val">${fmt(liq)}</div></div>
-<div class="box"><div class="label">Volume 24h</div><div class="val">${fmt(vol)}</div></div>
-<div class="box"><div class="label">Price</div><div class="val">${pf(p.priceUsd)}</div></div>
-<div class="box"><div class="label">FDV / MC</div><div class="val">${fmt(fdv)}</div></div>
-</div>
-
-<div class="buybox">
-<div class="buytitle">Mini guide</div>
-<div class="buyrow">🛒 Купить: ${buy}</div>
-<div class="buyrow">👛 Хранить: ${store}</div>
-<div class="buyrow">🌐 Сеть: ${chain}</div>
-<div class="buyrow">⚠️ DYOR: lowcap/high-risk segment</div>
-</div>
-
-<div class="linkrow">
-<a class="linkbtn" href="${p.url||'#'}" target="_blank">DexScreener</a>
-<a class="linkbtn" href="#" onclick="alert('Добавлено в watchlist');return false;">Watchlist</a>
-</div>
-`;
-return el;
-}
-function render(list){
-let r=document.getElementById("results");
-document.getElementById("found").textContent=list.length;
-document.getElementById("avg").textContent=list.length?Math.round(list.reduce((a,b)=>a+analyze(b),0)/list.length):"—";
-r.innerHTML="";
-if(!list.length){r.innerHTML='<div class="empty">Нет подходящих gems.</div>';return;}
-list.forEach(x=>r.appendChild(card(x)));
-}
-async function scan(){
-document.getElementById("status").textContent="scan...";
-let q=document.getElementById("query").value;
-let maxfdv=+document.getElementById("maxfdv").value||8000000;
-try{
-let res=await fetch("https://api.dexscreener.com/latest/dex/search?q="+encodeURIComponent(q));
-let data=await res.json();
-let list=(data.pairs||[]).filter(x=>ok(x,maxfdv)).sort((a,b)=>analyze(b)-analyze(a)).slice(0,20);
-document.getElementById("status").textContent="live";
-render(list);
-}catch(e){
-document.getElementById("status").textContent="api error";
-document.getElementById("results").innerHTML='<div class="empty">DexScreener API временно недоступен.</div>';
-}
-}
-function demo(){
-render([
+function ageD(ms){if(!ms)return null;return Math.max(.05,(Date.now()-ms)/86400000)}
+function age(ms){let d=ageD(ms);if(!d)return"—";return d<1?Math.round(d*24)+"h":Math.floor(d)+"d"}
+function wallet(chain){chain=(chain||"").toLowerCase();if(chain.includes("sol"))return"Phantom / Solflare";if(chain.includes("base"))return"MetaMask / Coinbase Wallet";if(chain.includes("bsc"))return"Trust Wallet / MetaMask";return"MetaMask"}
+function dexGuide(d){d=(d||"").toLowerCase();if(d.includes("ray"))return"Raydium";if(d.includes("pump"))return"PumpSwap";if(d.includes("cake"))return"PancakeSwap";if(d.includes("uni"))return"Uniswap";if(d.includes("aero"))return"Aerodrome";return d||"DEX"}
+function narrative(p){let t=((p.baseToken?.name||"")+" "+(p.baseToken?.symbol||"")).toLowerCase();if(/ai|agent|gpt|bot|neural/.test(t))return"AI";if(/rwa|real|asset|stock/.test(t))return"RWA";if(/depin|gpu|compute/.test(t))return"DEPIN";if(/cat|dog|frog|pepe|meme|inu|shib|bonk/.test(t))return"MEME";return"ECO";}
+function ecoPower(p){let c=(p.chainId||"").toLowerCase(), s=0, label="Other";if(c.includes("base")){s=18;label="Base gold mine"}else if(c.includes("sol")){s=16;label="Solana gold mine"}else if(c.includes("bsc")){s=7;label="BSC high-risk mine"}else if(c.includes("ethereum")){s=12;label="ETH liquidity mine"}return{s,label}}
+function bad(p){let sym=(p.baseToken?.symbol||"").toUpperCase();let name=(p.baseToken?.name||"").toLowerCase();if(BLOCK.includes(sym))return true;if(BAD.some(x=>name.includes(x)||sym.toLowerCase().includes(x)))return true;if(sym.startsWith("CB"))return true;return false}
+function score(p){let fdv=+(p.fdv||0),liq=+(p.liquidity?.usd||0),vol=+(p.volume?.h24||0),d=ageD(p.pairCreatedAt),n=narrative(p),eco=ecoPower(p);let s=30+eco.s;if(fdv>0&&fdv<300000)s+=16;else if(fdv<1500000)s+=13;else if(fdv<5000000)s+=8;if(liq>25000)s+=8;if(liq>75000)s+=7;if(vol>50000)s+=8;if(vol>200000)s+=8;if(d){if(d<3)s+=13;else if(d<21)s+=10;else if(d<90)s+=4;else s-=8}if(n==="AI"||n==="MEME")s+=8;if(n==="RWA"||n==="DEPIN")s+=5;if(vol/Math.max(liq,1)>25)s-=25;if(bad(p))s-=80;return Math.max(1,Math.min(99,Math.round(s)))}
+function thesis(p){let n=narrative(p), e=ecoPower(p), fdv=+(p.fdv||0), vol=+(p.volume?.h24||0), liq=+(p.liquidity?.usd||0);let arr=[];arr.push(e.label);arr.push(n+" narrative");if(fdv<1000000)arr.push("ранняя капитализация");if(vol>liq)arr.push("объём выше ликвидности");if(ageD(p.pairCreatedAt)&&ageD(p.pairCreatedAt)<7)arr.push("fresh launch");return arr.join(" · ")}
+function ok(p,maxfdv){if(bad(p))return false;if((p.fdv||0)>maxfdv||!(p.fdv>0))return false;if((p.liquidity?.usd||0)<25000)return false;if((p.volume?.h24||0)<40000)return false;let c=(p.chainId||"").toLowerCase();if(ECO==="base"&&!c.includes("base"))return false;if(ECO==="solana"&&!c.includes("sol"))return false;if(ECO==="ai" && !/ai|agent|rwa|depin|gpu|compute/i.test((p.baseToken?.name||"")+" "+(p.baseToken?.symbol||"")))return false;return true}
+function card(p){let sc=score(p),name=p.baseToken?.name||"Unknown",sym=p.baseToken?.symbol||"?",chain=(p.chainId||"").toUpperCase(),dex=dexGuide(p.dexId),img=p.info?.imageUrl||"",n=narrative(p);let el=document.createElement("div");el.className="token";el.innerHTML=`<div class="tokenTop">${img?`<img class="avatar" src="${img}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${sym.slice(0,3)}</div>'">`:`<div class="avatar fallback">${sym.slice(0,3)}</div>`}<div><div class="name">${name}</div><div class="sym">${sym} • ${chain}</div></div><div class="score ${sc<65?'mid':''}">${sc}</div></div><div class="badges"><div class="badge safe">${sc>75?'GOLD ZONE':'WATCH'}</div><div class="badge eco">${n}</div><div class="badge">${dex}</div><div class="badge">Age: ${age(p.pairCreatedAt)}</div></div><div class="thesis">🧠 Thesis: ${thesis(p)}</div><div class="grid" style="margin-top:12px"><div class="box"><div class="label">Liquidity</div><div class="val">${fmt(p.liquidity?.usd)}</div></div><div class="box"><div class="label">Volume 24h</div><div class="val">${fmt(p.volume?.h24)}</div></div><div class="box"><div class="label">Price</div><div class="val">${pf(p.priceUsd)}</div></div><div class="box"><div class="label">FDV / MC</div><div class="val">${fmt(p.fdv)}</div></div></div><div class="buybox"><div class="buytitle">Mini guide</div><div class="buyrow">🛒 Купить: ${dex}</div><div class="buyrow">👛 Хранить: ${wallet(chain)}</div><div class="buyrow">🌐 Сеть: ${chain}</div><div class="buyrow">⚠️ Проверить контракт перед покупкой</div></div><div class="linkrow"><a class="linkbtn" href="${p.url||'#'}" target="_blank">DexScreener</a><a class="linkbtn" href="#" onclick="alert('Добавлено в watchlist');return false;">Watchlist</a></div>`;return el}
+function render(list){let r=document.getElementById("results");document.getElementById("found").textContent=list.length;document.getElementById("avg").textContent=list.length?Math.round(list.reduce((a,b)=>a+score(b),0)/list.length):"—";r.innerHTML="";if(!list.length){r.innerHTML='<div class="empty">Нет gems в выбранной золотой жиле. Попробуй другой режим или снизь фильтр.</div>';return}list.forEach(x=>r.appendChild(card(x)))}
+async function scan(){document.getElementById("status").textContent="scan...";let q=document.getElementById("query").value,maxfdv=+document.getElementById("maxfdv").value||8000000;try{let queries=[q,ECO+" meme",ECO+" ai",ECO+" agent",ECO+" lowcap"];let all=[];for(let qq of queries){let res=await fetch("https://api.dexscreener.com/latest/dex/search?q="+encodeURIComponent(qq),{cache:"no-store"});let data=await res.json();all.push(...(data.pairs||[]));await new Promise(r=>setTimeout(r,90));}let seen=new Set();let list=all.filter(x=>{let a=(x.baseToken?.address||x.pairAddress||"").toLowerCase();if(seen.has(a))return false;seen.add(a);return ok(x,maxfdv)}).sort((a,b)=>score(b)-score(a)).slice(0,25);document.getElementById("status").textContent="live";render(list)}catch(e){document.getElementById("status").textContent="api error";document.getElementById("results").innerHTML='<div class="empty">API временно недоступен.</div>'}}
+function demo(){render([{baseToken:{name:"Base Agent",symbol:"BAGENT"},chainId:"base",dexId:"uniswap",liquidity:{usd:88000},volume:{h24:310000},fdv:690000,priceUsd:.00069,pairCreatedAt:Date.now()-2*86400000,url:"#"},
 {baseToken:{name:"Self-Aware Meme",symbol:"SAM"},chainId:"solana",dexId:"pumpswap",liquidity:{usd:51000},volume:{h24:67000},fdv:142000,priceUsd:.000142,pairCreatedAt:Date.now()-18*86400000,url:"#"},
-{baseToken:{name:"MEMEGUY",symbol:"MEMEGUY"},chainId:"bsc",dexId:"pancakeswap",liquidity:{usd:56000},volume:{h24:199000},fdv:238000,priceUsd:.000238,pairCreatedAt:Date.now()-6*86400000,url:"#"},
-{baseToken:{name:"Swatch Memes",symbol:"SWATCH"},chainId:"solana",dexId:"pumpswap",liquidity:{usd:42000},volume:{h24:862000},fdv:200000,priceUsd:.000200,pairCreatedAt:Date.now()-1*86400000,url:"#"}
-]);
-}
-if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js")}
+{baseToken:{name:"RWA Cat",symbol:"RWACAT"},chainId:"base",dexId:"aerodrome",liquidity:{usd:120000},volume:{h24:260000},fdv:1300000,priceUsd:.0013,pairCreatedAt:Date.now()-6*86400000,url:"#"}])}
+if("serviceWorker"in navigator){navigator.serviceWorker.register("./sw.js")}
 </script>
 </body>
 </html>

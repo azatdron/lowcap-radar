@@ -3,457 +3,189 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Lowcap Radar AI v4.0</title>
+<title>Lowcap Radar AI v4.1</title>
 <link rel="manifest" href="manifest.json">
 <style>
 :root{
---bg:#050816;
---card:#101827ee;
---line:#23385f;
---text:#f8fafc;
---muted:#94a3b8;
---green:#5cf2a0;
---yellow:#ffd166;
---red:#ff6b8a;
---blue:#7dd3fc;
+--bg:#050816;--card:#101827ee;--box:#08101f;--line:#22385d;--text:#f8fafc;
+--muted:#94a3b8;--green:#5cf2a0;--yellow:#ffd166;--red:#ff6b8a;--blue:#7dd3fc;--violet:#c4b5fd;
 }
 *{box-sizing:border-box}
-html,body{
-margin:0;
-padding:0;
-background:radial-gradient(circle at top,#0b1830 0,#050816 45%,#02040a 100%);
-color:var(--text);
-font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-overflow-x:hidden;
-}
-body{
-padding-top:env(safe-area-inset-top);
-padding-bottom:calc(env(safe-area-inset-bottom) + 110px);
-}
-.app{
-max-width:560px;
-margin:auto;
-padding:18px 14px 30px;
-}
-.header{
-display:flex;
-align-items:center;
-gap:12px;
-margin-top:8px;
-}
-.logo{
-width:58px;
-height:58px;
-border-radius:18px;
-background:#111b31;
-border:1px solid #30456f;
-display:grid;
-place-items:center;
-box-shadow:0 0 25px rgba(92,242,160,.18);
-}
-.logo:before{
-content:"⌁";
-font-size:40px;
-color:var(--green);
-font-weight:900;
-}
-.title{
-font-size:30px;
-font-weight:1000;
-line-height:1;
-}
-.sub{
-margin-top:4px;
-font-size:13px;
-color:#9db0c8;
-}
-.live{
-margin-left:auto;
-background:#0d2419;
-border:1px solid #245f45;
-color:var(--green);
-padding:8px 12px;
-border-radius:999px;
-font-size:12px;
-font-weight:800;
-}
-.card{
-background:var(--card);
-border:1px solid var(--line);
-border-radius:26px;
-padding:16px;
-margin-top:16px;
-backdrop-filter:blur(10px);
-}
-.stats{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-}
-.stat{
-background:#09101f;
-border:1px solid #1f3154;
-border-radius:18px;
-padding:12px;
-}
-.label{
-font-size:12px;
-color:#94a3b8;
-}
-.value{
-font-size:18px;
-font-weight:900;
-margin-top:5px;
-}
-.modes{
-display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:8px;
-margin-top:12px;
-}
-.mode{
-background:#0a1020;
-border:1px solid #243354;
-padding:11px;
-border-radius:14px;
-text-align:center;
-font-size:13px;
-font-weight:900;
-color:#aab5c8;
-}
-.mode.active{
-background:#1d2b49;
-color:#fff;
-}
-.filters{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-top:12px;
-}
-select,input{
-width:100%;
-background:#08101f;
-border:1px solid #243354;
-border-radius:15px;
-padding:13px;
-color:#fff;
-font-size:15px;
-}
-.buttons{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-top:12px;
-}
-button{
-border:0;
-border-radius:18px;
-padding:15px;
-font-size:16px;
-font-weight:900;
-}
-.scan{
-background:linear-gradient(135deg,#5cf2a0,#3ee779);
-color:#03120a;
-}
-.demo{
-background:#15213a;
-border:1px solid #2b3e63;
-color:#fff;
-}
-.coin{
-background:#101827ee;
-border:1px solid var(--line);
-border-radius:24px;
-padding:16px;
-margin-top:16px;
-}
-.top{
-display:flex;
-align-items:center;
-gap:12px;
-}
-.avatar{
-width:54px;
-height:54px;
-border-radius:16px;
-object-fit:cover;
-background:#1a2741;
-}
-.name{
-font-size:22px;
-font-weight:1000;
-}
-.sym{
-font-size:13px;
-color:#9fb0c8;
-margin-top:4px;
-}
-.score{
-margin-left:auto;
-font-size:34px;
-font-weight:1000;
-color:var(--green);
-}
-.badges{
-display:flex;
-gap:7px;
-flex-wrap:wrap;
-margin-top:12px;
-}
-.badge{
-padding:6px 10px;
-border-radius:999px;
-background:#142039;
-border:1px solid #273b62;
-font-size:11px;
-}
-.reason{
-margin-top:10px;
-background:#0a1222;
-border:1px solid #20355d;
-padding:11px;
-border-radius:15px;
-font-size:13px;
-line-height:1.45;
-color:#bfd0e4;
-}
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-top:12px;
-}
-.box{
-background:#09101f;
-border:1px solid #1f3154;
-border-radius:16px;
-padding:12px;
-}
-.big{
-font-size:17px;
-font-weight:900;
-margin-top:5px;
-}
-.nav{
-position:fixed;
-left:18px;
-right:18px;
-bottom:18px;
-max-width:530px;
-margin:auto;
-background:#0f172aee;
-border:1px solid #26385f;
-border-radius:28px;
-padding:8px;
-display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:8px;
-backdrop-filter:blur(12px);
-}
-.tab{
-padding:13px;
-text-align:center;
-border-radius:18px;
-font-weight:900;
-font-size:13px;
-color:#9fb0c8;
-}
-.tab.active{
-background:#1d2b49;
-color:#fff;
-}
-.note{
-margin-top:14px;
-font-size:13px;
-line-height:1.45;
-color:#9fb0c8;
-text-align:center;
-}
+html,body{margin:0;padding:0;background:radial-gradient(circle at 20% 0%,#0b1830 0,#050816 42%,#02040a 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",system-ui,sans-serif;overflow-x:hidden}
+body{padding-top:env(safe-area-inset-top);padding-bottom:calc(env(safe-area-inset-bottom) + 112px)}
+.app{max-width:540px;margin:auto;padding:22px 14px 30px}
+.head{display:flex;gap:12px;align-items:center;margin:8px 0 14px}
+.logo{width:58px;height:58px;border-radius:18px;background:#121b2e;border:1px solid #2d416a;display:grid;place-items:center;box-shadow:0 0 30px #36f29a33}
+.logo:before{content:"⌁";font-size:40px;color:var(--green);font-weight:900}
+h1{margin:0;font-size:30px;line-height:1;font-weight:1000}.sub{font-size:14px;color:#9fb0c8;margin-top:5px}
+.status{margin-left:auto;background:#092216;border:1px solid #235f45;color:var(--green);padding:9px 12px;border-radius:999px;font-size:13px;font-weight:800}
+.panel,.token{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:16px;margin:14px 0;backdrop-filter:blur(10px)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.box{background:var(--box);border:1px solid #1f3154;border-radius:18px;padding:13px}
+.label{font-size:12px;color:var(--muted)}.val{font-size:18px;font-weight:900;margin-top:4px}
+input,select{width:100%;background:#08101f;border:1px solid #243354;border-radius:15px;padding:13px;color:#fff;font-size:16px}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:17px}
+.scan{background:linear-gradient(135deg,#5cf2a0,#3ee779);color:#03120a}.ghost{background:#15213a;color:#fff;border:1px solid #2b3e63}
+.modebar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0}
+.mode{background:#0a1020;border:1px solid #243354;border-radius:14px;padding:10px;color:#a8b3c5;text-align:center;font-weight:900;font-size:13px}
+.mode.active{background:#1d2b49;color:#fff}
+.tokenTop{display:flex;gap:12px;align-items:center}.avatar{width:54px;height:54px;border-radius:16px;object-fit:cover;background:#1a2741}.fallback{display:grid;place-items:center;color:#fff;font-weight:900}
+.name{font-size:22px;font-weight:1000;line-height:1.03}.sym{color:#95a7bf;margin-top:5px;font-size:14px}
+.score{margin-left:auto;font-size:36px;color:var(--green);font-weight:1000}.score.mid{color:var(--yellow)}.score.bad{color:var(--red)}
+.badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.badge{padding:6px 10px;border-radius:999px;background:#142039;border:1px solid #273b62;font-size:12px;color:#d6e0ef}
+.eco{color:var(--blue)}.safe{color:var(--green)}.risk{color:var(--yellow)}.badtext{color:var(--red)}.source{color:var(--violet)}
+.thesis{margin-top:10px;color:#b6c6dc;font-size:13px;line-height:1.45;background:#0a1222;border:1px solid #20355d;border-radius:15px;padding:10px}
+.buybox{margin-top:12px;background:#0a1222;border:1px solid #23385f;border-radius:18px;padding:12px}.buytitle{font-size:13px;color:#9db0c8;margin-bottom:8px}.buyrow{font-size:14px;margin:5px 0}.mini{font-size:12px;color:#8fa2bd;margin-top:6px}
+.linkrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.linkbtn{text-decoration:none;background:#15213a;border:1px solid #2b3f67;color:#fff;padding:13px;border-radius:16px;text-align:center;font-weight:900}
+.note{font-size:13px;color:#9fb0c8;text-align:center;line-height:1.45;margin-top:14px}
+.tabs{position:fixed;left:18px;right:18px;bottom:18px;max-width:520px;margin:auto;background:#0f172aee;border:1px solid #26385f;border-radius:28px;padding:8px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;backdrop-filter:blur(12px)}
+.tab{padding:13px;text-align:center;border-radius:20px;color:#9fb0c8;font-weight:900}.tab.active{background:#1d2b49;color:#fff}
+.empty{border:1px dashed #32466f;border-radius:24px;padding:24px;text-align:center;color:#9fb0c8;margin-top:14px;line-height:1.45}
+.pos{color:var(--green)!important}.neg{color:var(--red)!important}.neutral{color:#cbd5e1!important}
 </style>
 </head>
 <body>
 <div class="app">
+  <div class="head">
+    <div class="logo"></div>
+    <div><h1>Lowcap Radar AI</h1><div class="sub">v4.1 • Live Narrative Radar</div></div>
+    <div id="status" class="status">ready</div>
+  </div>
 
-<div class="header">
-<div class="logo"></div>
-<div>
-<div class="title">Lowcap Radar AI</div>
-<div class="sub">v4.0 • Narrative Intelligence</div>
-</div>
-<div class="live">LIVE</div>
-</div>
+  <div class="panel">
+    <div class="grid">
+      <div class="box"><div class="label">Найдено</div><div id="found" class="val">0</div></div>
+      <div class="box"><div class="label">Avg score</div><div id="avg" class="val">—</div></div>
+    </div>
 
-<div class="card">
-<div class="stats">
-<div class="stat">
-<div class="label">Narrative gems</div>
-<div class="value">12</div>
-</div>
-<div class="stat">
-<div class="label">AI consensus</div>
-<div class="value">87</div>
-</div>
-</div>
+    <div class="modebar">
+      <div class="mode active" onclick="setMode('narrative',this)">Narrative</div>
+      <div class="mode" onclick="setMode('ecosystem',this)">Ecosystem</div>
+      <div class="mode" onclick="setMode('micro',this)">Micro</div>
+    </div>
 
-<div class="modes">
-<div class="mode active">Narrative</div>
-<div class="mode">Ecosystem</div>
-<div class="mode">Micro</div>
-</div>
+    <div class="controls">
+      <div><div class="label">Сектор</div>
+        <select id="sector">
+          <option value="ai">AI / DePIN / Compute</option>
+          <option value="rwa">RWA</option>
+          <option value="solana">Solana Ecosystem</option>
+          <option value="base">Base Ecosystem</option>
+          <option value="ethereum">Ethereum Ecosystem</option>
+          <option value="meme">Meme</option>
+        </select>
+      </div>
+      <div><div class="label">Max Market Cap</div><input id="maxcap" value="500000000"></div>
+      <div><div class="label">Min 24h Volume</div><input id="minvol" value="500000"></div>
+      <div><div class="label">CoinGecko Demo Key</div><input id="cgkey" placeholder="optional"></div>
+    </div>
 
-<div class="filters">
-<select>
-<option>AI / DePIN</option>
-<option>RWA</option>
-<option>Solana Ecosystem</option>
-<option>Base Ecosystem</option>
-<option>Ethereum Ecosystem</option>
-<option>Meme</option>
-</select>
+    <div style="height:12px"></div>
+    <div class="controls">
+      <button class="scan" onclick="scan()">Narrative Scan</button>
+      <button class="ghost" onclick="saveKey()">Save key</button>
+    </div>
 
-<select>
-<option>Ethereum Priority</option>
-<option>Solana Priority</option>
-<option>Base Priority</option>
-</select>
+    <div class="note">
+      При открытии список пустой. Монеты появляются только после нажатия Scan и берутся из реальных источников.
+    </div>
+  </div>
 
-<input value="$500M max market cap">
-<input value="$500K min volume">
-</div>
-
-<div class="buttons">
-<button class="scan">Narrative Scan</button>
-<button class="demo">Watchlist AI</button>
+  <div id="results"><div class="empty">Нажми Narrative Scan, чтобы загрузить реальные данные.</div></div>
 </div>
 
-<div class="note">
-v4.0 уже делает акцент не на случайных lowcaps,
-а на сильных narratives и сильных экосистемах:
-Ethereum → Solana → Base.
-</div>
-</div>
+<div class="tabs"><div class="tab active">Радар</div><div class="tab">Watchlist</div><div class="tab">Sources</div></div>
 
-<div class="coin">
-<div class="top">
-<img class="avatar" src="https://assets.coingecko.com/coins/images/12785/large/akash-logo.png">
-<div>
-<div class="name">Akash Network</div>
-<div class="sym">AKT • AI / DePIN</div>
-</div>
-<div class="score">92</div>
-</div>
-
-<div class="badges">
-<div class="badge">GOLD ZONE</div>
-<div class="badge">Ethereum narrative</div>
-<div class="badge">AI Compute</div>
-<div class="badge">CoinGecko</div>
-</div>
-
-<div class="reason">
-🧠 AI Score explanation:
-<br><br>
-• AI / Compute narrative +20
-<br>
-• Strong ecosystem momentum +15
-<br>
-• Healthy volume growth +14
-<br>
-• Mid-cap positioning +12
-<br>
-• Real utility project +10
-<br>
-• CoinGecko market validation +8
-<br>
-• DePIN sector activity +13
-</div>
-
-<div class="grid">
-<div class="box">
-<div class="label">Market Cap</div>
-<div class="big">$230M</div>
-</div>
-
-<div class="box">
-<div class="label">24h Volume</div>
-<div class="big">$18M</div>
-</div>
-
-<div class="box">
-<div class="label">24h Change</div>
-<div class="big">+8.4%</div>
-</div>
-
-<div class="box">
-<div class="label">Narrative Heat</div>
-<div class="big">HOT 🔥</div>
-</div>
-</div>
-</div>
-
-<div class="coin">
-<div class="top">
-<img class="avatar" src="https://assets.coingecko.com/coins/images/43723/large/ATH.png">
-<div>
-<div class="name">Aethir</div>
-<div class="sym">ATH • GPU / AI</div>
-</div>
-<div class="score">88</div>
-</div>
-
-<div class="badges">
-<div class="badge">WATCH</div>
-<div class="badge">GPU cloud</div>
-<div class="badge">DePIN</div>
-<div class="badge">CoinGecko</div>
-</div>
-
-<div class="reason">
-🧠 AI Score explanation:
-<br><br>
-• GPU narrative acceleration +20
-<br>
-• AI infrastructure sector +18
-<br>
-• Strong volume activity +11
-<br>
-• Mid/high risk growth zone +8
-<br>
-• Ecosystem momentum +10
-</div>
-
-<div class="grid">
-<div class="box">
-<div class="label">Market Cap</div>
-<div class="big">$320M</div>
-</div>
-
-<div class="box">
-<div class="label">24h Volume</div>
-<div class="big">$25M</div>
-</div>
-
-<div class="box">
-<div class="label">24h Change</div>
-<div class="big">+6.2%</div>
-</div>
-
-<div class="box">
-<div class="label">Narrative Heat</div>
-<div class="big">EARLY ⚡</div>
-</div>
-</div>
-</div>
-
-</div>
-
-<div class="nav">
-<div class="tab active">Radar</div>
-<div class="tab">Watchlist</div>
-<div class="tab">Sources</div>
-</div>
-
+<script>
+let MODE="narrative";
+const SECTORS={
+ ai:{ids:["akash-network","render-token","bittensor","io-net","aethir","origintrail","grass","autonolas","nosana"],q:"ai depin compute"},
+ rwa:{ids:["ondo-finance","mantra-dao","centrifuge","pendle","maple","clearpool"],q:"rwa real world asset"},
+ solana:{ids:["jupiter-exchange-solana","jito-governance-token","pyth-network","drift-protocol","orca"],q:"solana ecosystem"},
+ base:{ids:["aerodrome-finance","degen-base","toshi","brett","virtual-protocol"],q:"base ecosystem"},
+ ethereum:{ids:["uniswap","aave","chainlink","ethereum-name-service","pepe","ondo-finance"],q:"ethereum ecosystem"},
+ meme:{ids:["pepe","dogwifcoin","bonk","floki","mog-coin","popcat"],q:"meme"}
+};
+window.addEventListener("load",()=>{document.getElementById("cgkey").value=localStorage.getItem("cg_demo_key")||"";});
+function setMode(m,el){MODE=m;document.querySelectorAll('.mode').forEach(x=>x.classList.remove('active'));el.classList.add('active');}
+function saveKey(){localStorage.setItem("cg_demo_key",document.getElementById("cgkey").value.trim());alert("Ключ сохранён только на этом iPhone")}
+function fmt(n){n=Number(n||0);if(n>=1e9)return"$"+(n/1e9).toFixed(1)+"B";if(n>=1e6)return"$"+(n/1e6).toFixed(1)+"M";if(n>=1e3)return"$"+Math.round(n/1e3)+"K";return"$"+Math.round(n)}
+function pct(n){n=Number(n||0);return (n>0?"+":"")+n.toFixed(1)+"%"}
+function pctClass(n){n=Number(n||0); if(n>0)return"pos"; if(n<0)return"neg"; return"neutral";}
+function pf(n){n=Number(n||0);if(n>=1)return"$"+n.toFixed(3);if(n>0)return"$"+n.toPrecision(3);return"—"}
+function sourceFetch(url){const key=(document.getElementById("cgkey").value||localStorage.getItem("cg_demo_key")||"").trim();let opt={cache:"no-store"};if(key)opt.headers={"x-cg-demo-api-key":key};return fetch(url,opt)}
+function ecosystemBoost(sector){if(sector==="ethereum")return 18;if(sector==="solana")return 17;if(sector==="base")return 16;if(sector==="ai")return 15;if(sector==="rwa")return 11;if(sector==="meme")return 8;return 0}
+function scoreCG(c,sector){
+ let s=35+ecosystemBoost(sector);
+ const mc=c.market_cap||0,vol=c.total_volume||0,rank=c.market_cap_rank||99999,ch24=c.price_change_percentage_24h||0;
+ if(mc>0&&mc<500000000)s+=14; if(mc>0&&mc<100000000)s+=8; if(mc>1000000000)s-=10;
+ if(vol>500000)s+=8; if(vol>5000000)s+=8; if(vol>50000000)s+=4;
+ if(ch24>3)s+=8; if(ch24>10)s+=6; if(ch24<-10)s-=10;
+ if(rank<100)s-=8; else if(rank>100&&rank<500)s+=5; else if(rank>500)s+=9;
+ return Math.max(1,Math.min(99,Math.round(s)));
+}
+function thesisCG(c,sector){
+ let t=[];
+ if(sector==="ai")t.push("AI/DePIN/compute narrative");
+ if(sector==="rwa")t.push("RWA narrative");
+ if(sector==="solana")t.push("Solana ecosystem flow");
+ if(sector==="base")t.push("Base/Coinbase ecosystem flow");
+ if(sector==="ethereum")t.push("Ethereum liquidity core");
+ if(sector==="meme")t.push("Meme narrative");
+ if(c.market_cap&&c.market_cap<500000000)t.push("market cap below selected cap");
+ if(c.total_volume>5000000)t.push("strong volume");
+ if((c.price_change_percentage_24h||0)>3)t.push("24h momentum");
+ if((c.price_change_percentage_24h||0)<0)t.push("24h pullback");
+ if(c.market_cap_rank)t.push("CoinGecko rank "+c.market_cap_rank);
+ return t.join(" · ");
+}
+async function scanCG(){
+ const sector=document.getElementById("sector").value,maxcap=+document.getElementById("maxcap").value||500000000,minvol=+document.getElementById("minvol").value||0;
+ const ids=SECTORS[sector].ids.join(",");
+ const url="https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids="+ids+"&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=24h,7d";
+ let r=await sourceFetch(url); if(!r.ok)throw new Error("CoinGecko "+r.status);
+ let data=await r.json();
+ return data.filter(c=>(c.market_cap||0)<=maxcap && (c.total_volume||0)>=minvol).map(c=>({_type:"cg",_score:scoreCG(c,sector),_sector:sector,...c})).sort((a,b)=>b._score-a._score);
+}
+const BAD=["wrapped","coinbase wrapped","bridged","wormhole","shit","piss","skin","sex","porn","scam","rug","hitler","nazi"];
+const BLOCK=["BTC","ETH","SOL","DOGE","ADA","XRP","LTC","BNB","USDT","USDC","WETH","WBTC","WSOL","WBNB"];
+function badDex(p){let s=(p.baseToken?.symbol||"").toUpperCase(),n=(p.baseToken?.name||"").toLowerCase();return BLOCK.includes(s)||BAD.some(x=>n.includes(x)||s.toLowerCase().includes(x))}
+function scoreDex(p){let fdv=+(p.fdv||0),liq=+(p.liquidity?.usd||0),vol=+(p.volume?.h24||0);let s=35;if(fdv&&fdv<1000000)s+=18;else if(fdv<8000000)s+=10;if(liq>25000)s+=10;if(vol>40000)s+=10;if(vol>200000)s+=8;if(vol/Math.max(liq,1)>25)s-=20;if(badDex(p))s-=80;return Math.max(1,Math.min(99,Math.round(s)))}
+async function scanDex(){
+ const sec=document.getElementById("sector").value,q=SECTORS[sec].q,maxcap=+document.getElementById("maxcap").value||8000000,minvol=+document.getElementById("minvol").value||40000;
+ let all=[];
+ for(let qq of [q,sec+" meme",sec+" ai",sec+" lowcap"]){let r=await fetch("https://api.dexscreener.com/latest/dex/search?q="+encodeURIComponent(qq),{cache:"no-store"});let d=await r.json();all.push(...(d.pairs||[]));await new Promise(res=>setTimeout(res,90))}
+ let seen=new Set();
+ return all.filter(p=>{let a=(p.baseToken?.address||p.pairAddress||"").toLowerCase();if(seen.has(a))return false;seen.add(a);return !badDex(p)&&(p.fdv||0)>0&&(p.fdv||0)<=maxcap&&(p.volume?.h24||0)>=minvol&&(p.liquidity?.usd||0)>=20000}).map(p=>({_type:"dex",_score:scoreDex(p),...p})).sort((a,b)=>b._score-a._score).slice(0,25);
+}
+function render(list){
+ const r=document.getElementById("results");document.getElementById("found").textContent=list.length;document.getElementById("avg").textContent=list.length?Math.round(list.reduce((a,b)=>a+b._score,0)/list.length):"—";r.innerHTML="";
+ if(!list.length){r.innerHTML='<div class="empty">Ничего не найдено. Для Narrative попробуй снизить Min Volume или Max Market Cap. Для Micro — снизь Max FDV.</div>';return}
+ list.forEach(x=>r.appendChild(x._type==="cg"?cardCG(x):cardDex(x)));
+}
+function cardCG(c){
+ let cls=c._score<55?"bad":c._score<72?"mid":"", zone=c._score>78?"GOLD ZONE":c._score>62?"WATCH":"EARLY WATCH";
+ let change=c.price_change_percentage_24h||0;
+ let el=document.createElement("div");el.className="token";el.innerHTML=`<div class="tokenTop"><img class="avatar" src="${c.image||''}"><div><div class="name">${c.name}</div><div class="sym">${(c.symbol||'').toUpperCase()} • CoinGecko</div></div><div class="score ${cls}">${c._score}</div></div>
+ <div class="badges"><div class="badge safe">${zone}</div><div class="badge eco">${c._sector.toUpperCase()}</div><div class="badge source">CoinGecko</div><div class="badge">Rank ${c.market_cap_rank||"n/a"}</div></div>
+ <div class="thesis">🧠 Thesis: ${thesisCG(c,c._sector)}</div>
+ <div class="grid" style="margin-top:12px"><div class="box"><div class="label">Market Cap · CoinGecko</div><div class="val">${fmt(c.market_cap)}</div></div><div class="box"><div class="label">Volume 24h · CoinGecko</div><div class="val">${fmt(c.total_volume)}</div></div><div class="box"><div class="label">Price</div><div class="val">${pf(c.current_price)}</div></div><div class="box"><div class="label">24h</div><div class="val ${pctClass(change)}">${pct(change)}</div></div></div>
+ <div class="buybox"><div class="buytitle">Guide</div><div class="buyrow">🛒 Где искать: CoinGecko → Markets / CEX-DEX pairs</div><div class="buyrow">👛 Хранить: зависит от сети токена</div><div class="mini">Это narrative radar. Перед покупкой проверь сеть, контракт, unlocks и ликвидность.</div></div>`;
+ return el;
+}
+function cardDex(p){
+ let name=p.baseToken?.name||"Unknown",sym=p.baseToken?.symbol||"?",chain=(p.chainId||"").toUpperCase(),img=p.info?.imageUrl||"",cls=p._score<55?"bad":p._score<72?"mid":"";
+ let el=document.createElement("div");el.className="token";el.innerHTML=`<div class="tokenTop">${img?`<img class="avatar" src="${img}">`:`<div class="avatar fallback">${sym.slice(0,3)}</div>`}<div><div class="name">${name}</div><div class="sym">${sym} • ${chain}</div></div><div class="score ${cls}">${p._score}</div></div>
+ <div class="badges"><div class="badge safe">MICRO GEM</div><div class="badge source">DexScreener</div><div class="badge">FDV ${fmt(p.fdv)}</div></div>
+ <div class="thesis">🧠 Thesis: DEX microcap · live volume/liquidity · high risk segment</div>
+ <div class="grid" style="margin-top:12px"><div class="box"><div class="label">Liquidity</div><div class="val">${fmt(p.liquidity?.usd)}</div></div><div class="box"><div class="label">Volume 24h</div><div class="val">${fmt(p.volume?.h24)}</div></div><div class="box"><div class="label">Price</div><div class="val">${pf(p.priceUsd)}</div></div><div class="box"><div class="label">FDV</div><div class="val">${fmt(p.fdv)}</div></div></div>
+ <div class="linkrow"><a class="linkbtn" href="${p.url||'#'}" target="_blank">DexScreener</a><a class="linkbtn" href="#" onclick="alert('Добавлено в watchlist');return false;">Watchlist</a></div>`;
+ return el;
+}
+async function scan(){
+ document.getElementById("status").textContent="scan...";document.getElementById("results").innerHTML='<div class="empty">Сканирую реальные источники...</div>';localStorage.setItem("cg_demo_key",document.getElementById("cgkey").value.trim());
+ try{let list=MODE==="micro"?await scanDex():await scanCG();document.getElementById("status").textContent="live";render(list)}catch(e){console.error(e);document.getElementById("status").textContent="api error";document.getElementById("results").innerHTML='<div class="empty">Источник временно недоступен или нужен CoinGecko Demo Key. Попробуй снизить фильтры или включить Micro.</div>'}
+}
+</script>
 </body>
 </html>

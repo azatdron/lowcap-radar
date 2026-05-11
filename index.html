@@ -2,115 +2,163 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lowcap Radar AI v3.1</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Lowcap Radar AI v3.2</title>
 <link rel="manifest" href="manifest.json">
 <style>
-body{margin:0;background:#050816;color:#fff;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
-.wrap{padding:16px}
-h1{margin:0;font-size:34px}
-.sub{color:#8b95a7;margin-top:4px}
-.card{background:#0e1426;border:1px solid #1c2742;border-radius:22px;padding:16px;margin-top:14px}
-.btn{width:100%;padding:16px;border:none;border-radius:18px;background:#4ade80;color:#03120a;font-weight:800;font-size:18px}
-.token{padding:14px;border-radius:18px;background:#11192d;margin-top:12px}
-.row{display:flex;justify-content:space-between;gap:10px}
-.badge{background:#162238;padding:6px 10px;border-radius:999px;font-size:12px}
-.score{font-size:28px;font-weight:800;color:#63f5a8}
-.small{font-size:12px;color:#94a3b8}
-.name{font-size:22px;font-weight:700}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.box{background:#0a1020;border-radius:14px;padding:12px}
+:root{--bg:#050816;--card:#111827;--box:#080d1a;--line:#1f2d4a;--text:#f8fafc;--muted:#93a4bd;--green:#5cf2a0;--yellow:#ffd166;--red:#ff6b8a}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 20% 0%,#0b1830 0,#050816 38%,#02040a 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",system-ui,sans-serif;padding-bottom:90px}
+.app{max-width:520px;margin:0 auto;padding:18px}
+.head{display:flex;gap:12px;align-items:center;margin:18px 0}
+.logo{width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,#18233d,#0b1120);display:grid;place-items:center;border:1px solid #26385f;box-shadow:0 0 30px #35f59a33}
+.logo:before{content:"⌁";font-size:42px;color:var(--green);font-weight:900}
+h1{font-size:32px;margin:0;line-height:1}.sub{color:var(--muted);margin-top:5px;font-size:14px}.status{margin-left:auto;color:var(--green);border:1px solid #235f45;background:#092216;padding:8px 12px;border-radius:999px;font-size:13px}
+.panel,.token{background:rgba(17,24,39,.92);border:1px solid var(--line);border-radius:26px;padding:16px;margin:14px 0;box-shadow:0 12px 50px #0005}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.box{background:var(--box);border:1px solid #1b2948;border-radius:18px;padding:13px}.label{font-size:12px;color:var(--muted)}.val{font-size:18px;font-weight:800;margin-top:4px}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}input,select{width:100%;background:#080d1a;border:1px solid #243354;border-radius:16px;padding:13px;color:#fff;font-size:16px}button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:17px}.scan{background:linear-gradient(135deg,#5cf2a0,#3ee779);color:#03120a}.demo{background:#142039;color:#fff;border:1px solid #26385f}
+.tokenTop{display:flex;align-items:center;gap:12px}.avatar{width:52px;height:52px;border-radius:17px;background:#161f35;border:1px solid #27385e;object-fit:cover}.fallback{display:grid;place-items:center;font-size:15px;font-weight:900;color:#fff;background:linear-gradient(135deg,#2b215e,#12223c)}
+.name{font-size:23px;font-weight:900}.sym{color:var(--muted);font-size:14px;margin-top:3px}.score{margin-left:auto;font-size:34px;color:var(--green);font-weight:1000}
+.badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.badge{font-size:12px;border-radius:999px;padding:6px 9px;background:#142039;color:#cbd5e1;border:1px solid #24385d}.riskLow{color:var(--green)}.riskMid{color:var(--yellow)}.riskHigh{color:var(--red)}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.linkbtn{background:#142039;color:#fff;border:1px solid #273b63;padding:13px;border-radius:16px;text-align:center;text-decoration:none;font-weight:800}
+.note{color:var(--muted);font-size:13px;line-height:1.45;text-align:center;margin:16px 0}.empty{border:1px dashed #2d416d;border-radius:24px;padding:24px;text-align:center;color:var(--muted);margin-top:14px}.tabs{position:fixed;left:18px;right:18px;bottom:18px;max-width:500px;margin:auto;background:#0f172a;border:1px solid #26385f;border-radius:28px;padding:8px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.tab{padding:13px;text-align:center;border-radius:21px;color:#9aa8bd;font-weight:900}.tab.active{background:#1d2b49;color:#fff}
 </style>
 </head>
 <body>
-<div class="wrap">
-<h1>Lowcap Radar AI</h1>
-<div class="sub">v3.1 • AI scanner engine</div>
+<div class="app">
+  <div class="head">
+    <div class="logo"></div>
+    <div><h1>Lowcap Radar AI</h1><div class="sub">v3.2 • real token parser</div></div>
+    <div id="apiStatus" class="status">ready</div>
+  </div>
 
-<div class="card">
-<div class="row">
-<div>
-<div class="small">Scanner</div>
-<div class="name">Live Dex Scanner</div>
-</div>
-<div class="badge">SOL • BASE • ETH</div>
-</div>
+  <div class="panel">
+    <div class="grid">
+      <div class="box"><div class="label">Найдено</div><div id="found" class="val">0</div></div>
+      <div class="box"><div class="label">Средний score</div><div id="avg" class="val">—</div></div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="controls">
+      <div><div class="label">Запрос</div><input id="query" value="ai base solana lowcap"></div>
+      <div><div class="label">Max market cap</div><input id="maxMc" type="number" value="50000000"></div>
+      <div><div class="label">Min liquidity</div><input id="minLiq" type="number" value="10000"></div>
+      <div><div class="label">Min volume 24h</div><input id="minVol" type="number" value="50000"></div>
+    </div>
+    <div style="height:12px"></div>
+    <div class="controls">
+      <button class="scan" onclick="scan()">Сканировать</button>
+      <button class="demo" onclick="loadDemo()">Demo</button>
+    </div>
+    <div class="note">DYOR. Это радар и фильтр риска, не финансовый совет.</div>
+  </div>
+
+  <div id="results"></div>
 </div>
 
-<div class="card">
-<button class="btn" onclick="scan()">Сканировать рынок</button>
-<div class="small" style="margin-top:10px">Сканирует DexScreener и считает AI score</div>
-</div>
-
-<div id="results"></div>
-
-</div>
+<div class="tabs"><div class="tab active">Радар</div><div class="tab">Watchlist</div><div class="tab">Risk</div></div>
 
 <script>
-function calcScore(liq,vol,age){
- let s = 50;
- if(liq>50000) s+=10;
- if(vol>100000) s+=15;
- if(age>3) s+=10;
- return Math.min(99,Math.round(s));
+const fallbackColors=["#37275f","#173c55","#214533","#4a2637","#27395d"];
+function fmt(n){n=Number(n||0); if(n>=1e9)return "$"+(n/1e9).toFixed(1)+"B"; if(n>=1e6)return "$"+(n/1e6).toFixed(1)+"M"; if(n>=1e3)return "$"+Math.round(n/1e3)+"K"; return "$"+Math.round(n)}
+function priceFmt(n){n=Number(n||0); if(n>=1)return "$"+n.toFixed(3); if(n>0)return "$"+n.toPrecision(3); return "—"}
+function ageFromCreated(ms){ if(!ms) return "—"; const d=Math.max(1,Math.floor((Date.now()-ms)/86400000)); return d+"d" }
+function scoreToken(p){
+  const liq=p.liquidity?.usd||0, vol=p.volume?.h24||0, tx=(p.txns?.h24?.buys||0)+(p.txns?.h24?.sells||0), fdv=p.fdv||0;
+  let s=35;
+  if(liq>10000)s+=10; if(liq>50000)s+=10; if(vol>50000)s+=10; if(vol>250000)s+=10; if(tx>100)s+=8; if(tx>500)s+=8;
+  if(fdv>0 && fdv<50000000)s+=8; if(fdv>100000000)s-=10;
+  if(p.pairCreatedAt){ const age=(Date.now()-p.pairCreatedAt)/86400000; if(age<1)s-=8; else if(age<7)s+=4; else if(age<60)s+=8; }
+  return Math.max(1,Math.min(99,Math.round(s)));
 }
-
+function risk(score,liq,fdv){
+  if(score>=75 && liq>50000) return ["Low","riskLow"];
+  if(score>=55 && liq>10000) return ["Medium","riskMid"];
+  return ["High","riskHigh"];
+}
+function uniquePairs(pairs){
+  const seen=new Set(); const out=[];
+  for(const p of pairs){
+    const addr=(p.baseToken?.address||p.pairAddress||"").toLowerCase();
+    if(!addr || seen.has(addr)) continue;
+    seen.add(addr); out.push(p);
+  }
+  return out;
+}
+function render(list){
+  const res=document.getElementById("results");
+  document.getElementById("found").textContent=list.length;
+  document.getElementById("avg").textContent=list.length?Math.round(list.reduce((a,b)=>a+b._score,0)/list.length):"—";
+  if(!list.length){res.innerHTML='<div class="empty">Ничего не найдено по этим фильтрам. Ослабь liquidity/volume или измени запрос.</div>';return;}
+  res.innerHTML="";
+  list.forEach((p,i)=>{
+    const name=p.baseToken?.name||"Unknown token";
+    const sym=(p.baseToken?.symbol||"?").slice(0,8);
+    const chain=(p.chainId||"unknown").toUpperCase();
+    const liq=p.liquidity?.usd||0, vol=p.volume?.h24||0, fdv=p.fdv||0;
+    const [r,rc]=risk(p._score,liq,fdv);
+    const img=p.info?.imageUrl;
+    const el=document.createElement("div");
+    el.className="token";
+    el.innerHTML=`
+      <div class="tokenTop">
+        ${img?`<img class="avatar" src="${img}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${sym.slice(0,3)}</div>'">`:`<div class="avatar fallback" style="background:${fallbackColors[i%fallbackColors.length]}">${sym.slice(0,3)}</div>`}
+        <div><div class="name">${name}</div><div class="sym">${sym} • ${chain}</div></div>
+        <div class="score">${p._score}</div>
+      </div>
+      <div class="badges">
+        <span class="badge ${rc}">Risk: ${r}</span>
+        <span class="badge">DEX: ${p.dexId||"—"}</span>
+        <span class="badge">Age: ${ageFromCreated(p.pairCreatedAt)}</span>
+        <span class="badge">DYOR</span>
+      </div>
+      <div class="grid" style="margin-top:12px">
+        <div class="box"><div class="label">Liquidity</div><div class="val">${fmt(liq)}</div></div>
+        <div class="box"><div class="label">Volume 24h</div><div class="val">${fmt(vol)}</div></div>
+        <div class="box"><div class="label">Price</div><div class="val">${priceFmt(p.priceUsd)}</div></div>
+        <div class="box"><div class="label">FDV / MC</div><div class="val">${fmt(fdv)}</div></div>
+      </div>
+      <div class="actions">
+        <a class="linkbtn" href="${p.url||'#'}" target="_blank">DexScreener</a>
+        <a class="linkbtn" href="#" onclick="saveWatch('${name.replaceAll("'","")}','${sym}');return false;">Watchlist</a>
+      </div>`;
+    res.appendChild(el);
+  });
+}
+function saveWatch(n,s){ const w=JSON.parse(localStorage.getItem("watch")||"[]"); w.push({n,s,t:Date.now()}); localStorage.setItem("watch",JSON.stringify(w)); alert("Добавлено: "+n); }
 async function scan(){
- const container=document.getElementById('results');
- container.innerHTML='<div class="card">Scanning...</div>';
-
- try{
-   const r=await fetch('https://api.dexscreener.com/latest/dex/search?q=solana');
-   const data=await r.json();
-
-   const pairs=(data.pairs||[]).slice(0,8);
-
-   container.innerHTML='';
-
-   pairs.forEach(p=>{
-      const liq=p.liquidity?.usd||0;
-      const vol=p.volume?.h24||0;
-      const age=Math.floor(Math.random()*30)+1;
-      const score=calcScore(liq,vol,age);
-
-      const div=document.createElement('div');
-      div.className='token';
-
-      div.innerHTML=`
-        <div class="row">
-          <div>
-            <div class="name">${p.baseToken?.name||'Unknown'}</div>
-            <div class="small">${p.baseToken?.symbol||''}</div>
-          </div>
-          <div class="score">${score}</div>
-        </div>
-
-        <div class="grid">
-          <div class="box">
-            <div class="small">Liquidity</div>
-            <div>$${Math.round(liq).toLocaleString()}</div>
-          </div>
-          <div class="box">
-            <div class="small">Volume 24h</div>
-            <div>$${Math.round(vol).toLocaleString()}</div>
-          </div>
-          <div class="box">
-            <div class="small">Chain</div>
-            <div>${p.chainId||'Unknown'}</div>
-          </div>
-          <div class="box">
-            <div class="small">Age</div>
-            <div>${age}d</div>
-          </div>
-        </div>
-      `;
-      container.appendChild(div);
-   });
-
- }catch(e){
-   container.innerHTML='<div class="card">API temporarily unavailable</div>';
- }
+  const status=document.getElementById("apiStatus"); status.textContent="scan...";
+  document.getElementById("results").innerHTML='<div class="empty">Сканирую DexScreener...</div>';
+  const q=document.getElementById("query").value.trim()||"ai base solana";
+  const maxMc=+document.getElementById("maxMc").value||999999999;
+  const minLiq=+document.getElementById("minLiq").value||0;
+  const minVol=+document.getElementById("minVol").value||0;
+  try{
+    const queries=[q,"base ai","solana ai","meme solana","lowcap base"];
+    const all=[];
+    for(const qq of queries){
+      const r=await fetch("https://api.dexscreener.com/latest/dex/search?q="+encodeURIComponent(qq),{cache:"no-store"});
+      const d=await r.json(); all.push(...(d.pairs||[]));
+    }
+    let list=uniquePairs(all).filter(p=>{
+      const fdv=p.fdv||0, liq=p.liquidity?.usd||0, vol=p.volume?.h24||0;
+      return fdv>0 && fdv<=maxMc && liq>=minLiq && vol>=minVol && p.baseToken?.symbol;
+    }).map(p=>({...p,_score:scoreToken(p)})).sort((a,b)=>b._score-a._score).slice(0,30);
+    status.textContent="live";
+    render(list);
+  }catch(e){
+    status.textContent="api error";
+    document.getElementById("results").innerHTML='<div class="empty">API временно недоступен. Нажми Demo или попробуй позже.</div>';
+  }
 }
+function loadDemo(){
+ const demo=[
+  {baseToken:{name:"Nexa AI",symbol:"NEXA"},chainId:"base",dexId:"uniswap",liquidity:{usd:180000},volume:{h24:920000},fdv:18000000,priceUsd:.042,pairCreatedAt:Date.now()-12*86400000,url:"#",_score:86},
+  {baseToken:{name:"Byte Cat",symbol:"BYTECAT"},chainId:"solana",dexId:"raydium",liquidity:{usd:64000},volume:{h24:310000},fdv:3100000,priceUsd:.00081,pairCreatedAt:Date.now()-7*86400000,url:"#",_score:78},
+  {baseToken:{name:"Brick RWA",symbol:"BRICK"},chainId:"base",dexId:"aerodrome",liquidity:{usd:54000},volume:{h24:125000},fdv:7200000,priceUsd:.0062,pairCreatedAt:Date.now()-28*86400000,url:"#",_score:74}
+ ];
+ document.getElementById("apiStatus").textContent="demo";
+ render(demo);
+}
+if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js")}
 </script>
 </body>
 </html>

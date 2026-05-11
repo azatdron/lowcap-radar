@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Lowcap Radar AI v3.8</title>
+<title>Lowcap Radar AI v3.9</title>
 <link rel="manifest" href="manifest.json">
 <style>
 :root{--bg:#050816;--card:#111827;--box:#080d1a;--line:#22385d;--text:#f8fafc;--muted:#94a3b8;--green:#5cf2a0;--yellow:#ffd166;--red:#ff6b8a;--blue:#7dd3fc;--violet:#c4b5fd}
@@ -12,7 +12,7 @@
 h1{margin:0;font-size:31px;line-height:1}.sub{font-size:14px;color:#9fb0c8;margin-top:4px}.status{margin-left:auto;background:#092216;border:1px solid #235f45;color:#5cf2a0;padding:9px 12px;border-radius:999px;font-size:13px}
 .panel,.token{background:#101827dd;border:1px solid var(--line);border-radius:26px;padding:16px;margin:14px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.box{background:#08101f;border:1px solid #1f3154;border-radius:18px;padding:13px}.label{font-size:12px;color:#93a4bd}.val{font-size:18px;font-weight:900;margin-top:4px}
 input,select{width:100%;background:#08101f;border:1px solid #243354;border-radius:15px;padding:13px;color:#fff;font-size:16px}.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:17px}.scan{background:linear-gradient(135deg,#5cf2a0,#3ee779);color:#03120a}.demo{background:#15213a;color:#fff;border:1px solid #2b3e63}.ghost{background:#0a1222;color:#cbd5e1;border:1px solid #273b62}
+button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:17px}.scan{background:linear-gradient(135deg,#5cf2a0,#3ee779);color:#03120a}.ghost{background:#15213a;color:#fff;border:1px solid #2b3e63}
 .modebar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0}.mode{background:#0a1020;border:1px solid #243354;border-radius:14px;padding:10px;color:#a8b3c5;text-align:center;font-weight:900;font-size:13px}.mode.active{background:#1d2b49;color:#fff}
 .tokenTop{display:flex;gap:12px;align-items:center}.avatar{width:54px;height:54px;border-radius:16px;object-fit:cover;background:#1a2741}.fallback{display:grid;place-items:center;color:#fff;font-weight:900}.name{font-size:22px;font-weight:1000;line-height:1.02}.sym{color:#95a7bf;margin-top:5px;font-size:14px}.score{margin-left:auto;font-size:36px;color:#5cf2a0;font-weight:1000}.score.mid{color:var(--yellow)}.score.bad{color:var(--red)}
 .badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.badge{padding:6px 10px;border-radius:999px;background:#142039;border:1px solid #273b62;font-size:12px;color:#d6e0ef}.eco{color:var(--blue)}.safe{color:var(--green)}.risk{color:var(--yellow)}.bad{color:var(--red)}.source{color:var(--violet)}
@@ -27,44 +27,46 @@ button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:17px}.
 <div class="app">
   <div class="head">
     <div class="logo"></div>
-    <div><h1>Lowcap Radar AI</h1><div class="sub">v3.8 • Real Data Engine</div></div>
+    <div><h1>Lowcap Radar AI</h1><div class="sub">v3.9 • Narrative Radar</div></div>
     <div id="status" class="status">ready</div>
   </div>
 
   <div class="panel">
     <div class="grid">
-      <div class="box"><div class="label">Consensus gems</div><div id="found" class="val">0</div></div>
-      <div class="box"><div class="label">Avg consensus</div><div id="avg" class="val">—</div></div>
+      <div class="box"><div class="label">Найдено</div><div id="found" class="val">0</div></div>
+      <div class="box"><div class="label">Avg score</div><div id="avg" class="val">—</div></div>
     </div>
 
     <div class="modebar">
-      <div class="mode active" onclick="setEco('ethereum',this)">Ethereum</div>
-      <div class="mode" onclick="setEco('solana',this)">Solana</div>
-      <div class="mode" onclick="setEco('base',this)">Base</div>
+      <div class="mode active" onclick="setMode('narrative',this)">Narrative</div>
+      <div class="mode" onclick="setMode('ecosystem',this)">Ecosystem</div>
+      <div class="mode" onclick="setMode('micro',this)">Micro</div>
     </div>
 
     <div class="controls">
-      <div><div class="label">Narrative</div><input id="query" value="ethereum meme ai"></div>
-      <div><div class="label">Max FDV</div><input id="maxfdv" value="10000000"></div>
-      <div><div class="label">CoinGecko Demo Key</div><input id="cgkey" placeholder="optional, stored on iPhone"></div>
-      <div><div class="label">Min liquidity</div><input id="minliq" value="25000"></div>
+      <div><div class="label">Сектор</div>
+        <select id="sector">
+          <option value="ai">AI / DePIN / Compute</option>
+          <option value="rwa">RWA</option>
+          <option value="solana">Solana Ecosystem</option>
+          <option value="base">Base Ecosystem</option>
+          <option value="ethereum">Ethereum Ecosystem</option>
+          <option value="meme">Meme</option>
+        </select>
+      </div>
+      <div><div class="label">Max Market Cap</div><input id="maxcap" value="500000000"></div>
+      <div><div class="label">Min 24h Volume</div><input id="minvol" value="500000"></div>
+      <div><div class="label">CoinGecko Demo Key</div><input id="cgkey" placeholder="optional"></div>
     </div>
 
     <div style="height:12px"></div>
     <div class="controls">
-      <button class="scan" onclick="scan()">Real Data Scan</button>
+      <button class="scan" onclick="scan()">Narrative Scan</button>
       <button class="ghost" onclick="saveKey()">Save key</button>
     </div>
 
     <div class="note">
-      v3.8 не придумывает “официальные” цифры: liquidity/volume/FDV идут из DexScreener, market/rank — CoinGecko если найдено, ecosystem heat — DefiLlama, contract risk — GoPlus для EVM.
-    </div>
-
-    <div class="srcGrid">
-      <div class="src"><b>DexScreener</b>pairs / liquidity / volume / FDV</div>
-      <div class="src"><b>DefiLlama</b>chain TVL / ecosystem heat</div>
-      <div class="src"><b>CoinGecko</b>optional market rank / cap</div>
-      <div class="src"><b>GoPlus</b>EVM contract risk check</div>
+      v3.9 добавляет слой как у примера AKT: не только микрокапы DEX, а narrative/fundamental radar через CoinGecko + экосистемный heat. Micro-режим остаётся для DEX gems.
     </div>
   </div>
 
@@ -74,177 +76,94 @@ button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:17px}.
 <div class="tabs"><div class="tab active">Радар</div><div class="tab">Watchlist</div><div class="tab">Sources</div></div>
 
 <script>
-let ECO="ethereum";
+let MODE="narrative";
 let CHAIN_HEAT={};
-let CG_CACHE=[];
-const CHAIN_MAP={ethereum:"ethereum",solana:"solana",base:"base",bsc:"bsc"};
-const GO_PLUS_IDS={ethereum:"1",bsc:"56",base:"8453",arbitrum:"42161",polygon:"137",optimism:"10",avalanche:"43114"};
-const BLOCK=["BTC","ETH","SOL","DOGE","ADA","XRP","LTC","BNB","USDT","USDC","WETH","WBTC","WSOL","WBNB","CBADA","CBDOGE","CBLTC","CBETH","CBBTC","DAI","FDUSD","TUSD"];
-const BAD=["wrapped","coinbase wrapped","bridged","wormhole","shit","piss","skin","sex","porn","scam","rug","hitler","nazi"];
-window.addEventListener("load",()=>{document.getElementById("cgkey").value=localStorage.getItem("cg_demo_key")||"";warmupSources()});
+const SECTORS={
+ ai:{ids:["akash-network","render-token","bittensor","io-net","aethir","origintrail","grass","autonolas","nosana"],q:"ai depin compute"},
+ rwa:{ids:["ondo-finance","mantra-dao","centrifuge","pendle","maple","clearpool"],q:"rwa real world asset"},
+ solana:{ids:["jupiter-exchange-solana","jito-governance-token","pyth-network","drift-protocol","kamino","orca"],q:"solana ecosystem"},
+ base:{ids:["aerodrome-finance","degen-base","toshi","brett","virtual-protocol","higher"],q:"base ecosystem"},
+ ethereum:{ids:["uniswap","aave","chainlink","ethereum-name-service","pepe","ondo-finance"],q:"ethereum ecosystem"},
+ meme:{ids:["pepe","dogwifcoin","bonk","floki","mog-coin","popcat"],q:"meme"}
+};
+window.addEventListener("load",()=>{document.getElementById("cgkey").value=localStorage.getItem("cg_demo_key")||"";warmupLlama()});
+function setMode(m,el){MODE=m;document.querySelectorAll('.mode').forEach(x=>x.classList.remove('active'));el.classList.add('active');}
 function saveKey(){localStorage.setItem("cg_demo_key",document.getElementById("cgkey").value.trim());alert("Ключ сохранён только на этом iPhone")}
-function setEco(v,el){ECO=v;document.querySelectorAll('.mode').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('query').value=v==="ethereum"?"ethereum meme ai":v==="solana"?"solana meme pumpfun ai":v==="base"?"base meme ai agent":"meme ai";}
 function fmt(n){n=Number(n||0);if(n>=1e9)return"$"+(n/1e9).toFixed(1)+"B";if(n>=1e6)return"$"+(n/1e6).toFixed(1)+"M";if(n>=1e3)return"$"+Math.round(n/1e3)+"K";return"$"+Math.round(n)}
+function pct(n){n=Number(n||0);return (n>0?"+":"")+n.toFixed(1)+"%"}
 function pf(n){n=Number(n||0);if(n>=1)return"$"+n.toFixed(3);if(n>0)return"$"+n.toPrecision(3);return"—"}
-function ageD(ms){if(!ms)return null;return Math.max(.05,(Date.now()-ms)/86400000)}
-function age(ms){let d=ageD(ms);if(!d)return"—";return d<1?Math.round(d*24)+"h":Math.floor(d)+"d"}
-function wallet(chain){chain=(chain||"").toLowerCase();if(chain.includes("sol"))return"Phantom / Solflare";if(chain.includes("base"))return"MetaMask / Coinbase Wallet";if(chain.includes("bsc"))return"Trust Wallet / MetaMask";return"MetaMask / Rabby"}
-function dexGuide(d){d=(d||"").toLowerCase();if(d.includes("ray"))return"Raydium";if(d.includes("pump"))return"PumpSwap";if(d.includes("cake"))return"PancakeSwap";if(d.includes("uni"))return"Uniswap";if(d.includes("aero"))return"Aerodrome";return d||"DEX"}
-function narrative(p){let t=((p.baseToken?.name||"")+" "+(p.baseToken?.symbol||"")).toLowerCase();if(/ai|agent|gpt|bot|neural/.test(t))return"AI";if(/rwa|real|asset|stock/.test(t))return"RWA";if(/depin|gpu|compute/.test(t))return"DEPIN";if(/cat|dog|frog|pepe|meme|inu|shib|bonk/.test(t))return"MEME";return"ECO";}
-function ecoTier(chain){let c=(chain||"").toLowerCase();if(c.includes("ethereum"))return{tier:"S",boost:18,label:"Ethereum liquidity core"};if(c.includes("solana"))return{tier:"S",boost:17,label:"Solana meme engine"};if(c.includes("base"))return{tier:"S",boost:16,label:"Base/Coinbase growth zone"};if(c.includes("arbitrum")||c.includes("sui")||c.includes("aptos"))return{tier:"A",boost:10,label:"Tier A ecosystem"};if(c.includes("bsc"))return{tier:"B",boost:4,label:"BSC high-risk flow"};return{tier:"C",boost:-5,label:"Unknown/weak ecosystem"}}
-function badToken(p){let sym=(p.baseToken?.symbol||"").toUpperCase();let name=(p.baseToken?.name||"").toLowerCase();if(BLOCK.includes(sym))return true;if(BAD.some(x=>name.includes(x)||sym.toLowerCase().includes(x)))return true;if(sym.startsWith("CB"))return true;return false}
-async function warmupSources(){
-  try{const r=await fetch("https://api.llama.fi/v2/chains",{cache:"no-store"});const data=await r.json();(data||[]).forEach(x=>{if(x.name&&x.tvl)CHAIN_HEAT[x.name.toLowerCase()]=x.tvl})}catch(e){}
-  try{await fetchCoinGecko()}catch(e){}
+function sourceFetch(url){const key=(document.getElementById("cgkey").value||localStorage.getItem("cg_demo_key")||"").trim();let opt={cache:"no-store"};if(key)opt.headers={"x-cg-demo-api-key":key};return fetch(url,opt)}
+async function warmupLlama(){try{let r=await fetch("https://api.llama.fi/v2/chains",{cache:"no-store"});let d=await r.json();(d||[]).forEach(x=>{CHAIN_HEAT[(x.name||"").toLowerCase()]=x.tvl||0})}catch(e){}}
+function ecosystemBoost(sector){if(sector==="ethereum")return 18;if(sector==="solana")return 17;if(sector==="base")return 16;if(sector==="ai")return 15;if(sector==="rwa")return 11;if(sector==="meme")return 8;return 0}
+function scoreCG(c,sector){
+ let s=35+ecosystemBoost(sector);
+ const mc=c.market_cap||0,vol=c.total_volume||0,rank=c.market_cap_rank||99999,ch24=c.price_change_percentage_24h||0;
+ if(mc>0&&mc<500000000)s+=14; if(mc>0&&mc<100000000)s+=8; if(mc>1000000000)s-=10;
+ if(vol>500000)s+=8; if(vol>5000000)s+=8; if(vol>50000000)s+=4;
+ if(ch24>3)s+=8; if(ch24>10)s+=6; if(ch24<-10)s-=10;
+ if(rank<100)s-=8; else if(rank>100&&rank<500)s+=5; else if(rank>500)s+=9;
+ return Math.max(1,Math.min(99,Math.round(s)));
 }
-async function fetchCoinGecko(){
-  const key=(document.getElementById("cgkey")?.value||localStorage.getItem("cg_demo_key")||"").trim();
-  const url="https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=false";
-  const opt=key?{headers:{"x-cg-demo-api-key":key},cache:"no-store"}:{cache:"no-store"};
-  const r=await fetch(url,opt);
-  if(!r.ok) throw new Error("CoinGecko "+r.status);
-  CG_CACHE=await r.json();
+function thesisCG(c,sector){
+ let t=[];
+ if(sector==="ai")t.push("AI/DePIN/compute narrative");
+ if(sector==="rwa")t.push("RWA narrative");
+ if(sector==="solana")t.push("Solana ecosystem flow");
+ if(sector==="base")t.push("Base/Coinbase ecosystem flow");
+ if(sector==="ethereum")t.push("Ethereum liquidity core");
+ if(sector==="meme")t.push("Meme narrative");
+ if(c.market_cap&&c.market_cap<500000000)t.push("market cap below selected cap");
+ if(c.total_volume>5000000)t.push("strong volume");
+ if((c.price_change_percentage_24h||0)>3)t.push("24h momentum");
+ if(c.market_cap_rank)t.push("CoinGecko rank "+c.market_cap_rank);
+ return t.join(" · ");
 }
-function findCG(p){let sym=(p.baseToken?.symbol||"").toLowerCase(), name=(p.baseToken?.name||"").toLowerCase();return CG_CACHE.find(c=>c.symbol===sym || (c.name||"").toLowerCase()===name) || null}
-async function goPlusRisk(p){
-  const chain=(p.chainId||"").toLowerCase();
-  const id=GO_PLUS_IDS[chain];
-  const addr=p.baseToken?.address;
-  if(!id||!addr)return {source:"GoPlus",status:"not_supported",risk:0,text:"not supported"};
-  try{
-    const r=await fetch("https://api.gopluslabs.io/api/v1/token_security/"+id+"?contract_addresses="+addr,{cache:"no-store"});
-    const d=await r.json();
-    const item=d?.result?.[addr.toLowerCase()]||d?.result?.[addr]||null;
-    if(!item)return {source:"GoPlus",status:"no_data",risk:5,text:"no data"};
-    let risk=0, flags=[];
-    if(item.is_honeypot==="1"){risk+=60;flags.push("honeypot")}
-    if(item.is_blacklisted==="1"){risk+=50;flags.push("blacklist")}
-    if(item.is_mintable==="1"){risk+=20;flags.push("mintable")}
-    if(item.can_take_back_ownership==="1"){risk+=20;flags.push("owner risk")}
-    if(item.slippage_modifiable==="1"){risk+=20;flags.push("tax/slippage risk")}
-    return {source:"GoPlus",status:"ok",risk,text:flags.length?flags.join(", "):"basic check ok"};
-  }catch(e){return {source:"GoPlus",status:"error",risk:0,text:"api unavailable"}}
+async function scanCG(){
+ const sector=document.getElementById("sector").value,maxcap=+document.getElementById("maxcap").value||500000000,minvol=+document.getElementById("minvol").value||0;
+ const ids=SECTORS[sector].ids.join(",");
+ const url="https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids="+ids+"&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=24h,7d";
+ let r=await sourceFetch(url); if(!r.ok)throw new Error("CoinGecko "+r.status);
+ let data=await r.json();
+ return data.filter(c=>(c.market_cap||0)<=maxcap && (c.total_volume||0)>=minvol).map(c=>({_type:"cg",_score:scoreCG(c,sector),_sector:sector,...c})).sort((a,b)=>b._score-a._score);
 }
-function heatForChain(chain){
-  const c=(chain||"").toLowerCase();
-  const key=c.includes("ethereum")?"ethereum":c.includes("solana")?"solana":c.includes("base")?"base":c.includes("bsc")?"bsc":"";
-  const tvl=CHAIN_HEAT[key]||0;
-  let heat=0;if(tvl>60000000000)heat=20;else if(tvl>5000000000)heat=15;else if(tvl>1000000000)heat=10;else if(tvl>100000000)heat=5;
-  return {tvl,heat,source:"DefiLlama"};
-}
-function baseScore(p,cg,gp){
-  const fdv=+(p.fdv||0),liq=+(p.liquidity?.usd||0),vol=+(p.volume?.h24||0),d=ageD(p.pairCreatedAt),eco=ecoTier(p.chainId),heat=heatForChain(p.chainId),nar=narrative(p);
-  let s=25+eco.boost+heat.heat;
-  if(fdv>0&&fdv<300000)s+=15;else if(fdv<1500000)s+=12;else if(fdv<5000000)s+=7;else if(fdv>10000000)s-=10;
-  if(liq>25000)s+=7;if(liq>75000)s+=7;if(liq>250000)s+=3;
-  if(vol>40000)s+=7;if(vol>200000)s+=7;if(vol>800000)s+=3;
-  if(d){if(d<1)s+=8;else if(d<7)s+=12;else if(d<30)s+=8;else if(d>180)s-=8}
-  if(nar==="AI"||nar==="MEME")s+=7;if(nar==="RWA"||nar==="DEPIN")s+=5;
-  const vl=vol/Math.max(liq,1);if(vl>25)s-=20;if(vl>.5&&vl<12)s+=6;
-  if(cg){s+=5;if(cg.market_cap_rank&&cg.market_cap_rank<500)s-=18}
-  if(gp)s-=gp.risk||0;
-  if(badToken(p))s-=80;
-  return Math.max(1,Math.min(99,Math.round(s)));
-}
-function thesis(p,cg,gp){
-  const e=ecoTier(p.chainId),h=heatForChain(p.chainId),n=narrative(p),fdv=+(p.fdv||0),vol=+(p.volume?.h24||0),liq=+(p.liquidity?.usd||0),a=ageD(p.pairCreatedAt);
-  let t=[e.label,n+" narrative"];
-  if(h.tvl)t.push("ecosystem TVL "+fmt(h.tvl)+" by DefiLlama");
-  if(fdv&&fdv<1500000)t.push("early FDV");
-  if(vol>liq)t.push("volume > liquidity");
-  if(a&&a<7)t.push("fresh pair");
-  if(cg)t.push("CoinGecko rank "+(cg.market_cap_rank||"n/a"));
-  if(gp&&gp.status==="ok")t.push("GoPlus: "+gp.text);
-  return t.join(" · ");
-}
-function pass(p,maxfdv,minliq){
-  if(badToken(p))return false;
-  if(!(p.fdv>0)||p.fdv>maxfdv)return false;
-  if((p.liquidity?.usd||0)<minliq)return false;
-  if((p.volume?.h24||0)<40000)return false;
-  const c=(p.chainId||"").toLowerCase();
-  if(ECO==="ethereum"&&!c.includes("ethereum"))return false;
-  if(ECO==="solana"&&!c.includes("solana"))return false;
-  if(ECO==="base"&&!c.includes("base"))return false;
-  return true;
-}
-async function enrich(list){
-  const out=[];
-  for(const p of list){
-    const cg=findCG(p);
-    const gp=await goPlusRisk(p);
-    const sc=baseScore(p,cg,gp);
-    if(sc>35)out.push({...p,_cg:cg,_gp:gp,_score:sc});
-    await new Promise(r=>setTimeout(r,40));
-  }
-  return out.sort((a,b)=>b._score-a._score);
-}
-function card(p){
-  let sc=p._score,name=p.baseToken?.name||"Unknown",sym=p.baseToken?.symbol||"?",chain=(p.chainId||"").toUpperCase(),dex=dexGuide(p.dexId),img=p.info?.imageUrl||"",nar=narrative(p),eco=ecoTier(p.chainId),cg=p._cg,gp=p._gp,heat=heatForChain(p.chainId);
-  let cls=sc<55?"bad":sc<72?"mid":"";
-  let zone=sc>78?"GOLD ZONE":sc>62?"WATCH":"RISKY";
-  let el=document.createElement("div");el.className="token";
-  el.innerHTML=`<div class="tokenTop">${img?`<img class="avatar" src="${img}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${sym.slice(0,3)}</div>'">`:`<div class="avatar fallback">${sym.slice(0,3)}</div>`}<div><div class="name">${name}</div><div class="sym">${sym} • ${chain}</div></div><div class="score ${cls}">${sc}</div></div>
-  <div class="badges"><div class="badge ${sc>78?'safe':'risk'}">${zone}</div><div class="badge eco">Tier ${eco.tier}</div><div class="badge eco">${nar}</div><div class="badge source">Sources: ${2+(cg?1:0)+(gp?1:0)}</div></div>
-  <div class="thesis">🧠 Thesis: ${thesis(p,cg,gp)}</div>
-  <div class="grid" style="margin-top:12px">
-    <div class="box"><div class="label">Liquidity · DexScreener</div><div class="val">${fmt(p.liquidity?.usd)}</div></div>
-    <div class="box"><div class="label">Volume 24h · DexScreener</div><div class="val">${fmt(p.volume?.h24)}</div></div>
-    <div class="box"><div class="label">FDV · DexScreener</div><div class="val">${fmt(p.fdv)}</div></div>
-    <div class="box"><div class="label">Chain TVL · DefiLlama</div><div class="val">${heat.tvl?fmt(heat.tvl):"n/a"}</div></div>
-  </div>
-  <div class="buybox"><div class="buytitle">Sources & Guide</div>
-    <div class="buyrow">🛒 Купить: ${dex}</div>
-    <div class="buyrow">👛 Хранить: ${wallet(chain)}</div>
-    <div class="buyrow">🦎 CoinGecko: ${cg?("rank "+(cg.market_cap_rank||"n/a")):"not matched"}</div>
-    <div class="buyrow">🛡️ GoPlus: ${gp?gp.text:"not checked"}</div>
-    <div class="mini">Не финсовет. Перед покупкой проверяй контракт, slippage, liquidity lock и holders.</div>
-  </div>
-  <div class="linkrow"><a class="linkbtn" href="${p.url||'#'}" target="_blank">DexScreener</a><a class="linkbtn" href="#" onclick="saveWatch('${name.replaceAll("'","")}','${sym}');return false;">Watchlist</a></div>`;
-  return el;
+const BAD=["wrapped","coinbase wrapped","bridged","wormhole","shit","piss","skin","sex","porn","scam","rug","hitler","nazi"];
+const BLOCK=["BTC","ETH","SOL","DOGE","ADA","XRP","LTC","BNB","USDT","USDC","WETH","WBTC","WSOL","WBNB"];
+function badDex(p){let s=(p.baseToken?.symbol||"").toUpperCase(),n=(p.baseToken?.name||"").toLowerCase();return BLOCK.includes(s)||BAD.some(x=>n.includes(x)||s.toLowerCase().includes(x))}
+function scoreDex(p){let fdv=+(p.fdv||0),liq=+(p.liquidity?.usd||0),vol=+(p.volume?.h24||0);let s=35;if(fdv&&fdv<1000000)s+=18;else if(fdv<8000000)s+=10;if(liq>25000)s+=10;if(vol>40000)s+=10;if(vol>200000)s+=8;if(vol/Math.max(liq,1)>25)s-=20;if(badDex(p))s-=80;return Math.max(1,Math.min(99,Math.round(s)))}
+async function scanDex(){
+ const sec=document.getElementById("sector").value,q=SECTORS[sec].q,maxcap=+document.getElementById("maxcap").value||8000000,minvol=+document.getElementById("minvol").value||40000;
+ const chains=sec==="base"?["base"]:sec==="solana"?["solana"]:sec==="ethereum"?["ethereum"]:[sec,q,"meme"];
+ let all=[];
+ for(let qq of [q,...chains]){let r=await fetch("https://api.dexscreener.com/latest/dex/search?q="+encodeURIComponent(qq),{cache:"no-store"});let d=await r.json();all.push(...(d.pairs||[]));await new Promise(res=>setTimeout(res,90))}
+ let seen=new Set();
+ return all.filter(p=>{let a=(p.baseToken?.address||p.pairAddress||"").toLowerCase();if(seen.has(a))return false;seen.add(a);return !badDex(p)&&(p.fdv||0)>0&&(p.fdv||0)<=maxcap&&(p.volume?.h24||0)>=minvol&&(p.liquidity?.usd||0)>=20000}).map(p=>({_type:"dex",_score:scoreDex(p),...p})).sort((a,b)=>b._score-a._score).slice(0,25);
 }
 function render(list){
-  let r=document.getElementById("results");
-  document.getElementById("found").textContent=list.length;
-  document.getElementById("avg").textContent=list.length?Math.round(list.reduce((a,b)=>a+b._score,0)/list.length):"—";
-  r.innerHTML="";
-  if(!list.length){r.innerHTML='<div class="empty">Нет монет, прошедших multi-source фильтр. Можно снизить Min liquidity или Max FDV.</div>';return}
-  list.forEach(x=>r.appendChild(card(x)));
+ const r=document.getElementById("results");document.getElementById("found").textContent=list.length;document.getElementById("avg").textContent=list.length?Math.round(list.reduce((a,b)=>a+b._score,0)/list.length):"—";r.innerHTML="";
+ if(!list.length){r.innerHTML='<div class="empty">Ничего не найдено. Для Narrative попробуй снизить Min Volume или Max Market Cap. Для Micro — снизь Max FDV.</div>';return}
+ list.forEach(x=>r.appendChild(x._type==="cg"?cardCG(x):cardDex(x)));
 }
-function saveWatch(n,s){let w=JSON.parse(localStorage.getItem("watchlist_v38")||"[]");w.push({n,s,t:Date.now()});localStorage.setItem("watchlist_v38",JSON.stringify(w));alert("Добавлено в watchlist")}
+function cardCG(c){
+ let cls=c._score<55?"bad":c._score<72?"mid":"", zone=c._score>78?"GOLD ZONE":c._score>62?"WATCH":"EARLY WATCH";
+ let el=document.createElement("div");el.className="token";el.innerHTML=`<div class="tokenTop"><img class="avatar" src="${c.image||''}"><div><div class="name">${c.name}</div><div class="sym">${(c.symbol||'').toUpperCase()} • CoinGecko</div></div><div class="score ${cls}">${c._score}</div></div>
+ <div class="badges"><div class="badge safe">${zone}</div><div class="badge eco">${c._sector.toUpperCase()}</div><div class="badge source">CoinGecko</div><div class="badge">Rank ${c.market_cap_rank||"n/a"}</div></div>
+ <div class="thesis">🧠 Thesis: ${thesisCG(c,c._sector)}</div>
+ <div class="grid" style="margin-top:12px"><div class="box"><div class="label">Market Cap · CoinGecko</div><div class="val">${fmt(c.market_cap)}</div></div><div class="box"><div class="label">Volume 24h · CoinGecko</div><div class="val">${fmt(c.total_volume)}</div></div><div class="box"><div class="label">Price</div><div class="val">${pf(c.current_price)}</div></div><div class="box"><div class="label">24h</div><div class="val">${pct(c.price_change_percentage_24h||0)}</div></div></div>
+ <div class="buybox"><div class="buytitle">Guide</div><div class="buyrow">🛒 Где искать: CoinGecko → Markets / CEX-DEX pairs</div><div class="buyrow">👛 Хранить: зависит от сети токена</div><div class="mini">Это narrative radar. Перед покупкой проверь сеть, контракт, unlocks и ликвидность.</div></div>`;
+ return el;
+}
+function cardDex(p){
+ let name=p.baseToken?.name||"Unknown",sym=p.baseToken?.symbol||"?",chain=(p.chainId||"").toUpperCase(),img=p.info?.imageUrl||"",cls=p._score<55?"bad":p._score<72?"mid":"";
+ let el=document.createElement("div");el.className="token";el.innerHTML=`<div class="tokenTop">${img?`<img class="avatar" src="${img}">`:`<div class="avatar fallback">${sym.slice(0,3)}</div>`}<div><div class="name">${name}</div><div class="sym">${sym} • ${chain}</div></div><div class="score ${cls}">${p._score}</div></div>
+ <div class="badges"><div class="badge safe">MICRO GEM</div><div class="badge source">DexScreener</div><div class="badge">FDV ${fmt(p.fdv)}</div></div>
+ <div class="thesis">🧠 Thesis: DEX microcap · live volume/liquidity · high risk segment</div>
+ <div class="grid" style="margin-top:12px"><div class="box"><div class="label">Liquidity</div><div class="val">${fmt(p.liquidity?.usd)}</div></div><div class="box"><div class="label">Volume 24h</div><div class="val">${fmt(p.volume?.h24)}</div></div><div class="box"><div class="label">Price</div><div class="val">${pf(p.priceUsd)}</div></div><div class="box"><div class="label">FDV</div><div class="val">${fmt(p.fdv)}</div></div></div>
+ <div class="linkrow"><a class="linkbtn" href="${p.url||'#'}" target="_blank">DexScreener</a><a class="linkbtn" href="#" onclick="alert('Добавлено в watchlist');return false;">Watchlist</a></div>`;
+ return el;
+}
 async function scan(){
-  document.getElementById("status").textContent="scan...";
-  document.getElementById("results").innerHTML='<div class="empty">Сканирую DexScreener → сверяю CoinGecko → DefiLlama heat → GoPlus risk...</div>';
-  const q=document.getElementById("query").value.trim(),maxfdv=+document.getElementById("maxfdv").value||10000000,minliq=+document.getElementById("minliq").value||25000;
-  localStorage.setItem("cg_demo_key",document.getElementById("cgkey").value.trim());
-  try{await warmupSources()}catch(e){}
-  try{
-    let queries=[q,ECO+" meme",ECO+" ai",ECO+" agent",ECO+" lowcap",ECO+" rwa"];
-    let all=[];
-    for(let qq of queries){
-      const res=await fetch("https://api.dexscreener.com/latest/dex/search?q="+encodeURIComponent(qq),{cache:"no-store"});
-      const data=await res.json();
-      all.push(...(data.pairs||[]));
-      await new Promise(r=>setTimeout(r,90));
-    }
-    let seen=new Set();
-    let raw=all.filter(x=>{let a=(x.baseToken?.address||x.pairAddress||"").toLowerCase();if(seen.has(a))return false;seen.add(a);return pass(x,maxfdv,minliq)}).slice(0,35);
-    let final=await enrich(raw);
-    document.getElementById("status").textContent="live";
-    render(final.slice(0,25));
-  }catch(e){
-    console.error(e);
-    document.getElementById("status").textContent="api error";
-    document.getElementById("results").innerHTML='<div class="empty">Один из публичных API временно недоступен или лимитит. Попробуй ещё раз позже.</div>';
-  }
-}
-function demo(){
-  const demoPairs=[
-    {baseToken:{name:"Base Agent",symbol:"BAGENT",address:"0xdemo1"},chainId:"base",dexId:"uniswap",liquidity:{usd:88000},volume:{h24:310000},fdv:690000,priceUsd:.00069,pairCreatedAt:Date.now()-2*86400000,url:"#"},
-    {baseToken:{name:"Self-Aware Meme",symbol:"SAM",address:"demo2"},chainId:"solana",dexId:"pumpswap",liquidity:{usd:51000},volume:{h24:67000},fdv:142000,priceUsd:.000142,pairCreatedAt:Date.now()-18*86400000,url:"#"},
-    {baseToken:{name:"RWA Cat",symbol:"RWACAT",address:"0xdemo3"},chainId:"ethereum",dexId:"uniswap",liquidity:{usd:120000},volume:{h24:260000},fdv:1300000,priceUsd:.0013,pairCreatedAt:Date.now()-6*86400000,url:"#"}
-  ].map(p=>({...p,_cg:null,_gp:{source:"GoPlus",status:"demo",risk:0,text:"demo mode"},_score:baseScore(p,null,{risk:0})}));
-  render(demoPairs);
+ document.getElementById("status").textContent="scan...";document.getElementById("results").innerHTML='<div class="empty">Сканирую реальные источники...</div>';localStorage.setItem("cg_demo_key",document.getElementById("cgkey").value.trim());
+ try{let list=MODE==="micro"?await scanDex():await scanCG();document.getElementById("status").textContent="live";render(list)}catch(e){console.error(e);document.getElementById("status").textContent="api error";document.getElementById("results").innerHTML='<div class="empty">Источник временно недоступен или нужен CoinGecko Demo Key. Попробуй снизить фильтры или включить Micro.</div>'}
 }
 </script>
 </body>

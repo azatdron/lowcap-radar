@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Lowcap Radar AI v4.2</title>
+<title>Lowcap Radar AI v4.3</title>
 <link rel="manifest" href="manifest.json">
 <style>
 :root{
@@ -42,65 +42,119 @@ button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:17px}
 .tab{padding:13px;text-align:center;border-radius:20px;color:#9fb0c8;font-weight:900}.tab.active{background:#1d2b49;color:#fff}
 .empty{border:1px dashed #32466f;border-radius:24px;padding:24px;text-align:center;color:#9fb0c8;margin-top:14px;line-height:1.45}
 .pos{color:var(--green)!important}.neg{color:var(--red)!important}.neutral{color:#cbd5e1!important}
+.smallSource{font-size:11px;color:#8494ad;margin-top:4px}
 </style>
 </head>
 <body>
 <div class="app">
   <div class="head">
     <div class="logo"></div>
-    <div><h1>Lowcap Radar AI</h1><div class="sub">v4.2 • Clean Source Engine</div></div>
-    <div id="status" class="status">ready</div>
+    <div><h1>Lowcap Radar AI</h1><div class="sub">v4.3 • Русский профессиональный поиск</div></div>
+    <div id="status" class="status">готов</div>
   </div>
 
   <div class="panel">
     <div class="grid">
       <div class="box"><div class="label">Найдено</div><div id="found" class="val">0</div></div>
-      <div class="box"><div class="label">Avg score</div><div id="avg" class="val">—</div></div>
+      <div class="box"><div class="label">Средний рейтинг</div><div id="avg" class="val">—</div></div>
     </div>
 
     <div class="modebar">
-      <div class="mode active" onclick="setMode('narrative',this)">Narrative Mode</div>
-      <div class="mode" onclick="setMode('gem',this)">Gem Mode</div>
+      <div class="mode active" onclick="setMode('narrative',this)">Фундаментальный</div>
+      <div class="mode" onclick="setMode('gem',this)">Поиск гемов</div>
     </div>
 
     <div class="controls">
-      <div><div class="label">Сектор / Narrative</div>
+      <div><div class="label">Сектор</div>
         <select id="sector">
-          <option value="ai">AI / DePIN / Compute</option>
-          <option value="rwa">RWA</option>
-          <option value="solana">Solana Ecosystem</option>
-          <option value="base">Base Ecosystem</option>
-          <option value="ethereum">Ethereum Ecosystem</option>
-          <option value="meme">Meme</option>
+          <option value="ai">AI / DePIN / Вычисления</option>
+          <option value="rwa">RWA / Реальные активы</option>
+          <option value="solana">Экосистема Solana</option>
+          <option value="base">Экосистема Base</option>
+          <option value="ethereum">Экосистема Ethereum</option>
+          <option value="meme">Мемкоины</option>
         </select>
       </div>
-      <div><div class="label" id="capLabel">Max Market Cap</div><input id="maxcap" value="500000000"></div>
-      <div><div class="label">Min 24h Volume</div><input id="minvol" value="500000"></div>
-      <div><div class="label">CoinGecko Demo Key</div><input id="cgkey" placeholder="optional"></div>
+
+      <div><div class="label">Приоритет экосистемы</div>
+        <select id="priority">
+          <option value="auto">Авто</option>
+          <option value="ethereum">Ethereum</option>
+          <option value="solana">Solana</option>
+          <option value="base">Base</option>
+          <option value="any">Любая</option>
+        </select>
+      </div>
+
+      <div><div class="label" id="capLabel">Капитализация</div>
+        <select id="capPreset" onchange="applyPreset()">
+          <option value="100000000">до $100M</option>
+          <option value="500000000" selected>до $500M</option>
+          <option value="1000000000">до $1B</option>
+          <option value="custom">ввести вручную</option>
+        </select>
+      </div>
+
+      <div><div class="label">Объём 24ч</div>
+        <select id="volPreset" onchange="applyPreset()">
+          <option value="100000">от $100K</option>
+          <option value="500000" selected>от $500K</option>
+          <option value="1000000">от $1M</option>
+          <option value="10000000">от $10M</option>
+          <option value="custom">ввести вручную</option>
+        </select>
+      </div>
+
+      <div><div class="label">Рейтинг CoinGecko</div>
+        <select id="rankPreset">
+          <option value="1000">до Rank 1000</option>
+          <option value="500">до Rank 500</option>
+          <option value="300" selected>до Rank 300</option>
+          <option value="999999">без ограничения</option>
+        </select>
+      </div>
+
+      <div><div class="label">Режим риска</div>
+        <select id="riskMode">
+          <option value="safe">Осторожный</option>
+          <option value="balanced" selected>Сбалансированный</option>
+          <option value="aggressive">Агрессивный</option>
+        </select>
+      </div>
+
+      <div><div class="label">Max вручную</div><input id="maxcap" value="500000000"></div>
+      <div><div class="label">Объём вручную</div><input id="minvol" value="500000"></div>
+      <div><div class="label">CoinGecko Demo Key</div><input id="cgkey" placeholder="необязательно"></div>
+      <div><div class="label">Источник</div>
+        <select id="sourceMode">
+          <option value="clean" selected>Чистые источники</option>
+          <option value="wide">Широкий поиск</option>
+        </select>
+      </div>
     </div>
 
     <div style="height:12px"></div>
     <div class="controls">
-      <button class="scan" onclick="scan()">Start Scan</button>
-      <button class="ghost" onclick="saveKey()">Save key</button>
+      <button class="scan" onclick="scan()">Начать поиск</button>
+      <button class="ghost" onclick="saveKey()">Сохранить ключ</button>
     </div>
 
     <div class="note" id="modeNote">
-      Narrative Mode: фундаментальные монеты по чистым источникам CoinGecko. Пример логики AKT: AI/DePIN + объём + market cap + rank.
+      Фундаментальный режим: реальные монеты из CoinGecko, сектор, капитализация, объём, рейтинг и momentum. Без заранее вставленных монет.
     </div>
   </div>
 
-  <div id="results"><div class="empty">Нажми Start Scan. Мы не показываем заранее вставленные монеты — только результат после запроса к источникам.</div></div>
+  <div id="results"><div class="empty">Выбери критерии и нажми «Начать поиск». Приложение покажет только данные из источников.</div></div>
 </div>
 
-<div class="tabs"><div class="tab active">Радар</div><div class="tab">Watchlist</div><div class="tab">Sources</div></div>
+<div class="tabs"><div class="tab active">Радар</div><div class="tab">Избранное</div><div class="tab">Источники</div></div>
 
 <script>
 let MODE="narrative";
 const SECTORS={
  ai:{ids:["akash-network","render-token","bittensor","io-net","aethir","origintrail","grass","autonolas","nosana"],q:"ai depin compute"},
  rwa:{ids:["ondo-finance","mantra-dao","centrifuge","pendle","maple","clearpool"],q:"rwa real world asset"},
- solana:{ids:["jupiter-exchange-solana","jito-governance-token","pyth-network","drift-protocol","orca"],q:"solana ecosystem"},
+ solana:{ids:["jupiter-exchange-solana","jito-governance-token","pyth-network","drift-protocol","orca","raydium"],q:"solana ecosystem"},
  base:{ids:["aerodrome-finance","degen-base","toshi","brett","virtual-protocol"],q:"base ecosystem"},
  ethereum:{ids:["uniswap","aave","chainlink","ethereum-name-service","pepe","ondo-finance"],q:"ethereum ecosystem"},
  meme:{ids:["pepe","dogwifcoin","bonk","floki","mog-coin","popcat"],q:"meme"}
@@ -110,8 +164,18 @@ function setMode(m,el){
  MODE=m;
  document.querySelectorAll('.mode').forEach(x=>x.classList.remove('active'));el.classList.add('active');
  const cap=document.getElementById("maxcap"), vol=document.getElementById("minvol"), note=document.getElementById("modeNote"), capLabel=document.getElementById("capLabel");
- if(MODE==="gem"){cap.value="8000000";vol.value="40000";capLabel.textContent="Max FDV";note.textContent="Gem Mode: ранние lowcap DEX-пары из DexScreener. Это high-risk режим, не фундаментальный список."}
- else{cap.value="500000000";vol.value="500000";capLabel.textContent="Max Market Cap";note.textContent="Narrative Mode: фундаментальные монеты по чистым источникам CoinGecko. Пример логики AKT: AI/DePIN + объём + market cap + rank."}
+ if(MODE==="gem"){
+   cap.value="8000000";vol.value="40000";capLabel.textContent="FDV / Капитализация";
+   note.textContent="Поиск гемов: ранние DEX-пары из DexScreener. Риск выше, фильтр жёстче к мусору и фейкам.";
+ } else {
+   applyPreset();capLabel.textContent="Капитализация";
+   note.textContent="Фундаментальный режим: реальные монеты из CoinGecko, сектор, капитализация, объём, рейтинг и momentum. Без заранее вставленных монет.";
+ }
+}
+function applyPreset(){
+ const capP=document.getElementById("capPreset").value, volP=document.getElementById("volPreset").value;
+ if(capP!=="custom")document.getElementById("maxcap").value=capP;
+ if(volP!=="custom")document.getElementById("minvol").value=volP;
 }
 function saveKey(){localStorage.setItem("cg_demo_key",document.getElementById("cgkey").value.trim());alert("Ключ сохранён только на этом iPhone")}
 function fmt(n){n=Number(n||0);if(n>=1e9)return"$"+(n/1e9).toFixed(1)+"B";if(n>=1e6)return"$"+(n/1e6).toFixed(1)+"M";if(n>=1e3)return"$"+Math.round(n/1e3)+"K";return"$"+Math.round(n)}
@@ -119,38 +183,54 @@ function pct(n){n=Number(n||0);return (n>0?"+":"")+n.toFixed(1)+"%"}
 function pctClass(n){n=Number(n||0); if(n>0)return"pos"; if(n<0)return"neg"; return"neutral";}
 function pf(n){n=Number(n||0);if(n>=1)return"$"+n.toFixed(3);if(n>0)return"$"+n.toPrecision(3);return"—"}
 function sourceFetch(url){const key=(document.getElementById("cgkey").value||localStorage.getItem("cg_demo_key")||"").trim();let opt={cache:"no-store"};if(key)opt.headers={"x-cg-demo-api-key":key};return fetch(url,opt)}
-function ecosystemBoost(sector){if(sector==="ethereum")return 18;if(sector==="solana")return 17;if(sector==="base")return 16;if(sector==="ai")return 15;if(sector==="rwa")return 11;if(sector==="meme")return 8;return 0}
+function ecosystemBoost(sector, priority){
+ let b=0;
+ if(sector==="ethereum")b=18;if(sector==="solana")b=17;if(sector==="base")b=16;if(sector==="ai")b=15;if(sector==="rwa")b=11;if(sector==="meme")b=8;
+ if(priority==="ethereum")b+=5;if(priority==="solana")b+=5;if(priority==="base")b+=5;if(priority==="any")b-=2;
+ return b;
+}
+function riskPenalty(mode, c){
+ let p=0;
+ const rank=c.market_cap_rank||999999, mc=c.market_cap||0, vol=c.total_volume||0;
+ if(mode==="safe"){if(rank>500)p+=10;if(vol<1000000)p+=8;if(mc<20000000)p+=8;}
+ if(mode==="balanced"){if(rank>1000)p+=8;if(vol<500000)p+=5;}
+ if(mode==="aggressive"){p-=6;}
+ return p;
+}
 function scoreCG(c,sector){
- let s=35+ecosystemBoost(sector);
+ const priority=document.getElementById("priority").value, risk=document.getElementById("riskMode").value;
+ let s=35+ecosystemBoost(sector,priority);
  const mc=c.market_cap||0,vol=c.total_volume||0,rank=c.market_cap_rank||99999,ch24=c.price_change_percentage_24h||0;
  if(mc>0&&mc<500000000)s+=14; if(mc>0&&mc<100000000)s+=8; if(mc>1000000000)s-=10;
  if(vol>500000)s+=8; if(vol>5000000)s+=8; if(vol>50000000)s+=4;
  if(ch24>3)s+=8; if(ch24>10)s+=6; if(ch24<-10)s-=10;
  if(rank<100)s-=8; else if(rank>100&&rank<500)s+=5; else if(rank>500)s+=9;
+ s-=riskPenalty(risk,c);
  return Math.max(1,Math.min(99,Math.round(s)));
 }
 function thesisCG(c,sector){
  let t=[];
- if(sector==="ai")t.push("AI/DePIN/compute narrative");
- if(sector==="rwa")t.push("RWA narrative");
- if(sector==="solana")t.push("Solana ecosystem flow");
- if(sector==="base")t.push("Base/Coinbase ecosystem flow");
- if(sector==="ethereum")t.push("Ethereum liquidity core");
- if(sector==="meme")t.push("Meme narrative");
- if(c.market_cap&&c.market_cap<500000000)t.push("market cap below selected cap");
- if(c.total_volume>5000000)t.push("strong volume");
- if((c.price_change_percentage_24h||0)>3)t.push("24h momentum");
- if((c.price_change_percentage_24h||0)<0)t.push("24h pullback");
- if(c.market_cap_rank)t.push("CoinGecko rank "+c.market_cap_rank);
+ if(sector==="ai")t.push("AI/DePIN/вычисления");
+ if(sector==="rwa")t.push("RWA / реальные активы");
+ if(sector==="solana")t.push("поток экосистемы Solana");
+ if(sector==="base")t.push("экосистема Base/Coinbase");
+ if(sector==="ethereum")t.push("ликвидность Ethereum");
+ if(sector==="meme")t.push("meme narrative");
+ if(c.market_cap&&c.market_cap<500000000)t.push("капитализация ниже выбранного лимита");
+ if(c.total_volume>5000000)t.push("сильный объём");
+ if((c.price_change_percentage_24h||0)>3)t.push("рост за 24ч");
+ if((c.price_change_percentage_24h||0)<0)t.push("откат за 24ч");
+ if(c.market_cap_rank)t.push("рейтинг CoinGecko "+c.market_cap_rank);
  return t.join(" · ");
 }
 async function scanCG(){
- const sector=document.getElementById("sector").value,maxcap=+document.getElementById("maxcap").value||500000000,minvol=+document.getElementById("minvol").value||0;
+ const sector=document.getElementById("sector").value,maxcap=+document.getElementById("maxcap").value||500000000,minvol=+document.getElementById("minvol").value||0,maxrank=+document.getElementById("rankPreset").value||999999;
  const ids=SECTORS[sector].ids.join(",");
  const url="https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids="+ids+"&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=24h,7d";
  let r=await sourceFetch(url); if(!r.ok)throw new Error("CoinGecko "+r.status);
  let data=await r.json();
- return data.filter(c=>(c.market_cap||0)<=maxcap && (c.total_volume||0)>=minvol).map(c=>({_type:"cg",_score:scoreCG(c,sector),_sector:sector,...c})).sort((a,b)=>b._score-a._score);
+ return data.filter(c=>(c.market_cap||0)<=maxcap && (c.total_volume||0)>=minvol && (c.market_cap_rank||999999)<=maxrank)
+ .map(c=>({_type:"cg",_score:scoreCG(c,sector),_sector:sector,...c})).sort((a,b)=>b._score-a._score);
 }
 const BAD=["wrapped","coinbase wrapped","bridged","wormhole","shit","piss","skin","sex","porn","scam","rug","hitler","nazi"];
 const BLOCK=["BTC","ETH","SOL","DOGE","ADA","XRP","LTC","BNB","USDT","USDC","WETH","WBTC","WSOL","WBNB"];
@@ -165,31 +245,32 @@ async function scanDex(){
 }
 function render(list){
  const r=document.getElementById("results");document.getElementById("found").textContent=list.length;document.getElementById("avg").textContent=list.length?Math.round(list.reduce((a,b)=>a+b._score,0)/list.length):"—";r.innerHTML="";
- if(!list.length){r.innerHTML='<div class="empty">Ничего не найдено. Для Narrative снизь Min Volume или Max Market Cap. Для Gem — снизь Max FDV.</div>';return}
+ if(!list.length){r.innerHTML='<div class="empty">Ничего не найдено. Попробуй снизить капитализацию/объём или переключить режим риска.</div>';return}
  list.forEach(x=>r.appendChild(x._type==="cg"?cardCG(x):cardDex(x)));
 }
 function cardCG(c){
- let cls=c._score<55?"bad":c._score<72?"mid":"", zone=c._score>78?"GOLD ZONE":c._score>62?"WATCH":"EARLY WATCH";
+ let cls=c._score<55?"bad":c._score<72?"mid":"", zone=c._score>78?"ЗОЛОТАЯ ЗОНА":c._score>62?"НАБЛЮДАТЬ":"РАННИЙ WATCH";
  let change=c.price_change_percentage_24h||0;
  let el=document.createElement("div");el.className="token";el.innerHTML=`<div class="tokenTop"><img class="avatar" src="${c.image||''}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${(c.symbol||'?').slice(0,3).toUpperCase()}</div>'"><div><div class="name">${c.name}</div><div class="sym">${(c.symbol||'').toUpperCase()} • CoinGecko</div></div><div class="score ${cls}">${c._score}</div></div>
- <div class="badges"><div class="badge safe">${zone}</div><div class="badge eco">${c._sector.toUpperCase()}</div><div class="badge source">CoinGecko</div><div class="badge">Rank ${c.market_cap_rank||"n/a"}</div></div>
- <div class="thesis">🧠 Thesis: ${thesisCG(c,c._sector)}</div>
- <div class="grid" style="margin-top:12px"><div class="box"><div class="label">Market Cap · CoinGecko</div><div class="val">${fmt(c.market_cap)}</div></div><div class="box"><div class="label">Volume 24h · CoinGecko</div><div class="val">${fmt(c.total_volume)}</div></div><div class="box"><div class="label">Price</div><div class="val">${pf(c.current_price)}</div></div><div class="box"><div class="label">24h</div><div class="val ${pctClass(change)}">${pct(change)}</div></div></div>
- <div class="buybox"><div class="buytitle">Guide</div><div class="buyrow">🛒 Где искать: CoinGecko → Markets / CEX-DEX pairs</div><div class="buyrow">👛 Хранить: зависит от сети токена</div><div class="mini">Narrative Mode: фундаментал и сектор. Перед покупкой проверь сеть, контракт, unlocks и ликвидность.</div></div>`;
+ <div class="badges"><div class="badge safe">${zone}</div><div class="badge eco">${rusSector(c._sector)}</div><div class="badge source">CoinGecko</div><div class="badge">Рейтинг ${c.market_cap_rank||"н/д"}</div></div>
+ <div class="thesis">🧠 Почему выбрано: ${thesisCG(c,c._sector)}</div>
+ <div class="grid" style="margin-top:12px"><div class="box"><div class="label">Капитализация · CoinGecko</div><div class="val">${fmt(c.market_cap)}</div></div><div class="box"><div class="label">Объём 24ч · CoinGecko</div><div class="val">${fmt(c.total_volume)}</div></div><div class="box"><div class="label">Цена</div><div class="val">${pf(c.current_price)}</div></div><div class="box"><div class="label">Изменение 24ч</div><div class="val ${pctClass(change)}">${pct(change)}</div></div></div>
+ <div class="buybox"><div class="buytitle">Краткий гид</div><div class="buyrow">🛒 Где искать: CoinGecko → Markets / биржи</div><div class="buyrow">👛 Где хранить: зависит от сети токена</div><div class="mini">Данные из CoinGecko. Перед покупкой проверяй сеть, контракт, unlocks, ликвидность и биржу.</div></div>`;
  return el;
 }
 function cardDex(p){
  let name=p.baseToken?.name||"Unknown",sym=p.baseToken?.symbol||"?",chain=(p.chainId||"").toUpperCase(),img=p.info?.imageUrl||"",cls=p._score<55?"bad":p._score<72?"mid":"";
  let el=document.createElement("div");el.className="token";el.innerHTML=`<div class="tokenTop">${img?`<img class="avatar" src="${img}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${sym.slice(0,3)}</div>'">`:`<div class="avatar fallback">${sym.slice(0,3)}</div>`}<div><div class="name">${name}</div><div class="sym">${sym} • ${chain}</div></div><div class="score ${cls}">${p._score}</div></div>
- <div class="badges"><div class="badge risk">GEM MODE</div><div class="badge source">DexScreener</div><div class="badge">FDV ${fmt(p.fdv)}</div></div>
- <div class="thesis">🧠 Thesis: DEX microcap · live volume/liquidity · high-risk segment</div>
- <div class="grid" style="margin-top:12px"><div class="box"><div class="label">Liquidity</div><div class="val">${fmt(p.liquidity?.usd)}</div></div><div class="box"><div class="label">Volume 24h</div><div class="val">${fmt(p.volume?.h24)}</div></div><div class="box"><div class="label">Price</div><div class="val">${pf(p.priceUsd)}</div></div><div class="box"><div class="label">FDV</div><div class="val">${fmt(p.fdv)}</div></div></div>
- <div class="linkrow"><a class="linkbtn" href="${p.url||'#'}" target="_blank">DexScreener</a><a class="linkbtn" href="#" onclick="alert('Добавлено в watchlist');return false;">Watchlist</a></div>`;
+ <div class="badges"><div class="badge risk">ПОИСК ГЕМОВ</div><div class="badge source">DexScreener</div><div class="badge">FDV ${fmt(p.fdv)}</div></div>
+ <div class="thesis">🧠 Почему выбрано: DEX lowcap · живой объём/ликвидность · высокий риск</div>
+ <div class="grid" style="margin-top:12px"><div class="box"><div class="label">Ликвидность</div><div class="val">${fmt(p.liquidity?.usd)}</div></div><div class="box"><div class="label">Объём 24ч</div><div class="val">${fmt(p.volume?.h24)}</div></div><div class="box"><div class="label">Цена</div><div class="val">${pf(p.priceUsd)}</div></div><div class="box"><div class="label">FDV</div><div class="val">${fmt(p.fdv)}</div></div></div>
+ <div class="linkrow"><a class="linkbtn" href="${p.url||'#'}" target="_blank">DexScreener</a><a class="linkbtn" href="#" onclick="alert('Добавлено в избранное');return false;">Избранное</a></div>`;
  return el;
 }
+function rusSector(s){return {ai:"AI/DePIN",rwa:"RWA",solana:"Solana",base:"Base",ethereum:"Ethereum",meme:"Meme"}[s]||s}
 async function scan(){
- document.getElementById("status").textContent="scan...";document.getElementById("results").innerHTML='<div class="empty">Сканирую реальные источники...</div>';localStorage.setItem("cg_demo_key",document.getElementById("cgkey").value.trim());
- try{let list=MODE==="gem"?await scanDex():await scanCG();document.getElementById("status").textContent="live";render(list)}catch(e){console.error(e);document.getElementById("status").textContent="api error";document.getElementById("results").innerHTML='<div class="empty">Источник временно недоступен или нужен CoinGecko Demo Key. Попробуй снизить фильтры или переключись на Gem Mode.</div>'}
+ document.getElementById("status").textContent="поиск...";document.getElementById("results").innerHTML='<div class="empty">Сканирую выбранные источники...</div>';localStorage.setItem("cg_demo_key",document.getElementById("cgkey").value.trim());
+ try{let list=MODE==="gem"?await scanDex():await scanCG();document.getElementById("status").textContent="live";render(list)}catch(e){console.error(e);document.getElementById("status").textContent="api error";document.getElementById("results").innerHTML='<div class="empty">Источник временно недоступен или нужен CoinGecko Demo Key. Попробуй позже или переключись на Поиск гемов.</div>'}
 }
 </script>
 </body>

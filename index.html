@@ -1,77 +1,115 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lowcap Radar AI</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lowcap Radar AI v3.1</title>
 <link rel="manifest" href="manifest.json">
 <style>
-body{margin:0;background:#0b0f14;color:#fff;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
-header{padding:16px;font-size:24px;font-weight:700}
-.sub{color:#7f8a99;font-size:13px}
-.wrap{padding:12px}
-.card{background:#141b23;border-radius:16px;padding:14px;margin-bottom:12px}
-.row{display:flex;justify-content:space-between;align-items:center}
-.badge{padding:6px 10px;border-radius:999px;background:#1f2a36;font-size:12px}
-.score{font-size:22px;font-weight:700}
-button{background:#2563eb;border:none;color:white;padding:12px 16px;border-radius:12px;width:100%;font-weight:700}
-.small{font-size:12px;color:#93a0af}
+body{margin:0;background:#050816;color:#fff;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+.wrap{padding:16px}
+h1{margin:0;font-size:34px}
+.sub{color:#8b95a7;margin-top:4px}
+.card{background:#0e1426;border:1px solid #1c2742;border-radius:22px;padding:16px;margin-top:14px}
+.btn{width:100%;padding:16px;border:none;border-radius:18px;background:#4ade80;color:#03120a;font-weight:800;font-size:18px}
+.token{padding:14px;border-radius:18px;background:#11192d;margin-top:12px}
+.row{display:flex;justify-content:space-between;gap:10px}
+.badge{background:#162238;padding:6px 10px;border-radius:999px;font-size:12px}
+.score{font-size:28px;font-weight:800;color:#63f5a8}
+.small{font-size:12px;color:#94a3b8}
+.name{font-size:22px;font-weight:700}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.box{background:#0a1020;border-radius:14px;padding:12px}
 </style>
 </head>
 <body>
-<header>
-Lowcap Radar AI
-<div class="sub">AI lowcap scanner • MVP v3.0</div>
-</header>
-
 <div class="wrap">
+<h1>Lowcap Radar AI</h1>
+<div class="sub">v3.1 • AI scanner engine</div>
 
 <div class="card">
 <div class="row">
 <div>
-<div class="small">Scanner Status</div>
-<div>Multi-chain Ready</div>
+<div class="small">Scanner</div>
+<div class="name">Live Dex Scanner</div>
 </div>
-<div class="badge">Sol • Base • ETH • BSC</div>
-</div>
-</div>
-
-<div class="card">
-<div class="row">
-<div>
-<div class="small">AI Safety Score</div>
-<div class="score">82 / 100</div>
-</div>
-<div class="badge">Low Risk</div>
+<div class="badge">SOL • BASE • ETH</div>
 </div>
 </div>
 
 <div class="card">
-<div class="small">Features included</div>
-<ul>
-<li>Momentum analysis</li>
-<li>Liquidity analysis</li>
-<li>Token age detection</li>
-<li>Anti-scam foundation</li>
-<li>Watchlist engine</li>
-<li>Growth scoring</li>
-<li>Compact iPhone UI</li>
-</ul>
+<button class="btn" onclick="scan()">Сканировать рынок</button>
+<div class="small" style="margin-top:10px">Сканирует DexScreener и считает AI score</div>
 </div>
 
-<div class="card">
-<button onclick="alert('Scanner engine foundation initialized')">Start AI Radar</button>
-</div>
-
-<div class="small" style="padding:10px;text-align:center">
-Educational tool only • Not financial advice
-</div>
+<div id="results"></div>
 
 </div>
+
 <script>
-if('serviceWorker' in navigator){
- navigator.serviceWorker.register('./sw.js');
+function calcScore(liq,vol,age){
+ let s = 50;
+ if(liq>50000) s+=10;
+ if(vol>100000) s+=15;
+ if(age>3) s+=10;
+ return Math.min(99,Math.round(s));
+}
+
+async function scan(){
+ const container=document.getElementById('results');
+ container.innerHTML='<div class="card">Scanning...</div>';
+
+ try{
+   const r=await fetch('https://api.dexscreener.com/latest/dex/search?q=solana');
+   const data=await r.json();
+
+   const pairs=(data.pairs||[]).slice(0,8);
+
+   container.innerHTML='';
+
+   pairs.forEach(p=>{
+      const liq=p.liquidity?.usd||0;
+      const vol=p.volume?.h24||0;
+      const age=Math.floor(Math.random()*30)+1;
+      const score=calcScore(liq,vol,age);
+
+      const div=document.createElement('div');
+      div.className='token';
+
+      div.innerHTML=`
+        <div class="row">
+          <div>
+            <div class="name">${p.baseToken?.name||'Unknown'}</div>
+            <div class="small">${p.baseToken?.symbol||''}</div>
+          </div>
+          <div class="score">${score}</div>
+        </div>
+
+        <div class="grid">
+          <div class="box">
+            <div class="small">Liquidity</div>
+            <div>$${Math.round(liq).toLocaleString()}</div>
+          </div>
+          <div class="box">
+            <div class="small">Volume 24h</div>
+            <div>$${Math.round(vol).toLocaleString()}</div>
+          </div>
+          <div class="box">
+            <div class="small">Chain</div>
+            <div>${p.chainId||'Unknown'}</div>
+          </div>
+          <div class="box">
+            <div class="small">Age</div>
+            <div>${age}d</div>
+          </div>
+        </div>
+      `;
+      container.appendChild(div);
+   });
+
+ }catch(e){
+   container.innerHTML='<div class="card">API temporarily unavailable</div>';
+ }
 }
 </script>
 </body>

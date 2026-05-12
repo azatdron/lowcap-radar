@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Lowcap Radar AI v5.1</title>
+<title>Lowcap Radar AI v5.2</title>
 <link rel="manifest" href="manifest.json">
 <style>
 :root{--card:#101827ee;--box:#08101f;--line:#22385d;--muted:#94a3b8;--green:#5cf2a0;--yellow:#ffd166;--red:#ff6b8a;--blue:#7dd3fc;--violet:#c4b5fd}
@@ -20,8 +20,7 @@ h1{margin:0;font-size:30px;line-height:1;font-weight:1000}.sub{font-size:14px;co
 .stats,.filters,.buttons,.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .stat,.box{background:var(--box);border:1px solid #1f3154;border-radius:18px;padding:13px}
 .label{font-size:12px;color:var(--muted)}.val{font-size:19px;font-weight:900;margin-top:4px}
-select,input,textarea{width:100%;background:#08101f;border:1px solid #243354;border-radius:15px;padding:13px;color:#fff;font-size:15px}
-textarea{min-height:70px;resize:vertical}
+select,input{width:100%;background:#08101f;border:1px solid #243354;border-radius:15px;padding:13px;color:#fff;font-size:15px}
 button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:16px}
 .scan{background:linear-gradient(135deg,#5cf2a0,#3ee779);color:#03120a}.ghost{background:#15213a;color:#fff;border:1px solid #2b3e63}.danger{background:#27131b;color:#ff8aa3;border:1px solid #6f2d42}
 .presetRow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0}
@@ -40,7 +39,7 @@ button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:16px}
 </head>
 <body>
 <div class="app">
-  <div class="head"><div class="logo"></div><div><h1>Lowcap Radar AI</h1><div class="sub">v5.1 • API Settings</div></div><div id="status" class="status">готов</div></div>
+  <div class="head"><div class="logo"></div><div><h1>Lowcap Radar AI</h1><div class="sub">v5.2 • Backend Bridge</div></div><div id="status" class="status">готов</div></div>
 
   <section id="screenRadar">
     <div class="panel">
@@ -62,15 +61,15 @@ button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:16px}
         <div><div class="label">Объём 24ч</div><select id="vol"><option value="50000">от $50K</option><option value="100000" selected>от $100K</option><option value="500000">от $500K</option><option value="1000000">от $1M</option><option value="10000000">от $10M</option></select></div>
         <div><div class="label">Цена</div><select id="price"><option value="999999">любая</option><option value="1">до $1</option><option value="5">до $5</option><option value="10">до $10</option><option value="50">до $50</option></select></div>
         <div><div class="label">Риск</div><select id="risk"><option value="safe">Осторожный</option><option value="balanced" selected>Сбалансированный</option><option value="aggressive">Агрессивный</option></select></div>
-        <div><div class="label">Рейтинг CoinGecko</div><select id="rank"><option value="300">до Rank 300</option><option value="500">до Rank 500</option><option value="1000" selected>до Rank 1000</option><option value="999999">любой</option></select></div>
-        <div><div class="label">Режим источника</div><select id="mode"><option value="auto">Auto: CG → Dex</option><option value="coingecko">Только CoinGecko</option><option value="dex">Только DexScreener</option><option value="cmc">CoinMarketCap test</option></select></div>
+        <div><div class="label">Рейтинг</div><select id="rank"><option value="300">до Rank 300</option><option value="500">до Rank 500</option><option value="1000" selected>до Rank 1000</option><option value="999999">любой</option></select></div>
+        <div><div class="label">Источник</div><select id="mode"><option value="coingecko">CoinGecko через backend</option><option value="cmc">CoinMarketCap через backend</option><option value="auto">Auto: CG → CMC</option></select></div>
       </div>
 
       <div class="buttons"><button class="scan" onclick="scan()">Начать поиск</button><button class="ghost" onclick="smartExpand()">Сделать шире</button></div>
-      <div class="note" id="note">Ключи добавляются во вкладке «Источники». Без фейковых данных: если источник не работает — показываем честную ошибку.</div>
+      <div class="note" id="note">Ключи хранятся в Vercel Environment Variables, не в телефоне. Никаких фейковых данных.</div>
     </div>
 
-    <div id="results"><div class="empty">Выбери критерии и нажми «Начать поиск».</div></div>
+    <div id="results"><div class="empty">После загрузки на Vercel вставь ключи в Environment Variables и нажми «Начать поиск».</div></div>
   </section>
 
   <section id="screenWatch" class="hidden">
@@ -79,30 +78,18 @@ button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:16px}
 
   <section id="screenSources" class="hidden">
     <div class="panel">
-      <h2 style="margin-top:0">Настройки API</h2>
-      <div class="label">CoinGecko Demo API Key</div>
-      <input id="cgKey" placeholder="Вставь CoinGecko ключ">
-      <div class="small">Используется через header <b>x-cg-demo-api-key</b>.</div>
-
-      <div style="height:12px"></div>
-      <div class="label">CoinMarketCap API Key</div>
-      <input id="cmcKey" placeholder="Вставь CoinMarketCap ключ">
-      <div class="small">Важно: CoinMarketCap часто блокирует прямые запросы из браузера через CORS. Ключ сохранится, но для стабильной работы может понадобиться backend/proxy.</div>
-
-      <div style="height:12px"></div>
-      <div class="label">DefiLlama Pro Key / future</div>
-      <input id="llamaKey" placeholder="Необязательно">
-
-      <div class="buttons">
-        <button class="scan" onclick="saveKeys()">Сохранить ключи</button>
-        <button class="ghost" onclick="testKeys()">Проверить ключи</button>
+      <h2 style="margin-top:0">Источники / Backend</h2>
+      <div class="empty" style="text-align:left">
+        <b>Ключи теперь вставляются не здесь, а в Vercel:</b><br><br>
+        COINGECKO_API_KEY<br>
+        CMC_API_KEY<br><br>
+        Это скрывает ключи и убирает CORS.
       </div>
       <div class="buttons">
-        <button class="ghost" onclick="loadKeys()">Загрузить</button>
-        <button class="danger" onclick="clearKeys()">Удалить ключи</button>
+        <button class="scan" onclick="testBackend()">Проверить backend</button>
+        <button class="ghost" onclick="showInstructions()">Инструкция</button>
       </div>
-
-      <div id="keyStatus" class="empty">Статус ключей появится после проверки.</div>
+      <div id="keyStatus" class="empty">Статус появится после проверки.</div>
     </div>
   </section>
 </div>
@@ -113,27 +100,21 @@ button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:16px}
 const S={ai:["akash-network","render-token","bittensor","aethir","grass","origintrail","nosana","io-net"],rwa:["ondo-finance","mantra-dao","centrifuge","pendle","maple"],meme:["pepe","dogwifcoin","bonk","floki","mog-coin","popcat","brett"],defi:["uniswap","aave","pendle","aerodrome-finance","jupiter-exchange-solana","raydium"],gaming:["immutable-x","gala","ronin","illuvium","superverse"],infra:["chainlink","the-graph","arweave","celestia","pyth-network","akash-network"],l2:["arbitrum","optimism","starknet","mantle","celestia"]};
 const C={ethereum:["uniswap","aave","chainlink","pepe","ondo-finance"],solana:["jupiter-exchange-solana","raydium","pyth-network","dogwifcoin","bonk","nosana"],base:["aerodrome-finance","degen-base","toshi","brett","virtual-protocol"],arbitrum:["arbitrum","pendle","chainlink"],bsc:["pancakeswap-token","floki"]};
 const ALL=["ai","rwa","meme","defi","gaming","infra","l2"];let expandStep=0;
-window.addEventListener("load",loadKeys);
 function showTab(t){screenRadar.classList.add("hidden");screenWatch.classList.add("hidden");screenSources.classList.add("hidden");tabRadar.classList.remove("active");tabWatch.classList.remove("active");tabSources.classList.remove("active");if(t==="radar"){screenRadar.classList.remove("hidden");tabRadar.classList.add("active")}if(t==="watch"){screenWatch.classList.remove("hidden");tabWatch.classList.add("active")}if(t==="sources"){screenSources.classList.remove("hidden");tabSources.classList.add("active")}}
-function saveKeys(){localStorage.setItem("cg_key",cgKey.value.trim());localStorage.setItem("cmc_key",cmcKey.value.trim());localStorage.setItem("llama_key",llamaKey.value.trim());keyStatus.innerHTML='<span class="ok">Ключи сохранены на этом устройстве.</span>'}
-function loadKeys(){cgKey.value=localStorage.getItem("cg_key")||"";cmcKey.value=localStorage.getItem("cmc_key")||"";llamaKey.value=localStorage.getItem("llama_key")||""}
-function clearKeys(){localStorage.removeItem("cg_key");localStorage.removeItem("cmc_key");localStorage.removeItem("llama_key");loadKeys();keyStatus.innerHTML='<span class="warn">Ключи удалены.</span>'}
-async function testKeys(){saveKeys();let out=[];let cg=localStorage.getItem("cg_key")||"";let cmc=localStorage.getItem("cmc_key")||"";try{let r=await fetch("https://api.coingecko.com/api/v3/ping",{headers:cg?{"x-cg-demo-api-key":cg}:{},cache:"no-store"});out.push(r.ok?'<span class="ok">CoinGecko: ключ работает / API доступен.</span>':'<span class="err">CoinGecko: ошибка '+r.status+'</span>')}catch(e){out.push('<span class="err">CoinGecko: сеть/CORS/лимит.</span>')}try{if(!cmc){out.push('<span class="warn">CoinMarketCap: ключ не вставлен.</span>')}else{let r=await fetch("https://pro-api.coinmarketcap.com/v1/cryptocurrency/map?limit=1",{headers:{"X-CMC_PRO_API_KEY":cmc},cache:"no-store"});out.push(r.ok?'<span class="ok">CoinMarketCap: работает.</span>':'<span class="err">CoinMarketCap: ошибка '+r.status+' или CORS.</span>')}}catch(e){out.push('<span class="err">CoinMarketCap: браузер заблокировал CORS. Нужен backend/proxy для CMC.</span>')}keyStatus.innerHTML=out.join("<br><br>")}
 function preset(t,e){document.querySelectorAll('.preset').forEach(x=>x.classList.remove('active'));e.classList.add('active');expandStep=0;if(t=="balanced"){cap.value=500000000;vol.value=100000;rank.value=1000;price.value=999999;risk.value="balanced"}if(t=="early"){cap.value=100000000;vol.value=50000;rank.value=999999;price.value=5;risk.value="aggressive"}if(t=="quality"){cap.value=1000000000;vol.value=1000000;rank.value=500;price.value=999999;risk.value="safe"}}
-function smartExpand(){expandStep++;if(expandStep===1){vol.value=50000;note.textContent="Расширено 1/4: объём снижен до $50K+. Нажми поиск."}else if(expandStep===2){rank.value=999999;note.textContent="Расширено 2/4: рейтинг любой. Нажми поиск."}else if(expandStep===3){cap.value=1000000000;price.value=999999;note.textContent="Расширено 3/4: капитализация до $1B, цена любая. Нажми поиск."}else{sector.value="auto";chain.value="auto";risk.value="balanced";mode.value="auto";note.textContent="Расширено 4/4: AUTO / все сектора + автоисточник. Нажми поиск."}}
+function smartExpand(){expandStep++;if(expandStep===1){vol.value=50000;note.textContent="Расширено 1/4: объём снижен до $50K+. Нажми поиск."}else if(expandStep===2){rank.value=999999;note.textContent="Расширено 2/4: рейтинг любой. Нажми поиск."}else if(expandStep===3){cap.value=1000000000;price.value=999999;note.textContent="Расширено 3/4: капитализация до $1B, цена любая. Нажми поиск."}else{sector.value="auto";chain.value="auto";risk.value="balanced";mode.value="auto";note.textContent="Расширено 4/4: AUTO / все сектора + auto source. Нажми поиск."}}
 function fmt(n){n=Number(n||0);if(n>=1e9)return"$"+(n/1e9).toFixed(1)+"B";if(n>=1e6)return"$"+(n/1e6).toFixed(1)+"M";if(n>=1e3)return"$"+Math.round(n/1e3)+"K";return"$"+Math.round(n)}
 function pf(n){n=Number(n||0);if(n>=1)return"$"+n.toFixed(3);if(n>0)return"$"+n.toPrecision(3);return"—"}function pct(n){n=Number(n||0);return(n>0?"+":"")+n.toFixed(1)+"%"}function cls(n){return Number(n)>=0?"pos":"neg"}
 function sectorOf(id){for(let k in S){if(S[k].includes(id))return k}return sector.value}function sname(s){return{auto:"AUTO",ai:"AI/DePIN",rwa:"RWA",meme:"Meme",defi:"DeFi",gaming:"Gaming",infra:"Infra",l2:"L2/Modular"}[s]||s}
-function score(c){let sc=42;if((c.market_cap_rank||999999)<300)sc+=14;else if((c.market_cap_rank||999999)<700)sc+=8;if(c.total_volume>1e6)sc+=10;if(c.total_volume>1e7)sc+=8;if(c.market_cap<1e8)sc+=10;else if(c.market_cap<5e8)sc+=6;if(c.price_change_percentage_24h>3)sc+=10;if(c.price_change_percentage_24h<-8)sc-=8;if(["ai","rwa","infra"].includes(c._sector))sc+=6;if(risk.value=="aggressive")sc+=5;if(risk.value=="safe"&&(c.market_cap_rank||999999)>700)sc-=12;return Math.max(1,Math.min(99,Math.round(sc)))}function chunks(arr,size){let out=[];for(let i=0;i<arr.length;i+=size)out.push(arr.slice(i,i+size));return out}
-async function scan(){status.textContent="поиск...";results.innerHTML='<div class="empty">Сканирую источники...</div>';try{let data=[];if(mode.value==="coingecko"){data=await scanCG()}else if(mode.value==="dex"){data=await scanDex()}else if(mode.value==="cmc"){data=await scanCMC()}else{try{data=await scanCG();note.textContent="Источник: CoinGecko."}catch(e){console.log("CG fail",e);note.textContent="CoinGecko недоступен. Переключаюсь на DexScreener.";data=await scanDex()}}render(data);status.textContent="live"}catch(e){console.log(e);status.textContent="api error";results.innerHTML='<div class="empty">Источник не работает. Проверь ключ во вкладке «Источники». Фейковых данных нет.</div>'}}
-async function scanCG(){let ids=[];(sector.value=="auto"?ALL:[sector.value]).forEach(k=>ids.push(...(S[k]||[])));if(chain.value!="auto")ids.push(...(C[chain.value]||[]));ids=[...new Set(ids)];let all=[];let key=localStorage.getItem("cg_key")||"";for(const part of chunks(ids,8)){let url="https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids="+part.join(",")+"&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=24h";let r=await fetch(url,{headers:key?{"x-cg-demo-api-key":key}:{},cache:"no-store"});if(!r.ok)throw new Error("CG "+r.status);let d=await r.json();all.push(...d);await new Promise(res=>setTimeout(res,350))}return all.map(c=>({...c,_sector:sectorOf(c.id)})).filter(c=>c.market_cap<=+cap.value&&c.total_volume>=+vol.value&&c.current_price<=+price.value&&(c.market_cap_rank||999999)<=+rank.value).map(c=>({...c,_score:score(c),_source:"CoinGecko"})).sort((a,b)=>b._score-a._score)}
-async function scanCMC(){let key=localStorage.getItem("cmc_key")||"";if(!key)throw new Error("CMC key missing");let r=await fetch("https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=100&convert=USD",{headers:{"X-CMC_PRO_API_KEY":key},cache:"no-store"});if(!r.ok)throw new Error("CMC "+r.status);let j=await r.json();let data=(j.data||[]).map(x=>({id:"cmc-"+x.id,name:x.name,symbol:x.symbol,image:"",current_price:x.quote.USD.price,market_cap:x.quote.USD.market_cap,total_volume:x.quote.USD.volume_24h,market_cap_rank:x.cmc_rank,price_change_percentage_24h:x.quote.USD.percent_change_24h,_sector:"auto"}));return data.filter(c=>c.market_cap<=+cap.value&&c.total_volume>=+vol.value&&c.current_price<=+price.value&&(c.market_cap_rank||999999)<=+rank.value).map(c=>({...c,_score:score(c),_source:"CoinMarketCap"})).sort((a,b)=>b._score-a._score)}
-const BAD=["wrapped","bridged","wormhole","shit","piss","sex","porn","scam","rug","hitler","nazi"],BLOCK=["BTC","ETH","SOL","DOGE","ADA","XRP","LTC","BNB","USDT","USDC","WETH","WBTC","WSOL","WBNB"];
-function bad(p){let s=(p.baseToken?.symbol||"").toUpperCase(),n=(p.baseToken?.name||"").toLowerCase();return BLOCK.includes(s)||BAD.some(x=>n.includes(x)||s.toLowerCase().includes(x))}function dscore(p){let sc=35,fdv=p.fdv||0,liq=p.liquidity?.usd||0,v=p.volume?.h24||0;if(fdv<1e6)sc+=18;if(liq>20000)sc+=10;if(v>50000)sc+=10;if(v>200000)sc+=8;if(v/Math.max(liq,1)>25)sc-=20;if(bad(p))sc-=80;return Math.max(1,Math.min(99,Math.round(sc)))}
-async function scanDex(){let q=sname(sector.value=="auto"?"meme":sector.value),queries=[q,chain.value=="auto"?"lowcap":chain.value,q+" lowcap"],all=[];for(let x of queries){let r=await fetch("https://api.dexscreener.com/latest/dex/search?q="+encodeURIComponent(x),{cache:"no-store"});if(!r.ok)continue;let d=await r.json();all.push(...(d.pairs||[]));await new Promise(res=>setTimeout(res,180))}let seen=new Set();return all.filter(p=>{let id=(p.baseToken?.address||p.pairAddress||"").toLowerCase();if(seen.has(id))return false;seen.add(id);return !bad(p)&&(p.fdv||0)>0&&p.fdv<=+cap.value&&(p.volume?.h24||0)>=+vol.value&&Number(p.priceUsd||0)<=+price.value&&(p.liquidity?.usd||0)>10000}).map(p=>({...p,_score:dscore(p),_source:"DexScreener"})).sort((a,b)=>b._score-a._score).slice(0,30)}
-function render(data){found.textContent=data.length;avg.textContent=data.length?Math.round(data.reduce((a,b)=>a+(b._score||0),0)/data.length):"—";results.innerHTML="";if(!data.length){results.innerHTML='<div class="empty">Нет монет по выбранным критериям. Расширь фильтры или проверь источник.</div>';return}data.forEach(x=>results.appendChild(x.baseToken?cardDex(x):cardCG(x)))}
-function cardCG(c){let ch=c.price_change_percentage_24h||0,el=document.createElement("div");el.className="token";let img=c.image?`<img class="avatar" src="${c.image}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${(c.symbol||'?').slice(0,3).toUpperCase()}</div>'">`:`<div class="avatar fallback">${(c.symbol||'?').slice(0,3).toUpperCase()}</div>`;el.innerHTML=`<div class="tokenTop">${img}<div><div class="name">${c.name}</div><div class="sym">${c.symbol.toUpperCase()} • ${c._source||"Source"}</div></div><div class="score">${c._score}</div></div><div class="badges"><div class="badge safe">${c._score>78?"ЗОЛОТАЯ ЗОНА":"НАБЛЮДАТЬ"}</div><div class="badge eco">${sname(c._sector)}</div><div class="badge source">Clean Source</div><div class="badge">Rank ${c.market_cap_rank||"—"}</div></div><div class="thesis">🧠 Почему выбрано: ${sname(c._sector)} · капитализация ${fmt(c.market_cap)} · объём ${fmt(c.total_volume)} · 24ч <span class="${cls(ch)}">${pct(ch)}</span></div><div class="grid"><div class="box"><div class="label">Цена</div><div class="val">${pf(c.current_price)}</div></div><div class="box"><div class="label">Капитализация</div><div class="val">${fmt(c.market_cap)}</div></div></div>`;return el}
-function cardDex(p){let el=document.createElement("div");el.className="token";let sym=p.baseToken?.symbol||"?";let img=p.info?.imageUrl||"";el.innerHTML=`<div class="tokenTop">${img?`<img class="avatar" src="${img}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${sym.slice(0,3)}</div>'">`:`<div class="avatar fallback">${sym.slice(0,3)}</div>`}<div><div class="name">${p.baseToken?.name||"Unknown"}</div><div class="sym">${sym} • ${p.chainId||""} • DexScreener</div></div><div class="score">${p._score}</div></div><div class="badges"><div class="badge risk">GEM</div><div class="badge source">DexScreener</div><div class="badge">FDV ${fmt(p.fdv)}</div></div><div class="thesis">🧠 DEX lowcap · объём ${fmt(p.volume?.h24)} · ликвидность ${fmt(p.liquidity?.usd)}</div><div class="grid"><div class="box"><div class="label">Цена</div><div class="val">${pf(p.priceUsd)}</div></div><div class="box"><div class="label">FDV</div><div class="val">${fmt(p.fdv)}</div></div></div>`;return el}
+function score(c){let sc=42;if((c.market_cap_rank||999999)<300)sc+=14;else if((c.market_cap_rank||999999)<700)sc+=8;if(c.total_volume>1e6)sc+=10;if(c.total_volume>1e7)sc+=8;if(c.market_cap<1e8)sc+=10;else if(c.market_cap<5e8)sc+=6;if(c.price_change_percentage_24h>3)sc+=10;if(c.price_change_percentage_24h<-8)sc-=8;if(["ai","rwa","infra"].includes(c._sector))sc+=6;if(risk.value=="aggressive")sc+=5;if(risk.value=="safe"&&(c.market_cap_rank||999999)>700)sc-=12;return Math.max(1,Math.min(99,Math.round(sc)))}
+async function testBackend(){keyStatus.innerHTML="Проверяю...";try{let r=await fetch("/api/health",{cache:"no-store"});let j=await r.json();keyStatus.innerHTML='<span class="ok">Backend работает.</span><br><br>CoinGecko key: '+(j.hasCoinGeckoKey?"есть":"нет")+'<br>CMC key: '+(j.hasCmcKey?"есть":"нет")}catch(e){keyStatus.innerHTML='<span class="err">Backend не отвечает. Нужно загрузить проект на Vercel.</span>'}}
+function showInstructions(){keyStatus.innerHTML='1) Загрузи zip в GitHub.<br>2) Подключи репозиторий в Vercel.<br>3) В Vercel → Settings → Environment Variables добавь:<br><br><b>COINGECKO_API_KEY</b><br><b>CMC_API_KEY</b><br><br>4) Redeploy.<br>5) Нажми «Проверить backend».'}
+function selectedIds(){let ids=[];(sector.value=="auto"?ALL:[sector.value]).forEach(k=>ids.push(...(S[k]||[])));if(chain.value!="auto")ids.push(...(C[chain.value]||[]));return [...new Set(ids)]}
+async function scan(){status.textContent="поиск...";results.innerHTML='<div class="empty">Запрашиваю backend...</div>';try{let data=[];if(mode.value==="coingecko"){data=await fetchCG()}else if(mode.value==="cmc"){data=await fetchCMC()}else{try{data=await fetchCG();note.textContent="Источник: CoinGecko через backend."}catch(e){console.log("CG fail",e);note.textContent="CoinGecko не сработал. Пробую CoinMarketCap.";data=await fetchCMC()}}render(data);status.textContent="live"}catch(e){console.log(e);status.textContent="api error";results.innerHTML='<div class="empty">Источник не работает. Проверь Vercel Environment Variables и вкладку «Источники». Фейковых данных нет.</div>'}}
+async function fetchCG(){let ids=selectedIds();let url="/api/coingecko?ids="+encodeURIComponent(ids.join(","));let r=await fetch(url,{cache:"no-store"});if(!r.ok){let t=await r.text();throw new Error(t)}let all=await r.json();return all.map(c=>({...c,_sector:sectorOf(c.id)})).filter(c=>c.market_cap<=+cap.value&&c.total_volume>=+vol.value&&c.current_price<=+price.value&&(c.market_cap_rank||999999)<=+rank.value).map(c=>({...c,_score:score(c),_source:"CoinGecko"})).sort((a,b)=>b._score-a._score)}
+async function fetchCMC(){let r=await fetch("/api/cmc?limit=200",{cache:"no-store"});if(!r.ok){let t=await r.text();throw new Error(t)}let j=await r.json();let data=(j.data||j||[]).map(x=>({id:"cmc-"+x.id,name:x.name,symbol:x.symbol,image:"",current_price:x.quote.USD.price,market_cap:x.quote.USD.market_cap,total_volume:x.quote.USD.volume_24h,market_cap_rank:x.cmc_rank,price_change_percentage_24h:x.quote.USD.percent_change_24h,_sector:"auto"}));return data.filter(c=>c.market_cap<=+cap.value&&c.total_volume>=+vol.value&&c.current_price<=+price.value&&(c.market_cap_rank||999999)<=+rank.value).map(c=>({...c,_score:score(c),_source:"CoinMarketCap"})).sort((a,b)=>b._score-a._score)}
+function render(data){found.textContent=data.length;avg.textContent=data.length?Math.round(data.reduce((a,b)=>a+(b._score||0),0)/data.length):"—";results.innerHTML="";if(!data.length){results.innerHTML='<div class="empty">Нет монет по выбранным критериям. Расширь фильтры или проверь источник.</div>';return}data.forEach(x=>results.appendChild(card(x)))}
+function card(c){let ch=c.price_change_percentage_24h||0,el=document.createElement("div");el.className="token";let img=c.image?`<img class="avatar" src="${c.image}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${(c.symbol||'?').slice(0,3).toUpperCase()}</div>'">`:`<div class="avatar fallback">${(c.symbol||'?').slice(0,3).toUpperCase()}</div>`;el.innerHTML=`<div class="tokenTop">${img}<div><div class="name">${c.name}</div><div class="sym">${c.symbol.toUpperCase()} • ${c._source||"Source"}</div></div><div class="score">${c._score}</div></div><div class="badges"><div class="badge safe">${c._score>78?"ЗОЛОТАЯ ЗОНА":"НАБЛЮДАТЬ"}</div><div class="badge eco">${sname(c._sector)}</div><div class="badge source">Backend Source</div><div class="badge">Rank ${c.market_cap_rank||"—"}</div></div><div class="thesis">🧠 Почему выбрано: ${sname(c._sector)} · капитализация ${fmt(c.market_cap)} · объём ${fmt(c.total_volume)} · 24ч <span class="${cls(ch)}">${pct(ch)}</span></div><div class="grid"><div class="box"><div class="label">Цена</div><div class="val">${pf(c.current_price)}</div></div><div class="box"><div class="label">Капитализация</div><div class="val">${fmt(c.market_cap)}</div></div></div>`;return el}
 </script>
 </body>
 </html>

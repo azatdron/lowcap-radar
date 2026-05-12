@@ -1,0 +1,7 @@
+export default function handler(req, res) {
+  res.status(200).json({
+    ok: true,
+    backend: "online",
+    service: "Lowcap Radar AI"
+  });
+}

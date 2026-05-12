@@ -1,5 +1,3 @@
-# Lowcap Radar AI v5.3 Live Scanner
+# Lowcap Radar AI v5.4
 
-Vercel env vars:
-- COINGECKO_API_KEY
-- CMC_API_KEY
+API keys can be saved inside the app Sources tab. No fake data.

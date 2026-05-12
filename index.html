@@ -1,477 +1,52 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Lowcap Radar AI v4.7</title>
-
+<title>Lowcap Radar AI v4.8</title>
+<link rel="manifest" href="manifest.json">
 <style>
-:root{
---bg:#050816;
---card:#101827;
---line:#23385e;
---green:#5cf2a0;
---red:#ff6b8a;
---text:#ffffff;
---muted:#8ea2c7;
-}
-
-*{box-sizing:border-box}
-
-body{
-margin:0;
-font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-background:radial-gradient(circle at top,#0b1830 0%,#050816 45%,#02040a 100%);
-color:white;
-padding-bottom:120px;
-}
-
-.app{
-max-width:560px;
-margin:auto;
-padding:18px 14px 40px;
-}
-
-.header{
-display:flex;
-gap:14px;
-align-items:center;
-}
-
-.logo{
-width:64px;
-height:64px;
-border-radius:18px;
-background:#111b31;
-border:1px solid #30456f;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:36px;
-font-weight:900;
-color:var(--green);
-}
-
-.title{
-font-size:32px;
-font-weight:900;
-line-height:1;
-}
-
-.sub{
-margin-top:6px;
-color:var(--muted);
-font-size:14px;
-}
-
-.live{
-margin-left:auto;
-background:#0d2419;
-border:1px solid #245f45;
-color:#5cf2a0;
-padding:8px 14px;
-border-radius:999px;
-font-weight:900;
-}
-
-.card,.coin{
-margin-top:18px;
-background:rgba(16,24,39,.95);
-border:1px solid var(--line);
-border-radius:28px;
-padding:16px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-}
-
-.box{
-background:#08101f;
-border:1px solid #1d3155;
-border-radius:18px;
-padding:14px;
-}
-
-.label{
-font-size:12px;
-color:var(--muted);
-}
-
-.value{
-font-size:22px;
-font-weight:900;
-margin-top:4px;
-}
-
-select,button{
-width:100%;
-margin-top:10px;
-padding:14px;
-border-radius:18px;
-border:1px solid #2a3c61;
-background:#08101f;
-color:white;
-font-size:16px;
-}
-
-button{
-background:linear-gradient(135deg,#5cf2a0,#38e977);
-border:none;
-color:#03120a;
-font-weight:900;
-}
-
-.marketHeat{
-margin-top:12px;
-padding:14px;
-border-radius:18px;
-font-weight:900;
-text-align:center;
-}
-
-.hot{background:#12281d;color:#5cf2a0;border:1px solid #245f45;}
-.mid{background:#2b2410;color:#ffd36a;border:1px solid #7a6330;}
-.cold{background:#26131b;color:#ff8aa3;border:1px solid #6f2d42;}
-
-.coinTop{
-display:flex;
-align-items:center;
-gap:12px;
-}
-
-.avatar{
-width:56px;
-height:56px;
-border-radius:18px;
-}
-
-.name{
-font-size:28px;
-font-weight:900;
-}
-
-.sym{
-font-size:14px;
-color:var(--muted);
-margin-top:4px;
-}
-
-.score{
-margin-left:auto;
-font-size:42px;
-font-weight:900;
-color:var(--green);
-}
-
-.badges{
-display:flex;
-gap:8px;
-flex-wrap:wrap;
-margin-top:12px;
-}
-
-.badge{
-padding:6px 10px;
-border-radius:999px;
-background:#142039;
-border:1px solid #273b62;
-font-size:12px;
-}
-
-.reason{
-margin-top:12px;
-padding:14px;
-border-radius:18px;
-background:#0a1222;
-border:1px solid #20355d;
-line-height:1.5;
-color:#d2deee;
-}
-
-.pos{color:#5cf2a0;font-weight:900}
-.neg{color:#ff6b8a;font-weight:900}
-
-.tabs{
-position:fixed;
-left:18px;
-right:18px;
-bottom:18px;
-max-width:530px;
-margin:auto;
-background:#0f172aee;
-border:1px solid #26385f;
-border-radius:28px;
-padding:8px;
-display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:8px;
-}
-
-.tab{
-padding:13px;
-border-radius:18px;
-text-align:center;
-font-weight:900;
-color:#94a3b8;
-}
-
-.active{
-background:#1d2b49;
-color:white;
-}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#0b1830,#050816 45%,#02040a);color:#fff;font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:env(safe-area-inset-top) 14px 120px}.app{max-width:560px;margin:auto}.head{display:flex;gap:12px;align-items:center;margin:20px 0}.logo{width:58px;height:58px;border-radius:18px;background:#111b31;border:1px solid #30456f;display:grid;place-items:center;color:#5cf2a0;font-size:38px;font-weight:900}.title{font-size:30px;font-weight:1000;line-height:1}.sub{color:#94a3b8;margin-top:5px}.live{margin-left:auto;background:#0d2419;border:1px solid #245f45;color:#5cf2a0;padding:8px 12px;border-radius:999px;font-weight:900}.panel,.coin,.empty{background:#101827ee;border:1px solid #22385d;border-radius:26px;padding:16px;margin:14px 0}.stats,.grid,.filters,.buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px}.box{background:#08101f;border:1px solid #1f3154;border-radius:18px;padding:13px}.label{font-size:12px;color:#94a3b8}.val{font-size:19px;font-weight:900;margin-top:4px}select,button{width:100%;background:#08101f;border:1px solid #243354;border-radius:15px;padding:13px;color:#fff;font-size:15px}button{border:0;background:linear-gradient(135deg,#5cf2a0,#3ee779);color:#03120a;font-weight:900;font-size:16px}.ghost{background:#15213a;color:#fff;border:1px solid #2b3e63}.presets{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0}.preset{padding:10px;background:#0a1020;border:1px solid #243354;border-radius:14px;text-align:center;color:#a8b3c5;font-weight:900;font-size:12px}.preset.active{background:#1d2b49;color:#fff}.top{display:flex;gap:12px;align-items:center}.avatar{width:54px;height:54px;border-radius:16px;object-fit:cover;background:#1a2741}.name{font-size:22px;font-weight:1000}.sym{font-size:14px;color:#95a7bf;margin-top:4px}.score{margin-left:auto;font-size:36px;color:#5cf2a0;font-weight:1000}.badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.badge{padding:6px 10px;border-radius:999px;background:#142039;border:1px solid #273b62;font-size:12px}.thesis{margin-top:10px;background:#0a1222;border:1px solid #20355d;border-radius:15px;padding:11px;color:#bfd0e4;line-height:1.45}.pos{color:#5cf2a0}.neg{color:#ff6b8a}.tabs{position:fixed;left:18px;right:18px;bottom:18px;max-width:540px;margin:auto;background:#0f172aee;border:1px solid #26385f;border-radius:28px;padding:8px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.tab{padding:13px;text-align:center;border-radius:20px;color:#9fb0c8;font-weight:900}.tab.active{background:#1d2b49;color:#fff}
 </style>
 </head>
-
-<body>
-
-<div class="app">
-
-<div class="header">
-<div class="logo">⌁</div>
-
-<div>
-<div class="title">Lowcap Radar AI</div>
-<div class="sub">v4.7 • Rotation Engine</div>
+<body><div class="app">
+<div class="head"><div class="logo">⌁</div><div><div class="title">Lowcap Radar AI</div><div class="sub">v4.8 • Настраиваемый поиск</div></div><div id="status" class="live">готов</div></div>
+<div class="panel">
+<div class="stats"><div class="box"><div class="label">Найдено</div><div id="found" class="val">0</div></div><div class="box"><div class="label">Средний score</div><div id="avg" class="val">—</div></div></div>
+<div class="presets"><div class="preset active" onclick="setPreset('balanced',this)">Баланс</div><div class="preset" onclick="setPreset('early',this)">Ранние</div><div class="preset" onclick="setPreset('quality',this)">Качество</div></div>
+<div class="filters">
+<div><div class="label">Сектор</div><select id="sector"><option value="auto">AUTO / Все</option><option value="ai">AI / DePIN</option><option value="rwa">RWA</option><option value="meme">Meme</option><option value="defi">DeFi</option><option value="gaming">Gaming</option><option value="infra">Infrastructure</option><option value="l2">L2 / Modular</option></select></div>
+<div><div class="label">Экосистема</div><select id="chain"><option value="auto">Любая</option><option value="ethereum">Ethereum</option><option value="solana">Solana</option><option value="base">Base</option><option value="arbitrum">Arbitrum</option><option value="bsc">BSC</option></select></div>
+<div><div class="label">Капитализация</div><select id="cap"><option value="50000000">до $50M</option><option value="100000000">до $100M</option><option value="500000000" selected>до $500M</option><option value="1000000000">до $1B</option><option value="999999999999">без лимита</option></select></div>
+<div><div class="label">Объём 24ч</div><select id="vol"><option value="50000">от $50K</option><option value="100000">от $100K</option><option value="500000" selected>от $500K</option><option value="1000000">от $1M</option><option value="10000000">от $10M</option></select></div>
+<div><div class="label">Цена</div><select id="price"><option value="999999">любая</option><option value="1">до $1</option><option value="5">до $5</option><option value="10">до $10</option><option value="50">до $50</option></select></div>
+<div><div class="label">Риск</div><select id="risk"><option value="safe">Осторожный</option><option value="balanced" selected>Сбалансированный</option><option value="aggressive">Агрессивный</option></select></div>
+<div><div class="label">Рейтинг</div><select id="rank"><option value="300">до Rank 300</option><option value="500" selected>до Rank 500</option><option value="1000">до Rank 1000</option><option value="999999">любой</option></select></div>
+<div><div class="label">Источник</div><select id="source"><option value="coingecko">CoinGecko</option><option value="dex">DexScreener GEM</option></select></div>
 </div>
-
-<div class="live">LIVE</div>
+<div class="buttons"><button onclick="scan()">Начать поиск</button><button class="ghost" onclick="loosen()">Сделать шире</button></div>
 </div>
-
-<div class="card">
-
-<div class="grid">
-<div class="box">
-<div class="label">Найдено</div>
-<div class="value" id="found">0</div>
-</div>
-
-<div class="box">
-<div class="label">Средний Score</div>
-<div class="value" id="avg">—</div>
-</div>
-</div>
-
-<select id="sector">
-<option value="ai">AI / DePIN</option>
-<option value="rwa">RWA</option>
-<option value="gaming">Gaming</option>
-<option value="solana">Solana</option>
-<option value="infra">Infrastructure</option>
-</select>
-
-<select id="marketcap">
-<option value="100000000">до $100M</option>
-<option value="500000000" selected>до $500M</option>
-<option value="1000000000">до $1B</option>
-</select>
-
-<select id="volume">
-<option value="100000">$100K+</option>
-<option value="500000" selected>$500K+</option>
-<option value="1000000">$1M+</option>
-</select>
-
-<select id="risk">
-<option value="safe">Низкий риск</option>
-<option value="mid" selected>Средний риск</option>
-<option value="high">Высокий потенциал</option>
-</select>
-
-<button onclick="scan()">Начать поиск</button>
-
-<div id="heat" class="marketHeat mid">
-Рынок нейтральный
-</div>
-
-</div>
-
-<div id="results"></div>
-
-</div>
-
-<div class="tabs">
-<div class="tab active">Радар</div>
-<div class="tab">Watchlist</div>
-<div class="tab">Источники</div>
-</div>
-
+<div id="results"><div class="empty">Выбери критерии и нажми «Начать поиск».</div></div>
+</div><div class="tabs"><div class="tab active">Радар</div><div class="tab">Избранное</div><div class="tab">Источники</div></div>
 <script>
-
-const sectors = {
-ai:["akash-network","render-token","bittensor","aethir","grass"],
-rwa:["ondo-finance","centrifuge","mantra-dao"],
-gaming:["immutable-x","gala","ronin"],
-solana:["jupiter-exchange-solana","raydium","pyth-network"],
-infra:["chainlink","the-graph","arweave"]
-};
-
-function fmt(n){
-if(n>=1e9)return "$"+(n/1e9).toFixed(1)+"B";
-if(n>=1e6)return "$"+(n/1e6).toFixed(1)+"M";
-return "$"+Math.round(n/1000)+"K";
-}
-
-function trust(c){
-let s=50;
-
-if(c.market_cap_rank<100)s+=20;
-else if(c.market_cap_rank<300)s+=12;
-else s+=6;
-
-if(c.total_volume>5000000)s+=15;
-else if(c.total_volume>1000000)s+=10;
-
-if(c.market_cap>100000000)s+=10;
-
-if(c.price_change_percentage_24h>0)s+=8;
-
-return Math.min(99,Math.round(s));
-}
-
-function marketHeat(data){
-
-let positive=data.filter(x=>(x.price_change_percentage_24h||0)>0).length;
-let ratio=positive/data.length;
-
-let el=document.getElementById("heat");
-
-if(ratio>0.7){
-el.className='marketHeat hot';
-el.innerText='🔥 Рынок горячий • идёт ротация капитала';
-}
-else if(ratio>0.4){
-el.className='marketHeat mid';
-el.innerText='⚡ Рынок нейтральный • выборочно сильные монеты';
-}
-else{
-el.className='marketHeat cold';
-el.innerText='❄️ Рынок слабый • осторожность';
-}
-}
-
-async function scan(){
-
-document.getElementById("results").innerHTML='<div class="card">Сканирование clean sources...</div>';
-
-let sector=document.getElementById("sector").value;
-let cap=Number(document.getElementById("marketcap").value);
-let vol=Number(document.getElementById("volume").value);
-let risk=document.getElementById("risk").value;
-
-let ids=sectors[sector].join(",");
-
-let url='https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids='+ids+'&sparkline=false&price_change_percentage=24h';
-
-let r=await fetch(url);
-let data=await r.json();
-
-data=data.filter(c=>c.market_cap<=cap && c.total_volume>=vol);
-
-if(risk==="safe"){
-data=data.filter(c=>c.market_cap_rank<200);
-}
-if(risk==="high"){
-data=data.filter(c=>c.market_cap_rank>200);
-}
-
-data.sort((a,b)=>trust(b)-trust(a));
-
-document.getElementById("found").innerText=data.length;
-
-if(data.length){
-let avg=Math.round(data.reduce((a,b)=>a+trust(b),0)/data.length);
-document.getElementById("avg").innerText=avg;
-marketHeat(data);
-}
-
-render(data);
-
-}
-
-function render(data){
-
-let root=document.getElementById("results");
-root.innerHTML='';
-
-if(!data.length){
-root.innerHTML='<div class="card">Нет монет по этим критериям.</div>';
-return;
-}
-
-data.forEach(c=>{
-
-let change=Number(c.price_change_percentage_24h||0);
-let cls=change>=0?'pos':'neg';
-
-let unlockRisk='Низкий';
-
-if(c.market_cap_rank>300) unlockRisk='Средний';
-if(c.market_cap_rank>600) unlockRisk='Высокий';
-
-let el=document.createElement("div");
-el.className='coin';
-
-el.innerHTML=`
-
-<div class="coinTop">
-<img class="avatar" src="${c.image}">
-<div>
-<div class="name">${c.name}</div>
-<div class="sym">${c.symbol.toUpperCase()} • CoinGecko</div>
-</div>
-<div class="score">${trust(c)}</div>
-</div>
-
-<div class="badges">
-<div class="badge">Trust Score</div>
-<div class="badge">Clean Sources</div>
-<div class="badge">Rotation Engine</div>
-</div>
-
-<div class="reason">
-🧠 Почему выбрано:
-<br><br>
-• Market Cap: ${fmt(c.market_cap)}
-<br>
-• Объём 24ч: ${fmt(c.total_volume)}
-<br>
-• Rank CoinGecko: ${c.market_cap_rank}
-<br>
-• Unlock Risk: ${unlockRisk}
-<br>
-• Изменение 24ч:
-<span class="${cls}">${change.toFixed(1)}%</span>
-</div>
-
-<div class="grid" style="margin-top:12px">
-
-<div class="box">
-<div class="label">Цена</div>
-<div class="value">$${Number(c.current_price).toFixed(3)}</div>
-</div>
-
-<div class="box">
-<div class="label">Объём</div>
-<div class="value">${fmt(c.total_volume)}</div>
-</div>
-
-</div>
-
-`;
-
-root.appendChild(el);
-
-});
-
-}
-
-scan();
-
-</script>
-
-</body>
-</html>
+const S={ai:["akash-network","render-token","bittensor","aethir","grass","origintrail","nosana","io-net"],rwa:["ondo-finance","mantra-dao","centrifuge","pendle","maple"],meme:["pepe","dogwifcoin","bonk","floki","mog-coin","popcat","brett"],defi:["uniswap","aave","pendle","aerodrome-finance","jupiter-exchange-solana","raydium"],gaming:["immutable-x","gala","ronin","illuvium","superverse"],infra:["chainlink","the-graph","arweave","celestia","pyth-network","akash-network"],l2:["arbitrum","optimism","starknet","mantle","celestia"]};
+const C={ethereum:["uniswap","aave","chainlink","pepe","ondo-finance"],solana:["jupiter-exchange-solana","raydium","pyth-network","dogwifcoin","bonk","nosana"],base:["aerodrome-finance","degen-base","toshi","brett","virtual-protocol"],arbitrum:["arbitrum","pendle","chainlink"],bsc:["pancakeswap-token","floki"]};
+const ALL=["ai","rwa","meme","defi","gaming","infra","l2"];
+function setPreset(t,e){document.querySelectorAll('.preset').forEach(x=>x.classList.remove('active'));e.classList.add('active');if(t=="balanced"){cap.value=500000000;vol.value=500000;rank.value=500;price.value=999999;risk.value="balanced"}if(t=="early"){cap.value=100000000;vol.value=100000;rank.value=1000;price.value=5;risk.value="aggressive"}if(t=="quality"){cap.value=1000000000;vol.value=1000000;rank.value=300;price.value=999999;risk.value="safe"}}
+function loosen(){cap.value=1000000000;vol.value=100000;rank.value=1000;price.value=999999;risk.value="balanced";alert("Фильтры расширены. Нажми поиск.")}
+function fmt(n){n=Number(n||0);if(n>=1e9)return"$"+(n/1e9).toFixed(1)+"B";if(n>=1e6)return"$"+(n/1e6).toFixed(1)+"M";if(n>=1e3)return"$"+Math.round(n/1e3)+"K";return"$"+Math.round(n)}
+function pf(n){n=Number(n||0);if(n>=1)return"$"+n.toFixed(3);if(n>0)return"$"+n.toPrecision(3);return"—"}
+function pct(n){n=Number(n||0);return(n>0?"+":"")+n.toFixed(1)+"%"} function cls(n){return Number(n)>=0?"pos":"neg"}
+function sectorOf(id){for(let k in S){if(S[k].includes(id))return k}return sector.value}
+function sname(s){return{auto:"AUTO",ai:"AI/DePIN",rwa:"RWA",meme:"Meme",defi:"DeFi",gaming:"Gaming",infra:"Infra",l2:"L2/Modular"}[s]||s}
+function score(c){let sc=42;if((c.market_cap_rank||999999)<300)sc+=14;else if((c.market_cap_rank||999999)<700)sc+=8;if(c.total_volume>1e6)sc+=10;if(c.total_volume>1e7)sc+=8;if(c.market_cap<1e8)sc+=10;else if(c.market_cap<5e8)sc+=6;if(c.price_change_percentage_24h>3)sc+=10;if(c.price_change_percentage_24h<-8)sc-=8;if(["ai","rwa","infra"].includes(c._sector))sc+=6;if(risk.value=="aggressive")sc+=5;if(risk.value=="safe"&&(c.market_cap_rank||999999)>700)sc-=12;return Math.max(1,Math.min(99,Math.round(sc)))}
+async function scan(){status.textContent="поиск...";results.innerHTML='<div class="empty">Сканирую источники...</div>';try{let data=source.value=="dex"?await scanDex():await scanCG();render(data);status.textContent="live"}catch(e){console.log(e);status.textContent="api error";results.innerHTML='<div class="empty">API временно недоступен или лимит. Попробуй позже или нажми «Сделать шире».</div>'}}
+async function scanCG(){let ids=[];(sector.value=="auto"?ALL:[sector.value]).forEach(k=>ids.push(...(S[k]||[])));if(chain.value!="auto")ids.push(...(C[chain.value]||[]));ids=[...new Set(ids)];let r=await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids="+ids.join(",")+"&order=market_cap_desc&per_page=250&page=1&sparkline=false&price_change_percentage=24h",{cache:"no-store"});if(!r.ok)throw new Error(r.status);let data=await r.json();return data.map(c=>({...c,_sector:sectorOf(c.id)})).filter(c=>c.market_cap<=+cap.value&&c.total_volume>=+vol.value&&c.current_price<=+price.value&&(c.market_cap_rank||999999)<=+rank.value).map(c=>({...c,_score:score(c)})).sort((a,b)=>b._score-a._score)}
+const BAD=["wrapped","bridged","wormhole","shit","piss","sex","porn","scam","rug","hitler","nazi"],BLOCK=["BTC","ETH","SOL","DOGE","ADA","XRP","LTC","BNB","USDT","USDC","WETH","WBTC","WSOL","WBNB"];
+function bad(p){let s=(p.baseToken?.symbol||"").toUpperCase(),n=(p.baseToken?.name||"").toLowerCase();return BLOCK.includes(s)||BAD.some(x=>n.includes(x)||s.toLowerCase().includes(x))}
+function dscore(p){let sc=35,fdv=p.fdv||0,liq=p.liquidity?.usd||0,v=p.volume?.h24||0;if(fdv<1e6)sc+=18;if(liq>20000)sc+=10;if(v>50000)sc+=10;if(v>200000)sc+=8;if(v/Math.max(liq,1)>25)sc-=20;if(bad(p))sc-=80;return Math.max(1,Math.min(99,sc))}
+async function scanDex(){let q=sname(sector.value=="auto"?"meme":sector.value),all=[];for(let x of [q,chain.value=="auto"?"lowcap":chain.value,q+" lowcap"]){let r=await fetch("https://api.dexscreener.com/latest/dex/search?q="+encodeURIComponent(x),{cache:"no-store"});let d=await r.json();all.push(...(d.pairs||[]))}let seen=new Set();return all.filter(p=>{let id=(p.baseToken?.address||p.pairAddress||"").toLowerCase();if(seen.has(id))return false;seen.add(id);return !bad(p)&&(p.fdv||0)>0&&p.fdv<=+cap.value&&(p.volume?.h24||0)>=+vol.value&&Number(p.priceUsd||0)<=+price.value&&(p.liquidity?.usd||0)>10000}).map(p=>({...p,_score:dscore(p)})).sort((a,b)=>b._score-a._score).slice(0,30)}
+function render(data){found.textContent=data.length;avg.textContent=data.length?Math.round(data.reduce((a,b)=>a+b._score,0)/data.length):"—";results.innerHTML="";if(!data.length){results.innerHTML='<div class="empty">Нет монет по выбранным критериям. Нажми «Сделать шире» или выбери AUTO.</div>';return}data.forEach(x=>results.appendChild(x.id?cardCG(x):cardDex(x)))}
+function cardCG(c){let ch=c.price_change_percentage_24h||0,el=document.createElement("div");el.className="coin";el.innerHTML=`<div class="top"><img class="avatar" src="${c.image||''}"><div><div class="name">${c.name}</div><div class="sym">${c.symbol.toUpperCase()} • CoinGecko</div></div><div class="score">${c._score}</div></div><div class="badges"><div class="badge">${c._score>78?"ЗОЛОТАЯ ЗОНА":"НАБЛЮДАТЬ"}</div><div class="badge">${sname(c._sector)}</div><div class="badge">Rank ${c.market_cap_rank||"—"}</div></div><div class="thesis">🧠 Почему выбрано: ${sname(c._sector)} · капитализация ${fmt(c.market_cap)} · объём ${fmt(c.total_volume)} · 24ч <span class="${cls(ch)}">${pct(ch)}</span></div><div class="grid"><div class="box"><div class="label">Цена</div><div class="val">${pf(c.current_price)}</div></div><div class="box"><div class="label">Капитализация</div><div class="val">${fmt(c.market_cap)}</div></div></div>`;return el}
+function cardDex(p){let el=document.createElement("div");el.className="coin";let sym=p.baseToken?.symbol||"?";el.innerHTML=`<div class="top"><div class="avatar fallback">${sym.slice(0,3)}</div><div><div class="name">${p.baseToken?.name||"Unknown"}</div><div class="sym">${sym} • ${p.chainId||""}</div></div><div class="score">${p._score}</div></div><div class="badges"><div class="badge">GEM</div><div class="badge">DexScreener</div><div class="badge">FDV ${fmt(p.fdv)}</div></div><div class="thesis">🧠 DEX lowcap · объём ${fmt(p.volume?.h24)} · ликвидность ${fmt(p.liquidity?.usd)}</div>`;return el}
+</script></body></html>

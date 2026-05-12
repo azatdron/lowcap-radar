@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Lowcap Radar AI v5.2</title>
+<title>Lowcap Radar AI v5.3</title>
 <link rel="manifest" href="manifest.json">
 <style>
 :root{--card:#101827ee;--box:#08101f;--line:#22385d;--muted:#94a3b8;--green:#5cf2a0;--yellow:#ffd166;--red:#ff6b8a;--blue:#7dd3fc;--violet:#c4b5fd}
@@ -16,30 +16,30 @@ body{padding-top:env(safe-area-inset-top);padding-bottom:calc(env(safe-area-inse
 .logo:before{content:"⌁";font-size:40px;color:var(--green);font-weight:900}
 h1{margin:0;font-size:30px;line-height:1;font-weight:1000}.sub{font-size:14px;color:#9fb0c8;margin-top:5px}
 .status{margin-left:auto;background:#092216;border:1px solid #235f45;color:var(--green);padding:9px 12px;border-radius:999px;font-size:13px;font-weight:800}
-.panel,.token{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:16px;margin:14px 0;backdrop-filter:blur(10px)}
+.panel,.token{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:16px;margin:14px 0}
 .stats,.filters,.buttons,.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .stat,.box{background:var(--box);border:1px solid #1f3154;border-radius:18px;padding:13px}
 .label{font-size:12px;color:var(--muted)}.val{font-size:19px;font-weight:900;margin-top:4px}
-select,input{width:100%;background:#08101f;border:1px solid #243354;border-radius:15px;padding:13px;color:#fff;font-size:15px}
+select{width:100%;background:#08101f;border:1px solid #243354;border-radius:15px;padding:13px;color:#fff;font-size:15px}
 button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:16px}
-.scan{background:linear-gradient(135deg,#5cf2a0,#3ee779);color:#03120a}.ghost{background:#15213a;color:#fff;border:1px solid #2b3e63}.danger{background:#27131b;color:#ff8aa3;border:1px solid #6f2d42}
+.scan{background:linear-gradient(135deg,#5cf2a0,#3ee779);color:#03120a}.ghost{background:#15213a;color:#fff;border:1px solid #2b3e63}
 .presetRow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:12px 0}
 .preset{padding:10px;background:#0a1020;border:1px solid #243354;border-radius:14px;color:#a8b3c5;text-align:center;font-weight:900;font-size:12px}.preset.active{background:#1d2b49;color:#fff}
 .tokenTop{display:flex;gap:12px;align-items:center}.avatar{width:54px;height:54px;border-radius:16px;object-fit:cover;background:#1a2741}.fallback{display:grid;place-items:center;color:#fff;font-weight:900}
-.name{font-size:22px;font-weight:1000;line-height:1.03}.sym{color:#95a7bf;margin-top:5px;font-size:14px}.score{margin-left:auto;font-size:36px;color:var(--green);font-weight:1000}
+.name{font-size:22px;font-weight:1000;line-height:1.03}.sym{color:#95a7bf;margin-top:5px;font-size:14px}.score{margin-left:auto;font-size:36px;color:var(--green);font-weight:1000}.score.mid{color:var(--yellow)}.score.bad{color:var(--red)}
 .badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.badge{padding:6px 10px;border-radius:999px;background:#142039;border:1px solid #273b62;font-size:12px;color:#d6e0ef}
-.safe{color:var(--green)}.risk{color:var(--yellow)}.source{color:var(--violet)}.eco{color:var(--blue)}
+.safe{color:var(--green)}.source{color:var(--violet)}.eco{color:var(--blue)}
 .thesis{margin-top:10px;color:#b6c6dc;font-size:13px;line-height:1.45;background:#0a1222;border:1px solid #20355d;border-radius:15px;padding:10px}
-.note{font-size:13px;color:#9fb0c8;text-align:center;line-height:1.45;margin-top:14px}.small{font-size:12px;color:#8494ad;margin-top:6px}
-.tabs{position:fixed;left:18px;right:18px;bottom:18px;max-width:540px;margin:auto;background:#0f172aee;border:1px solid #26385f;border-radius:28px;padding:8px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;backdrop-filter:blur(12px)}
+.note{font-size:13px;color:#9fb0c8;text-align:center;line-height:1.45;margin-top:14px}
+.tabs{position:fixed;left:18px;right:18px;bottom:18px;max-width:540px;margin:auto;background:#0f172aee;border:1px solid #26385f;border-radius:28px;padding:8px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 .tab{padding:13px;text-align:center;border-radius:20px;color:#9fb0c8;font-weight:900}.tab.active{background:#1d2b49;color:#fff}
 .empty{border:1px dashed #32466f;border-radius:24px;padding:24px;text-align:center;color:#9fb0c8;margin-top:14px;line-height:1.45}.pos{color:var(--green)!important}.neg{color:var(--red)!important}
-.hidden{display:none}.ok{color:var(--green);font-weight:900}.err{color:var(--red);font-weight:900}.warn{color:var(--yellow);font-weight:900}
+.hidden{display:none}.ok{color:var(--green);font-weight:900}.err{color:var(--red);font-weight:900}
 </style>
 </head>
 <body>
 <div class="app">
-  <div class="head"><div class="logo"></div><div><h1>Lowcap Radar AI</h1><div class="sub">v5.2 • Backend Bridge</div></div><div id="status" class="status">готов</div></div>
+  <div class="head"><div class="logo"></div><div><h1>Lowcap Radar AI</h1><div class="sub">v5.3 • Live API Scanner</div></div><div id="status" class="status">готов</div></div>
 
   <section id="screenRadar">
     <div class="panel">
@@ -47,48 +47,34 @@ button{border:0;border-radius:18px;padding:15px;font-weight:900;font-size:16px}
         <div class="stat"><div class="label">Найдено</div><div id="found" class="val">0</div></div>
         <div class="stat"><div class="label">Средний score</div><div id="avg" class="val">—</div></div>
       </div>
-
       <div class="presetRow">
         <div class="preset active" onclick="preset('balanced',this)">Баланс</div>
         <div class="preset" onclick="preset('early',this)">Ранние</div>
         <div class="preset" onclick="preset('quality',this)">Качество</div>
       </div>
-
       <div class="filters">
         <div><div class="label">Сектор</div><select id="sector"><option value="auto">AUTO / Все</option><option value="ai">AI / DePIN</option><option value="rwa">RWA</option><option value="meme">Meme</option><option value="defi">DeFi</option><option value="gaming">Gaming</option><option value="infra">Infrastructure</option><option value="l2">L2 / Modular</option></select></div>
         <div><div class="label">Экосистема</div><select id="chain"><option value="auto">Любая</option><option value="ethereum">Ethereum</option><option value="solana">Solana</option><option value="base">Base</option><option value="arbitrum">Arbitrum</option><option value="bsc">BSC</option></select></div>
-        <div><div class="label">Капитализация / FDV</div><select id="cap"><option value="50000000">до $50M</option><option value="100000000">до $100M</option><option value="500000000" selected>до $500M</option><option value="1000000000">до $1B</option><option value="999999999999">без лимита</option></select></div>
+        <div><div class="label">Капитализация</div><select id="cap"><option value="50000000">до $50M</option><option value="100000000">до $100M</option><option value="500000000" selected>до $500M</option><option value="1000000000">до $1B</option><option value="999999999999">без лимита</option></select></div>
         <div><div class="label">Объём 24ч</div><select id="vol"><option value="50000">от $50K</option><option value="100000" selected>от $100K</option><option value="500000">от $500K</option><option value="1000000">от $1M</option><option value="10000000">от $10M</option></select></div>
         <div><div class="label">Цена</div><select id="price"><option value="999999">любая</option><option value="1">до $1</option><option value="5">до $5</option><option value="10">до $10</option><option value="50">до $50</option></select></div>
         <div><div class="label">Риск</div><select id="risk"><option value="safe">Осторожный</option><option value="balanced" selected>Сбалансированный</option><option value="aggressive">Агрессивный</option></select></div>
         <div><div class="label">Рейтинг</div><select id="rank"><option value="300">до Rank 300</option><option value="500">до Rank 500</option><option value="1000" selected>до Rank 1000</option><option value="999999">любой</option></select></div>
-        <div><div class="label">Источник</div><select id="mode"><option value="coingecko">CoinGecko через backend</option><option value="cmc">CoinMarketCap через backend</option><option value="auto">Auto: CG → CMC</option></select></div>
+        <div><div class="label">Источник</div><select id="mode"><option value="coingecko">CoinGecko live</option><option value="cmc">CoinMarketCap live</option><option value="auto">Auto: CG → CMC</option></select></div>
       </div>
-
       <div class="buttons"><button class="scan" onclick="scan()">Начать поиск</button><button class="ghost" onclick="smartExpand()">Сделать шире</button></div>
-      <div class="note" id="note">Ключи хранятся в Vercel Environment Variables, не в телефоне. Никаких фейковых данных.</div>
+      <div class="note" id="note">v5.3: настоящий live scanner через backend. Без демо и фейковых данных.</div>
     </div>
-
-    <div id="results"><div class="empty">После загрузки на Vercel вставь ключи в Environment Variables и нажми «Начать поиск».</div></div>
+    <div id="results"><div class="empty">Нажми «Начать поиск». Backend уже работает через Vercel.</div></div>
   </section>
 
-  <section id="screenWatch" class="hidden">
-    <div class="panel"><h2>Избранное</h2><div id="watchList" class="empty">Пока пусто.</div></div>
-  </section>
+  <section id="screenWatch" class="hidden"><div class="panel"><h2>Избранное</h2><div class="empty">Пока пусто.</div></div></section>
 
   <section id="screenSources" class="hidden">
     <div class="panel">
       <h2 style="margin-top:0">Источники / Backend</h2>
-      <div class="empty" style="text-align:left">
-        <b>Ключи теперь вставляются не здесь, а в Vercel:</b><br><br>
-        COINGECKO_API_KEY<br>
-        CMC_API_KEY<br><br>
-        Это скрывает ключи и убирает CORS.
-      </div>
-      <div class="buttons">
-        <button class="scan" onclick="testBackend()">Проверить backend</button>
-        <button class="ghost" onclick="showInstructions()">Инструкция</button>
-      </div>
+      <div class="empty" style="text-align:left">Ключи хранятся в Vercel:<br><br><b>COINGECKO_API_KEY</b><br><b>CMC_API_KEY</b></div>
+      <div class="buttons"><button class="scan" onclick="testBackend()">Проверить backend</button><button class="ghost" onclick="showInstructions()">Инструкция</button></div>
       <div id="keyStatus" class="empty">Статус появится после проверки.</div>
     </div>
   </section>
@@ -104,17 +90,18 @@ function showTab(t){screenRadar.classList.add("hidden");screenWatch.classList.ad
 function preset(t,e){document.querySelectorAll('.preset').forEach(x=>x.classList.remove('active'));e.classList.add('active');expandStep=0;if(t=="balanced"){cap.value=500000000;vol.value=100000;rank.value=1000;price.value=999999;risk.value="balanced"}if(t=="early"){cap.value=100000000;vol.value=50000;rank.value=999999;price.value=5;risk.value="aggressive"}if(t=="quality"){cap.value=1000000000;vol.value=1000000;rank.value=500;price.value=999999;risk.value="safe"}}
 function smartExpand(){expandStep++;if(expandStep===1){vol.value=50000;note.textContent="Расширено 1/4: объём снижен до $50K+. Нажми поиск."}else if(expandStep===2){rank.value=999999;note.textContent="Расширено 2/4: рейтинг любой. Нажми поиск."}else if(expandStep===3){cap.value=1000000000;price.value=999999;note.textContent="Расширено 3/4: капитализация до $1B, цена любая. Нажми поиск."}else{sector.value="auto";chain.value="auto";risk.value="balanced";mode.value="auto";note.textContent="Расширено 4/4: AUTO / все сектора + auto source. Нажми поиск."}}
 function fmt(n){n=Number(n||0);if(n>=1e9)return"$"+(n/1e9).toFixed(1)+"B";if(n>=1e6)return"$"+(n/1e6).toFixed(1)+"M";if(n>=1e3)return"$"+Math.round(n/1e3)+"K";return"$"+Math.round(n)}
-function pf(n){n=Number(n||0);if(n>=1)return"$"+n.toFixed(3);if(n>0)return"$"+n.toPrecision(3);return"—"}function pct(n){n=Number(n||0);return(n>0?"+":"")+n.toFixed(1)+"%"}function cls(n){return Number(n)>=0?"pos":"neg"}
+function pf(n){n=Number(n||0);if(n>=1)return"$"+n.toFixed(3);if(n>0)return"$"+n.toPrecision(3);return"—"}
+function pct(n){n=Number(n||0);return(n>0?"+":"")+n.toFixed(1)+"%"}function cls(n){return Number(n)>=0?"pos":"neg"}
 function sectorOf(id){for(let k in S){if(S[k].includes(id))return k}return sector.value}function sname(s){return{auto:"AUTO",ai:"AI/DePIN",rwa:"RWA",meme:"Meme",defi:"DeFi",gaming:"Gaming",infra:"Infra",l2:"L2/Modular"}[s]||s}
 function score(c){let sc=42;if((c.market_cap_rank||999999)<300)sc+=14;else if((c.market_cap_rank||999999)<700)sc+=8;if(c.total_volume>1e6)sc+=10;if(c.total_volume>1e7)sc+=8;if(c.market_cap<1e8)sc+=10;else if(c.market_cap<5e8)sc+=6;if(c.price_change_percentage_24h>3)sc+=10;if(c.price_change_percentage_24h<-8)sc-=8;if(["ai","rwa","infra"].includes(c._sector))sc+=6;if(risk.value=="aggressive")sc+=5;if(risk.value=="safe"&&(c.market_cap_rank||999999)>700)sc-=12;return Math.max(1,Math.min(99,Math.round(sc)))}
-async function testBackend(){keyStatus.innerHTML="Проверяю...";try{let r=await fetch("/api/health",{cache:"no-store"});let j=await r.json();keyStatus.innerHTML='<span class="ok">Backend работает.</span><br><br>CoinGecko key: '+(j.hasCoinGeckoKey?"есть":"нет")+'<br>CMC key: '+(j.hasCmcKey?"есть":"нет")}catch(e){keyStatus.innerHTML='<span class="err">Backend не отвечает. Нужно загрузить проект на Vercel.</span>'}}
-function showInstructions(){keyStatus.innerHTML='1) Загрузи zip в GitHub.<br>2) Подключи репозиторий в Vercel.<br>3) В Vercel → Settings → Environment Variables добавь:<br><br><b>COINGECKO_API_KEY</b><br><b>CMC_API_KEY</b><br><br>4) Redeploy.<br>5) Нажми «Проверить backend».'}
 function selectedIds(){let ids=[];(sector.value=="auto"?ALL:[sector.value]).forEach(k=>ids.push(...(S[k]||[])));if(chain.value!="auto")ids.push(...(C[chain.value]||[]));return [...new Set(ids)]}
-async function scan(){status.textContent="поиск...";results.innerHTML='<div class="empty">Запрашиваю backend...</div>';try{let data=[];if(mode.value==="coingecko"){data=await fetchCG()}else if(mode.value==="cmc"){data=await fetchCMC()}else{try{data=await fetchCG();note.textContent="Источник: CoinGecko через backend."}catch(e){console.log("CG fail",e);note.textContent="CoinGecko не сработал. Пробую CoinMarketCap.";data=await fetchCMC()}}render(data);status.textContent="live"}catch(e){console.log(e);status.textContent="api error";results.innerHTML='<div class="empty">Источник не работает. Проверь Vercel Environment Variables и вкладку «Источники». Фейковых данных нет.</div>'}}
-async function fetchCG(){let ids=selectedIds();let url="/api/coingecko?ids="+encodeURIComponent(ids.join(","));let r=await fetch(url,{cache:"no-store"});if(!r.ok){let t=await r.text();throw new Error(t)}let all=await r.json();return all.map(c=>({...c,_sector:sectorOf(c.id)})).filter(c=>c.market_cap<=+cap.value&&c.total_volume>=+vol.value&&c.current_price<=+price.value&&(c.market_cap_rank||999999)<=+rank.value).map(c=>({...c,_score:score(c),_source:"CoinGecko"})).sort((a,b)=>b._score-a._score)}
-async function fetchCMC(){let r=await fetch("/api/cmc?limit=200",{cache:"no-store"});if(!r.ok){let t=await r.text();throw new Error(t)}let j=await r.json();let data=(j.data||j||[]).map(x=>({id:"cmc-"+x.id,name:x.name,symbol:x.symbol,image:"",current_price:x.quote.USD.price,market_cap:x.quote.USD.market_cap,total_volume:x.quote.USD.volume_24h,market_cap_rank:x.cmc_rank,price_change_percentage_24h:x.quote.USD.percent_change_24h,_sector:"auto"}));return data.filter(c=>c.market_cap<=+cap.value&&c.total_volume>=+vol.value&&c.current_price<=+price.value&&(c.market_cap_rank||999999)<=+rank.value).map(c=>({...c,_score:score(c),_source:"CoinMarketCap"})).sort((a,b)=>b._score-a._score)}
+async function testBackend(){keyStatus.innerHTML="Проверяю...";try{let r=await fetch("/api/health",{cache:"no-store"});let j=await r.json();keyStatus.innerHTML='<span class="ok">Backend online.</span><br><br>CoinGecko key: '+(j.hasCoinGeckoKey?"есть":"нет")+'<br>CMC key: '+(j.hasCmcKey?"есть":"нет")}catch(e){keyStatus.innerHTML='<span class="err">Backend не отвечает.</span>'}}
+function showInstructions(){keyStatus.innerHTML='Проверь, что в GitHub есть папка <b>api</b> и файлы <b>health.js</b>, <b>coingecko.js</b>, <b>cmc.js</b>. Потом Vercel → Deployments → Redeploy.'}
+async function scan(){status.textContent="поиск...";results.innerHTML='<div class="empty">Запрашиваю live API...</div>';try{let data=[];if(mode.value==="coingecko"){data=await fetchCG()}else if(mode.value==="cmc"){data=await fetchCMC()}else{try{data=await fetchCG();note.textContent="Источник: CoinGecko live."}catch(e){note.textContent="CoinGecko не сработал. Пробую CoinMarketCap.";data=await fetchCMC()}}render(data);status.textContent="live"}catch(e){status.textContent="api error";results.innerHTML='<div class="empty">Источник не работает. Проверь api/coingecko.js, api/cmc.js и ключи в Vercel. Фейковых данных нет.</div>'}}
+async function fetchCG(){let ids=selectedIds();let r=await fetch("/api/coingecko?ids="+encodeURIComponent(ids.join(",")),{cache:"no-store"});if(!r.ok){throw new Error(await r.text())}let all=await r.json();return all.map(c=>({...c,_sector:sectorOf(c.id)})).filter(c=>c.market_cap<=+cap.value&&c.total_volume>=+vol.value&&c.current_price<=+price.value&&(c.market_cap_rank||999999)<=+rank.value).map(c=>({...c,_score:score(c),_source:"CoinGecko"})).sort((a,b)=>b._score-a._score)}
+async function fetchCMC(){let r=await fetch("/api/cmc?limit=200",{cache:"no-store"});if(!r.ok){throw new Error(await r.text())}let j=await r.json();let data=(j.data||j||[]).map(x=>({id:"cmc-"+x.id,name:x.name,symbol:x.symbol,image:"",current_price:x.quote.USD.price,market_cap:x.quote.USD.market_cap,total_volume:x.quote.USD.volume_24h,market_cap_rank:x.cmc_rank,price_change_percentage_24h:x.quote.USD.percent_change_24h,_sector:"auto"}));return data.filter(c=>c.market_cap<=+cap.value&&c.total_volume>=+vol.value&&c.current_price<=+price.value&&(c.market_cap_rank||999999)<=+rank.value).map(c=>({...c,_score:score(c),_source:"CoinMarketCap"})).sort((a,b)=>b._score-a._score)}
 function render(data){found.textContent=data.length;avg.textContent=data.length?Math.round(data.reduce((a,b)=>a+(b._score||0),0)/data.length):"—";results.innerHTML="";if(!data.length){results.innerHTML='<div class="empty">Нет монет по выбранным критериям. Расширь фильтры или проверь источник.</div>';return}data.forEach(x=>results.appendChild(card(x)))}
-function card(c){let ch=c.price_change_percentage_24h||0,el=document.createElement("div");el.className="token";let img=c.image?`<img class="avatar" src="${c.image}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${(c.symbol||'?').slice(0,3).toUpperCase()}</div>'">`:`<div class="avatar fallback">${(c.symbol||'?').slice(0,3).toUpperCase()}</div>`;el.innerHTML=`<div class="tokenTop">${img}<div><div class="name">${c.name}</div><div class="sym">${c.symbol.toUpperCase()} • ${c._source||"Source"}</div></div><div class="score">${c._score}</div></div><div class="badges"><div class="badge safe">${c._score>78?"ЗОЛОТАЯ ЗОНА":"НАБЛЮДАТЬ"}</div><div class="badge eco">${sname(c._sector)}</div><div class="badge source">Backend Source</div><div class="badge">Rank ${c.market_cap_rank||"—"}</div></div><div class="thesis">🧠 Почему выбрано: ${sname(c._sector)} · капитализация ${fmt(c.market_cap)} · объём ${fmt(c.total_volume)} · 24ч <span class="${cls(ch)}">${pct(ch)}</span></div><div class="grid"><div class="box"><div class="label">Цена</div><div class="val">${pf(c.current_price)}</div></div><div class="box"><div class="label">Капитализация</div><div class="val">${fmt(c.market_cap)}</div></div></div>`;return el}
+function card(c){let ch=c.price_change_percentage_24h||0,el=document.createElement("div");el.className="token";let img=c.image?`<img class="avatar" src="${c.image}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${(c.symbol||'?').slice(0,3).toUpperCase()}</div>'">`:`<div class="avatar fallback">${(c.symbol||'?').slice(0,3).toUpperCase()}</div>`;let scoreClass=c._score<55?'bad':c._score<75?'mid':'';el.innerHTML=`<div class="tokenTop">${img}<div><div class="name">${c.name}</div><div class="sym">${c.symbol.toUpperCase()} • ${c._source||"Source"}</div></div><div class="score ${scoreClass}">${c._score}</div></div><div class="badges"><div class="badge safe">${c._score>78?"ЗОЛОТАЯ ЗОНА":"НАБЛЮДАТЬ"}</div><div class="badge eco">${sname(c._sector)}</div><div class="badge source">Live API</div><div class="badge">Rank ${c.market_cap_rank||"—"}</div></div><div class="thesis">🧠 Почему выбрано: ${sname(c._sector)} · капитализация ${fmt(c.market_cap)} · объём ${fmt(c.total_volume)} · 24ч <span class="${cls(ch)}">${pct(ch)}</span></div><div class="grid"><div class="box"><div class="label">Цена</div><div class="val">${pf(c.current_price)}</div></div><div class="box"><div class="label">Капитализация</div><div class="val">${fmt(c.market_cap)}</div></div><div class="box"><div class="label">Объём 24ч</div><div class="val">${fmt(c.total_volume)}</div></div><div class="box"><div class="label">24ч</div><div class="val ${cls(ch)}">${pct(ch)}</div></div></div>`;return el}
 </script>
 </body>
 </html>

@@ -4,39 +4,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Lowcap Radar AI</title>
+<title>Lowcap Radar AI v4.7</title>
+
 <style>
 :root{
 --bg:#050816;
 --card:#101827;
---box:#08101f;
---line:#22385d;
---text:#ffffff;
---muted:#94a3b8;
+--line:#23385e;
 --green:#5cf2a0;
 --red:#ff6b8a;
+--text:#ffffff;
+--muted:#8ea2c7;
 }
+
 *{box-sizing:border-box}
+
 body{
 margin:0;
 font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-background:radial-gradient(circle at top,#0b1830 0,#050816 45%,#02040a 100%);
+background:radial-gradient(circle at top,#0b1830 0%,#050816 45%,#02040a 100%);
 color:white;
 padding-bottom:120px;
 }
+
 .app{
 max-width:560px;
 margin:auto;
 padding:18px 14px 40px;
 }
+
 .header{
 display:flex;
-align-items:center;
 gap:14px;
+align-items:center;
 }
+
 .logo{
-width:62px;
-height:62px;
+width:64px;
+height:64px;
 border-radius:18px;
 background:#111b31;
 border:1px solid #30456f;
@@ -44,55 +49,64 @@ display:flex;
 align-items:center;
 justify-content:center;
 font-size:36px;
+font-weight:900;
 color:var(--green);
-font-weight:900;
 }
+
 .title{
-font-size:30px;
+font-size:32px;
 font-weight:900;
+line-height:1;
 }
+
 .sub{
-color:#94a3b8;
-margin-top:4px;
+margin-top:6px;
+color:var(--muted);
 font-size:14px;
 }
+
 .live{
 margin-left:auto;
 background:#0d2419;
 border:1px solid #245f45;
 color:#5cf2a0;
-padding:8px 12px;
+padding:8px 14px;
 border-radius:999px;
-font-weight:800;
-font-size:12px;
+font-weight:900;
 }
+
 .card,.coin{
 margin-top:18px;
 background:rgba(16,24,39,.95);
-border:1px solid #22385d;
+border:1px solid var(--line);
 border-radius:28px;
 padding:16px;
 }
+
 .grid{
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:10px;
 }
+
 .box{
 background:#08101f;
-border:1px solid #1f3154;
+border:1px solid #1d3155;
 border-radius:18px;
 padding:14px;
 }
+
 .label{
 font-size:12px;
-color:#94a3b8;
+color:var(--muted);
 }
+
 .value{
-font-size:20px;
+font-size:22px;
 font-weight:900;
 margin-top:4px;
 }
+
 select,button{
 width:100%;
 margin-top:10px;
@@ -103,44 +117,63 @@ background:#08101f;
 color:white;
 font-size:16px;
 }
+
 button{
-background:linear-gradient(135deg,#5cf2a0,#3ee779);
+background:linear-gradient(135deg,#5cf2a0,#38e977);
+border:none;
 color:#03120a;
 font-weight:900;
-border:none;
 }
+
+.marketHeat{
+margin-top:12px;
+padding:14px;
+border-radius:18px;
+font-weight:900;
+text-align:center;
+}
+
+.hot{background:#12281d;color:#5cf2a0;border:1px solid #245f45;}
+.mid{background:#2b2410;color:#ffd36a;border:1px solid #7a6330;}
+.cold{background:#26131b;color:#ff8aa3;border:1px solid #6f2d42;}
+
 .coinTop{
 display:flex;
 align-items:center;
 gap:12px;
 }
+
 .avatar{
 width:56px;
 height:56px;
 border-radius:18px;
-object-fit:cover;
 }
+
 .name{
 font-size:28px;
 font-weight:900;
 }
+
 .sym{
 font-size:14px;
-color:#94a3b8;
+color:var(--muted);
 margin-top:4px;
 }
+
 .score{
 margin-left:auto;
 font-size:42px;
 font-weight:900;
-color:#5cf2a0;
+color:var(--green);
 }
+
 .badges{
 display:flex;
 gap:8px;
 flex-wrap:wrap;
 margin-top:12px;
 }
+
 .badge{
 padding:6px 10px;
 border-radius:999px;
@@ -148,6 +181,7 @@ background:#142039;
 border:1px solid #273b62;
 font-size:12px;
 }
+
 .reason{
 margin-top:12px;
 padding:14px;
@@ -155,10 +189,12 @@ border-radius:18px;
 background:#0a1222;
 border:1px solid #20355d;
 line-height:1.5;
-color:#c8d6e8;
+color:#d2deee;
 }
+
 .pos{color:#5cf2a0;font-weight:900}
 .neg{color:#ff6b8a;font-weight:900}
+
 .tabs{
 position:fixed;
 left:18px;
@@ -174,6 +210,7 @@ display:grid;
 grid-template-columns:1fr 1fr 1fr;
 gap:8px;
 }
+
 .tab{
 padding:13px;
 border-radius:18px;
@@ -181,22 +218,26 @@ text-align:center;
 font-weight:900;
 color:#94a3b8;
 }
+
 .active{
 background:#1d2b49;
 color:white;
 }
 </style>
 </head>
+
 <body>
 
 <div class="app">
 
 <div class="header">
 <div class="logo">⌁</div>
+
 <div>
 <div class="title">Lowcap Radar AI</div>
-<div class="sub">v4.6 • Clean Source Engine</div>
+<div class="sub">v4.7 • Rotation Engine</div>
 </div>
+
 <div class="live">LIVE</div>
 </div>
 
@@ -205,12 +246,12 @@ color:white;
 <div class="grid">
 <div class="box">
 <div class="label">Найдено</div>
-<div id="found" class="value">0</div>
+<div class="value" id="found">0</div>
 </div>
 
 <div class="box">
-<div class="label">Средний score</div>
-<div id="avg" class="value">—</div>
+<div class="label">Средний Score</div>
+<div class="value" id="avg">—</div>
 </div>
 </div>
 
@@ -219,6 +260,7 @@ color:white;
 <option value="rwa">RWA</option>
 <option value="gaming">Gaming</option>
 <option value="solana">Solana</option>
+<option value="infra">Infrastructure</option>
 </select>
 
 <select id="marketcap">
@@ -233,7 +275,17 @@ color:white;
 <option value="1000000">$1M+</option>
 </select>
 
+<select id="risk">
+<option value="safe">Низкий риск</option>
+<option value="mid" selected>Средний риск</option>
+<option value="high">Высокий потенциал</option>
+</select>
+
 <button onclick="scan()">Начать поиск</button>
+
+<div id="heat" class="marketHeat mid">
+Рынок нейтральный
+</div>
 
 </div>
 
@@ -243,17 +295,18 @@ color:white;
 
 <div class="tabs">
 <div class="tab active">Радар</div>
-<div class="tab">Избранное</div>
+<div class="tab">Watchlist</div>
 <div class="tab">Источники</div>
 </div>
 
 <script>
 
 const sectors = {
-ai:["akash-network","grass","aethir","render-token","bittensor"],
+ai:["akash-network","render-token","bittensor","aethir","grass"],
 rwa:["ondo-finance","centrifuge","mantra-dao"],
 gaming:["immutable-x","gala","ronin"],
-solana:["jupiter-exchange-solana","raydium","pyth-network"]
+solana:["jupiter-exchange-solana","raydium","pyth-network"],
+infra:["chainlink","the-graph","arweave"]
 };
 
 function fmt(n){
@@ -262,44 +315,81 @@ if(n>=1e6)return "$"+(n/1e6).toFixed(1)+"M";
 return "$"+Math.round(n/1000)+"K";
 }
 
-function score(c){
+function trust(c){
 let s=50;
-if(c.market_cap_rank<300)s+=15;
-if(c.total_volume>1000000)s+=15;
-if(c.market_cap>50000000)s+=10;
-if(c.price_change_percentage_24h>0)s+=10;
+
+if(c.market_cap_rank<100)s+=20;
+else if(c.market_cap_rank<300)s+=12;
+else s+=6;
+
+if(c.total_volume>5000000)s+=15;
+else if(c.total_volume>1000000)s+=10;
+
+if(c.market_cap>100000000)s+=10;
+
+if(c.price_change_percentage_24h>0)s+=8;
+
 return Math.min(99,Math.round(s));
+}
+
+function marketHeat(data){
+
+let positive=data.filter(x=>(x.price_change_percentage_24h||0)>0).length;
+let ratio=positive/data.length;
+
+let el=document.getElementById("heat");
+
+if(ratio>0.7){
+el.className='marketHeat hot';
+el.innerText='🔥 Рынок горячий • идёт ротация капитала';
+}
+else if(ratio>0.4){
+el.className='marketHeat mid';
+el.innerText='⚡ Рынок нейтральный • выборочно сильные монеты';
+}
+else{
+el.className='marketHeat cold';
+el.innerText='❄️ Рынок слабый • осторожность';
+}
 }
 
 async function scan(){
 
-document.getElementById("results").innerHTML='<div class="card">Сканирование...</div>';
+document.getElementById("results").innerHTML='<div class="card">Сканирование clean sources...</div>';
 
 let sector=document.getElementById("sector").value;
 let cap=Number(document.getElementById("marketcap").value);
 let vol=Number(document.getElementById("volume").value);
+let risk=document.getElementById("risk").value;
 
 let ids=sectors[sector].join(",");
 
-let url='https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids='+ids+'&order=market_cap_desc&sparkline=false&price_change_percentage=24h';
+let url='https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids='+ids+'&sparkline=false&price_change_percentage=24h';
 
 let r=await fetch(url);
 let data=await r.json();
 
 data=data.filter(c=>c.market_cap<=cap && c.total_volume>=vol);
 
-data.sort((a,b)=>score(b)-score(a));
+if(risk==="safe"){
+data=data.filter(c=>c.market_cap_rank<200);
+}
+if(risk==="high"){
+data=data.filter(c=>c.market_cap_rank>200);
+}
+
+data.sort((a,b)=>trust(b)-trust(a));
 
 document.getElementById("found").innerText=data.length;
 
 if(data.length){
-let avg=Math.round(data.reduce((a,b)=>a+score(b),0)/data.length);
+let avg=Math.round(data.reduce((a,b)=>a+trust(b),0)/data.length);
 document.getElementById("avg").innerText=avg;
-}else{
-document.getElementById("avg").innerText='—';
+marketHeat(data);
 }
 
 render(data);
+
 }
 
 function render(data){
@@ -308,7 +398,7 @@ let root=document.getElementById("results");
 root.innerHTML='';
 
 if(!data.length){
-root.innerHTML='<div class="card">Нет монет по выбранным критериям.</div>';
+root.innerHTML='<div class="card">Нет монет по этим критериям.</div>';
 return;
 }
 
@@ -316,6 +406,11 @@ data.forEach(c=>{
 
 let change=Number(c.price_change_percentage_24h||0);
 let cls=change>=0?'pos':'neg';
+
+let unlockRisk='Низкий';
+
+if(c.market_cap_rank>300) unlockRisk='Средний';
+if(c.market_cap_rank>600) unlockRisk='Высокий';
 
 let el=document.createElement("div");
 el.className='coin';
@@ -328,25 +423,27 @@ el.innerHTML=`
 <div class="name">${c.name}</div>
 <div class="sym">${c.symbol.toUpperCase()} • CoinGecko</div>
 </div>
-<div class="score">${score(c)}</div>
+<div class="score">${trust(c)}</div>
 </div>
 
 <div class="badges">
-<div class="badge">Проверено</div>
-<div class="badge">Clean Sources</div>
 <div class="badge">Trust Score</div>
+<div class="badge">Clean Sources</div>
+<div class="badge">Rotation Engine</div>
 </div>
 
 <div class="reason">
 🧠 Почему выбрано:
 <br><br>
-• капитализация: ${fmt(c.market_cap)}
+• Market Cap: ${fmt(c.market_cap)}
 <br>
-• объём 24ч: ${fmt(c.total_volume)}
+• Объём 24ч: ${fmt(c.total_volume)}
 <br>
-• рейтинг CoinGecko: ${c.market_cap_rank}
+• Rank CoinGecko: ${c.market_cap_rank}
 <br>
-• изменение 24ч:
+• Unlock Risk: ${unlockRisk}
+<br>
+• Изменение 24ч:
 <span class="${cls}">${change.toFixed(1)}%</span>
 </div>
 
@@ -358,8 +455,8 @@ el.innerHTML=`
 </div>
 
 <div class="box">
-<div class="label">Market Cap</div>
-<div class="value">${fmt(c.market_cap)}</div>
+<div class="label">Объём</div>
+<div class="value">${fmt(c.total_volume)}</div>
 </div>
 
 </div>

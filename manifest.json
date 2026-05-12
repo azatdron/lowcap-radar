@@ -1,1 +1,8 @@
-{"name": "Lowcap Radar AI", "short_name": "RadarAI", "display": "standalone", "start_url": "./"}
+{
+  "name": "Lowcap Radar AI",
+  "short_name": "RadarAI",
+  "display": "standalone",
+  "start_url": "./",
+  "background_color": "#050816",
+  "theme_color": "#050816"
+}

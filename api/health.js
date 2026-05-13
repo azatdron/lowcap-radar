@@ -1,1 +1,1 @@
-export default function handler(req,res){res.status(200).json({ok:true,backend:'online',service:'Lowcap Radar AI',version:'v6.7-smart-quality-scanner',smartQuality:true,resetFilters:true,stableBase:'v6.6.3'})}
+export default function handler(req,res){res.status(200).json({ok:true,backend:'online',service:'Lowcap Radar AI',version:'v7.1-multi-source-scanner',sources:['CoinMarketCap','CoinGecko','DexScreener']})}

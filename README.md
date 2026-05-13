@@ -1,3 +1,3 @@
-# Lowcap Radar AI v5.6
+# Lowcap Radar AI v5.7 Strict Chain Scanner
 
-Chain-True Scanner: DexScreener for real chain filtering + CoinGecko/CMC.
+Upload all files. Redeploy without cache.

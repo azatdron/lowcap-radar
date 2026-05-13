@@ -1,1 +1,1 @@
-export default function handler(req,res){res.status(200).json({ok:true,backend:'online',service:'Lowcap Radar AI',version:'v6.6.3-js-fixed',buttonsFixed:true,stableBase:'v6.6'})}
+export default function handler(req,res){res.status(200).json({ok:true,backend:'online',service:'Lowcap Radar AI',version:'v6.6.4-avalanche-checkbox-fix',stableBase:'v6.6.3',logicChanged:false})}

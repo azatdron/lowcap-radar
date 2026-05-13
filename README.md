@@ -1,3 +1,3 @@
-# Lowcap Radar AI v6.4 Stable UI Clean
+# Lowcap Radar AI v6.5 Design Polish
 
-Fixes horizontal overflow, cleans portfolio/watchlist UI, removes bank block from radar, improves dedupe, and clarifies filter labels.
+Fixes horizontal layout, replaces double network controls with one dropdown checkbox picker, adds theme toggle, clearer preset names, and label sizing.

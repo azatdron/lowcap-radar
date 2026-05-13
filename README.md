@@ -1,7 +1,3 @@
-# Lowcap Radar AI v7.0.1 Premium UI Fix
+# Lowcap Radar AI v7.1 — Multi-Source Scanner
 
-Точечный UI-fix поверх v7.0:
-- верхние режимы теперь влезают;
-- «Осторожный» заменён на «Осторожно»;
-- интерфейс стал плотнее и визуально дороже;
-- логика поиска не менялась.
+CMC + CoinGecko + DexScreener scanner through /api/scan. If CMC_API_KEY is missing, works via CoinGecko + DexScreener.

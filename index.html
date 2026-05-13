@@ -13,7 +13,7 @@
     <div class="logo">⌁</div>
     <div class="brand">
       <div class="title">Lowcap Radar AI</div>
-      <div class="subtitle">v7.0.1 · Premium UI</div>
+      <div class="subtitle">v7.1 · Multi‑Source Scanner</div>
     </div>
     <button id="themeBtn" class="theme" onclick="toggleTheme()">🌙</button>
   </header>
@@ -90,7 +90,7 @@
         <button class="primary" onclick="scan()">Начать поиск</button>
         <button class="secondary" onclick="resetSearch()">Сбросить</button>
       </div>
-      <div id="note" class="note">AI сам учитывает: капитализацию, рост объёма, рост цены, ликвидность, возраст проекта, соцсети, комьюнити, фонды, экосистему и narrative.</div>
+      <div id="note" class="note">AI собирает кандидатов из CoinMarketCap, CoinGecko и DexScreener, объединяет их, убирает дубли и показывает короткий shortlist.</div>
     </div>
 
     <div id="results"></div>
@@ -104,7 +104,7 @@
     <div class="panel">
       <h1>Источники</h1>
       <div id="backendStatus" class="explain">Проверяю backend...</div>
-      <div class="explain">Основной live-источник: DexScreener API через backend Vercel. Ссылки на CoinMarketCap и CoinGecko открываются через поиск по названию монеты.</div>
+      <div class="explain">v7.1 использует multi-source backend: CoinMarketCap + CoinGecko + DexScreener. Если CMC ключ не добавлен, scanner всё равно работает через CoinGecko и DexScreener.</div>
     </div>
   </section>
 </div>

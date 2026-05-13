@@ -1,3 +1,3 @@
-# Lowcap Radar AI v6.0 Soft Quality Scan
+# Lowcap Radar AI v6.1 Watchlist Details + Hard Dedupe
 
-Soft filters: shows coins and explains risks instead of hiding everything.
+Watchlist cards expand with full metrics and links. Results are hard-deduped by chain + token address/name/symbol.

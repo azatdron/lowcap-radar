@@ -1,3 +1,3 @@
-# Lowcap Radar AI v6.1 Watchlist Details + Hard Dedupe
+# Lowcap Radar AI v6.3 Bank Portfolio
 
-Watchlist cards expand with full metrics and links. Results are hard-deduped by chain + token address/name/symbol.
+Adds bank allocation, multi-chain checkboxes, portfolio amounts in watchlist, and live P/L refresh via DexScreener pair endpoint.

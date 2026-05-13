@@ -1,1 +1,1 @@
-Upload ALL files and folders. api folder must include dex.js, health.js, coingecko.js, cmc.js. Redeploy Vercel without cache.
+Upload ALL files and folders. api folder must include dex.js, pair.js, health.js, coingecko.js, cmc.js. Redeploy Vercel without cache.

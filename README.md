@@ -1,3 +1,3 @@
-# Lowcap Radar AI v6.6.5 Avalanche Hard Fix
+# Lowcap Radar AI v6.7 Smart Quality Scanner
 
-Based on v6.6.3 stable. Avalanche row now uses a custom reliable toggle and hidden checkbox. Search logic unchanged.
+Based on v6.6.3 stable. Adds smarter quality scoring, clearer filter names, risk modes, reset filters button, and improved anti-junk logic.

@@ -20,10 +20,15 @@ body.light .mid{color:#ca8a04}
 body.light .bad{color:#e11d48}
 body.light .logo{background:radial-gradient(circle at 30% 25%,#e0f2fe,#ffffff 70%);color:#16a34a;border-color:#cbd5e1}
 body.light .status{background:#eef2ff;color:#172033;border-color:#c7d2fe}
-body.light .deleteSmall{width:auto;min-width:130px;padding:9px 18px;font-size:13px;border-radius:14px;margin:14px auto 0;display:block}
+body.light .deleteSmall{background:#fee2e2;color:#be123c;border-color:#fecdd3}
 
 body.light .ghost,body.light .watchBtn{background:#e8eef8;color:#0f172a;border-color:#cbd5e1}
 
+/* v6.6.2 safe CSS only */
+html,body{max-width:100%;overflow-x:hidden}
+.app,.panel,.token{max-width:100%;overflow:hidden}
+.tokenTop{min-width:0;max-width:100%;overflow:hidden}
+.name{overflow-wrap:anywhere}
 body.light .badge{background:#e8eef8!important;color:#172033!important;border-color:#cbd5e1!important}
 body.light .badge.good{background:#dcfce7!important;color:#166534!important;border-color:#86efac!important}
 body.light .badge.warn{background:#fef3c7!important;color:#92400e!important;border-color:#facc15!important}
@@ -31,9 +36,12 @@ body.light .ghost,body.light .watchBtn{background:#e8eef8!important;color:#0f172
 body.light .preset{background:#f8fafc!important;color:#334155!important;border-color:#cbd5e1!important}
 body.light .preset.active{background:#dbeafe!important;color:#0f172a!important}
 body.light .chainMenu label{color:#172033!important}
-body.light .deleteSmall{width:auto;min-width:130px;padding:9px 18px;font-size:13px;border-radius:14px;margin:14px auto 0;display:block}
+body.light .deleteSmall{background:#fee2e2!important;color:#be123c!important;border-color:#fecdd3!important}
+.chainMenu.open{grid-template-columns:1fr!important}
+.chainMenu label{font-size:15px!important;padding:6px 2px!important}
+.deleteSmall{width:auto!important;min-width:130px!important;padding:9px 18px!important;font-size:13px!important;border-radius:14px!important;margin:14px auto 0!important;display:block!important}
 </style></head><body><div class="app">
-<div class="head"><div class="logo">⌁</div><div><div class="title">Lowcap Radar AI</div><div class="sub">v6.6.1 • Stable Fix</div></div><div id="status" class="status" onclick="toggleTheme()">🌙</div></div>
+<div class="head"><div class="logo">⌁</div><div><div class="title">Lowcap Radar AI</div><div class="sub">v6.6.2 • Buttons Safe</div></div><div id="status" class="status" onclick="toggleTheme()">🌙</div></div>
 <section id="screenRadar"><div class="panel"><div class="stats"><div class="stat"><div class="label">Найдено</div><div id="found" class="val">0</div></div><div class="stat"><div class="label">Средний score</div><div id="avg" class="val">—</div></div></div>
 <div class="presetRow"><div class="preset active" onclick="preset('balanced',this)">Сбалансировано</div><div class="preset" onclick="preset('early',this)">Новые</div><div class="preset" onclick="preset('quality',this)">Качественные</div></div>
 
@@ -59,7 +67,7 @@ body.light .deleteSmall{width:auto;min-width:130px;padding:9px 18px;font-size:13
 <div><div class="label">Движение 24ч</div><select id="move"><option value="any" selected>любое</option><option value="green">рост</option><option value="pullback">просадка/откат</option><option value="hot">сильный рост</option></select></div>
 <div><div class="label">Охват поиска</div><select id="depth"><option value="normal">Обычный</option><option value="deep" selected>Расширенный</option><option value="max">Максимальный</option></select><div class="filterHelp">Охват = сколько поисковых запросов делает сканер.</div></div>
 <div><div class="label">Отбор качества</div><select id="quality"><option value="soft" selected>Мягкий отбор</option><option value="balanced">Средний отбор</option><option value="strict">Строгий отбор</option></select><div class="filterHelp">Отбор качества влияет на риск-флаги и мусорные пары.</div></div></div>
-<div class="buttons"><button class="scan" onclick="scan()">Начать поиск</button><button class="ghost" onclick="smartExpand()">Сделать шире</button></div><div class="note" id="note">v6.6.1: стабильный фикс светлой темы, ссылок и списка сетей.</div></div><div id="results"><div class="empty">Нажми «Начать поиск».</div></div></section>
+<div class="buttons"><button class="scan" onclick="scan()">Начать поиск</button><button class="ghost" onclick="smartExpand()">Сделать шире</button></div><div class="note" id="note">v6.6.2: безопасный фикс кнопок, светлой темы и сетей.</div></div><div id="results"><div class="empty">Нажми «Начать поиск».</div></div></section>
 <section id="screenWatch" class="hidden"><div class="panel"><h2>Избранное</h2><div id="watchList" class="empty">Пока пусто.</div></div></section>
 <section id="screenSources" class="hidden"><div class="panel"><h2 style="margin-top:0">Источники / API ключи</h2><div class="label">CoinGecko API Key</div><input id="cgKey" placeholder="Вставь CoinGecko ключ"><div class="label" style="margin-top:12px">CoinMarketCap API Key</div><input id="cmcKey" placeholder="Вставь CoinMarketCap ключ"><div class="buttons"><button class="scan" onclick="saveKeys()">Сохранить</button><button class="ghost" onclick="testBackend()">Проверить</button></div><div class="buttons"><button class="ghost" onclick="loadKeys()">Загрузить</button><button class="danger" onclick="clearKeys()">Удалить</button></div><div id="keyStatus" class="empty">Статус появится после проверки.</div></div></section></div>
 <div id="toast" class="toast">Добавлено в избранное</div><button id="topBtn" class="topbtn" onclick="scrollToTop()">↑</button><div class="tabs"><div id="tabRadar" class="tab active" onclick="showTab('radar')">Радар</div><div id="tabWatch" class="tab" onclick="showTab('watch')">Избранное</div><div id="tabSources" class="tab" onclick="showTab('sources')">Источники</div></div>
@@ -104,8 +112,10 @@ function coinLinks(c){
   let out=[];
   if(c.url)out.push(`<a class="badge good" target="_blank" rel="noopener" href="${c.url}">DexScreener</a>`);
   const q=encodeURIComponent((c.name||c.symbol||"").trim());
+  const sym=encodeURIComponent((c.symbol||c.name||"").trim());
   if(q)out.push(`<a class="badge" target="_blank" rel="noopener" href="https://coinmarketcap.com/search/?q=${q}">CoinMarketCap</a>`);
   if(q)out.push(`<a class="badge" target="_blank" rel="noopener" href="https://www.coingecko.com/en/search?query=${q}">CoinGecko</a>`);
+  if(c.url)out.push(`<a class="badge" target="_blank" rel="noopener" href="${c.url}">Купить/DEX</a>`);
   return out.join("");
 }
 function toggleFav(i){const el=document.getElementById("favDetail"+i);if(el)el.classList.toggle("hidden")}

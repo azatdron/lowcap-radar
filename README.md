@@ -1,3 +1,3 @@
-# Lowcap Radar AI v5.4
+# Lowcap Radar AI v5.6
 
-API keys can be saved inside the app Sources tab. No fake data.
+Chain-True Scanner: DexScreener for real chain filtering + CoinGecko/CMC.

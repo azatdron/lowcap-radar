@@ -1,3 +1,3 @@
-# Lowcap Radar AI v5.9 Anti-Fake Quality
+# Lowcap Radar AI v6.0 Soft Quality Scan
 
-Dedupe, minimum FDV, liquidity, volume, age, movement filters.
+Soft filters: shows coins and explains risks instead of hiding everything.

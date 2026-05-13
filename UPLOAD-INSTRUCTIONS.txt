@@ -1,1 +1,10 @@
-Upload ALL files and folders. api folder must include dex.js, pair.js, health.js, coingecko.js, cmc.js. Redeploy Vercel without cache.
+ЗАГРУЗКА НА GITHUB / VERCEL
+
+1. Разархивируй ZIP.
+2. Загрузи ВСЕ файлы и папку api целиком.
+3. В Vercel нажми Redeploy без cache.
+4. Проверь:
+   /api/health
+5. Открой сайт и нажми «Начать поиск».
+
+Важно: не загружай только index.html. Нужны также style.css, app.js и папка api.

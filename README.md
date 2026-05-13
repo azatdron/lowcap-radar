@@ -1,3 +1,3 @@
-# Lowcap Radar AI v5.8 Deep Chain Scan
+# Lowcap Radar AI v5.9 Anti-Fake Quality
 
-Deeper DexScreener chain scan, liquidity filter, cleaner sector matching.
+Dedupe, minimum FDV, liquidity, volume, age, movement filters.

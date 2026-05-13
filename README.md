@@ -1,3 +1,3 @@
-# Lowcap Radar AI v5.7 Strict Chain Scanner
+# Lowcap Radar AI v5.8 Deep Chain Scan
 
-Upload all files. Redeploy without cache.
+Deeper DexScreener chain scan, liquidity filter, cleaner sector matching.

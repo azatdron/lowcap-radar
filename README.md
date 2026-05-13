@@ -1,3 +1,3 @@
-# Lowcap Radar AI v6.6.2 Buttons Safe
+# Lowcap Radar AI v6.5 Design Polish
 
-Based on v6.6 stable. JavaScript functions are not modified. Only safe CSS fixes were added.
+Fixes horizontal layout, replaces double network controls with one dropdown checkbox picker, adds theme toggle, clearer preset names, and label sizing.

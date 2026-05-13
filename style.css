@@ -102,3 +102,148 @@ body.light .tabs{background:rgba(255,255,255,.94);border-color:#d6dfef}
 @media(max-width:420px){
   .title{font-size:27px}.controls{gap:10px}.coinName{font-size:21px}.score{font-size:31px}
 }
+
+
+/* v7.0.1 Premium UI Fix */
+body{
+  padding:22px 14px 120px;
+  background:
+    radial-gradient(circle at 18% 0%,rgba(92,242,160,.16),transparent 28%),
+    radial-gradient(circle at 82% 6%,rgba(96,165,250,.14),transparent 26%),
+    linear-gradient(180deg,#071226 0%,#050816 46%,#030611 100%);
+}
+body.light{
+  background:
+    radial-gradient(circle at 18% 0%,rgba(34,197,94,.16),transparent 28%),
+    radial-gradient(circle at 82% 6%,rgba(96,165,250,.18),transparent 26%),
+    linear-gradient(180deg,#f8fbff 0%,#f3f7fc 100%);
+}
+.header{gap:12px;margin:6px 0 16px;padding:4px 0}
+.logo{
+  width:58px;height:58px;flex-basis:58px;border-radius:20px;
+  background:linear-gradient(145deg,#152642,#07101f);
+  box-shadow:0 0 28px rgba(92,242,160,.20), inset 0 1px 0 rgba(255,255,255,.10);
+}
+.title{font-size:28px;letter-spacing:-1px}
+.subtitle{font-size:14px;color:#a9b8d0}
+.theme{
+  width:52px;height:52px;
+  background:linear-gradient(145deg,#16243e,#0b1224);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 8px 22px rgba(0,0,0,.18);
+}
+.panel,.coin{
+  border-radius:30px;
+  border-color:rgba(76,111,177,.62);
+  background:linear-gradient(180deg,rgba(17,27,46,.96),rgba(10,17,31,.98));
+  box-shadow:0 18px 45px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.08);
+}
+body.light .panel,body.light .coin{
+  background:linear-gradient(180deg,#ffffff,#f8fbff);
+  border-color:#d4def0;
+  box-shadow:0 18px 40px rgba(15,23,42,.10), inset 0 1px 0 rgba(255,255,255,.8);
+}
+.stats{gap:12px}
+.stat,.metric{
+  border-radius:22px;
+  background:linear-gradient(180deg,rgba(9,16,31,.96),rgba(7,13,25,.96));
+}
+body.light .stat,body.light .metric{
+  background:linear-gradient(180deg,#fbfdff,#f3f7fc);
+}
+.presets{
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+  margin-top:14px;
+}
+.preset{
+  min-width:0;
+  padding:12px 4px;
+  border-radius:18px;
+  font-size:14px;
+  line-height:1.08;
+  white-space:normal;
+  overflow:hidden;
+  text-overflow:clip;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:54px;
+  background:linear-gradient(180deg,rgba(14,24,43,.96),rgba(9,16,30,.96));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+}
+.preset.active{
+  background:linear-gradient(145deg,#263d68,#182a4b);
+  box-shadow:0 8px 20px rgba(66,116,200,.18), inset 0 1px 0 rgba(255,255,255,.12);
+}
+body.light .preset{
+  background:linear-gradient(180deg,#ffffff,#f4f8ff);
+}
+body.light .preset.active{
+  background:linear-gradient(145deg,#dbeafe,#cfe3ff);
+}
+.controls{
+  gap:12px;
+  margin-top:15px;
+}
+.label{
+  font-size:13px;
+  letter-spacing:.1px;
+  color:#aebbd0;
+}
+body.light .label{color:#5f6f86}
+select,.chainBox{
+  min-height:52px;
+  border-radius:18px;
+  font-size:15px;
+  background:linear-gradient(180deg,rgba(8,16,31,.98),rgba(7,12,24,.98));
+  border-color:rgba(66,94,148,.78);
+}
+body.light select,body.light .chainBox{
+  background:#ffffff;
+  border-color:#d4def0;
+}
+.buttons{gap:12px;margin-top:17px}
+.primary,.secondary{
+  min-height:58px;
+  border-radius:22px;
+  font-size:18px;
+}
+.primary{
+  background:linear-gradient(135deg,#73f7ad,#32df78);
+  box-shadow:0 14px 28px rgba(50,223,120,.24);
+}
+.secondary{
+  background:linear-gradient(145deg,#1a2a49,#111d34);
+}
+body.light .secondary{
+  background:linear-gradient(145deg,#edf4ff,#dfe9f8);
+}
+.note{font-size:13px;line-height:1.45;margin-top:13px}
+.coin{padding:16px}
+.coinTop{gap:13px}
+.coinName{font-size:23px}
+.score{font-size:34px}
+.badges{gap:7px}
+.badge{font-size:12px;padding:7px 10px}
+.analysisGrid{gap:10px}
+.tabs{
+  border-radius:30px;
+  box-shadow:0 14px 34px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.08);
+}
+.tab{font-size:15px}
+@media(max-width:430px){
+  body{padding-left:13px;padding-right:13px}
+  .title{font-size:26px}
+  .subtitle{font-size:13px}
+  .logo{width:56px;height:56px;flex-basis:56px}
+  .theme{width:50px;height:50px}
+  .panel{padding:15px}
+  .preset{font-size:13px;padding:10px 3px;min-height:52px}
+  .controls{grid-template-columns:1fr 1fr;gap:11px}
+  .primary,.secondary{font-size:17px}
+  .coinName{font-size:21px}
+}
+@media(max-width:380px){
+  .preset{font-size:12px}
+  .title{font-size:24px}
+}

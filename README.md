@@ -1,3 +1,3 @@
-# Lowcap Radar AI v6.5 Design Polish
+# Lowcap Radar AI v6.6.3 JS Fixed
 
-Fixes horizontal layout, replaces double network controls with one dropdown checkbox picker, adds theme toggle, clearer preset names, and label sizing.
+Based on v6.6 stable. Fixes the JavaScript syntax error that prevented buttons from working. Search logic unchanged.

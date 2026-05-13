@@ -1,1 +1,1 @@
-export default function handler(req,res){res.status(200).json({ok:true,backend:'online',service:'Lowcap Radar AI',version:'v6.1-watchlist-details-dedupe',watchlistDetails:true,dedupe:true})}
+export default function handler(req,res){res.status(200).json({ok:true,backend:'online',service:'Lowcap Radar AI',version:'v6.3-bank-portfolio',portfolio:true,pairRefresh:true,multiChain:true})}

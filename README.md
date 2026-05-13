@@ -1,3 +1,3 @@
-# Lowcap Radar AI v6.3 Bank Portfolio
+# Lowcap Radar AI v6.4 Stable UI Clean
 
-Adds bank allocation, multi-chain checkboxes, portfolio amounts in watchlist, and live P/L refresh via DexScreener pair endpoint.
+Fixes horizontal overflow, cleans portfolio/watchlist UI, removes bank block from radar, improves dedupe, and clarifies filter labels.

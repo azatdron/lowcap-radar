@@ -16,3 +16,27 @@ button{cursor:pointer}.primary,.secondary,.danger{border:1px solid var(--line);b
 .tabs{position:fixed;left:18px;right:18px;bottom:18px;max-width:540px;margin:auto;background:rgba(15,23,42,.94);border:1px solid #26385f;border-radius:30px;padding:8px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;z-index:60;backdrop-filter:blur(12px);box-shadow:0 14px 34px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.08)}body.light .tabs{background:rgba(255,255,255,.94);border-color:#d6dfef}.tab{padding:13px 6px;text-align:center;border-radius:20px;color:var(--muted);font-weight:1000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tab.active{background:var(--blue);color:var(--text)}.hidden{display:none!important}.empty{color:var(--muted);padding:25px;text-align:center;line-height:1.45}.toast{position:fixed;left:50%;bottom:105px;transform:translateX(-50%);background:#10251a;border:1px solid #2c6b4b;color:var(--green);padding:12px 18px;border-radius:999px;font-weight:900;z-index:99;opacity:0;transition:.25s}.toast.show{opacity:1}.topbtn{position:fixed;right:18px;bottom:105px;width:54px;height:54px;border-radius:999px;background:var(--btn);border:1px solid var(--line);color:var(--text);font-size:24px;font-weight:900;z-index:58;display:none}.topbtn.show{display:block}
 .goodText{color:var(--green)}.badText{color:var(--pink)}
 @media(max-width:430px){.title{font-size:26px}.subtitle{font-size:13px}.logo{width:56px;height:56px;flex-basis:56px}.theme{width:50px;height:50px}.panel{padding:15px}.preset{font-size:13px;padding:10px 3px;min-height:52px}.primary,.secondary{font-size:17px}.coinName{font-size:21px}.score{font-size:31px}}
+
+/* v7.2 Quality Proof + Portfolio */
+body{font-weight:500}
+.title,.coinName,.value,.score,.primary,.secondary,.preset,.tab{font-weight:850}
+.label{font-weight:720}
+.coinName,.value,.metric,.explain,.badge,.linkBtn{overflow-wrap:anywhere;word-break:break-word}
+.metric{min-height:104px}
+.metric .value{font-size:17px;line-height:1.18;letter-spacing:-.2px}
+.coinName{font-size:22px;letter-spacing:-.3px}
+.score{font-size:32px}
+.chainMenu{max-height:360px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.chainMenu label{min-height:44px}
+.proofLink{display:inline-flex;margin-top:7px;padding:6px 9px;border-radius:999px;background:var(--btn);border:1px solid var(--line);color:var(--muted);text-decoration:none;font-size:11px;font-weight:800}
+.sourceLine{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.35}
+.watchCompact{cursor:pointer}
+.watchCompact .analysisGrid,.watchCompact .explain,.watchCompact .links,.watchCompact .portfolioBox{display:none}
+.watchCompact.open .analysisGrid{display:grid}
+.watchCompact.open .explain,.watchCompact.open .links,.watchCompact.open .portfolioBox{display:block}
+.portfolioBox{margin-top:12px;border:1px solid var(--line);border-radius:18px;padding:12px;background:var(--card2)}
+.portfolioRow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.portfolioRow input{width:100%;border:1px solid var(--line);border-radius:14px;padding:11px;background:var(--card);color:var(--text);font-size:15px}
+.smallBtn{min-height:42px;border-radius:14px;font-size:14px;padding:10px 12px}
+.mutedSmall{font-size:12px;color:var(--muted);margin-top:7px}
+@media(max-width:430px){.metric{min-height:98px;padding:12px}.metric .value{font-size:16px}.analysisGrid{gap:9px}.coin{padding:14px}.coinName{font-size:20px}.score{font-size:30px}}

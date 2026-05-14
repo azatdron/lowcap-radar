@@ -1,3 +1,3 @@
-# Lowcap Radar AI v7.1 — Multi-Source Scanner
+# Lowcap Radar AI v7.2 — Quality Proof + Portfolio
 
-CMC + CoinGecko + DexScreener scanner through /api/scan. If CMC_API_KEY is missing, works via CoinGecko + DexScreener.
+Дизайн выровнен, текст переносится, сети прокручиваются, в топ не попадают монеты без подтверждаемой ликвидности, добавлены ссылки-подтверждения, количество обработанных кандидатов, избранное с разворачиванием и портфелем.

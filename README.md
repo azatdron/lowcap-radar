@@ -1,10 +1,3 @@
-# Lowcap Radar AI v7.6.1 — Portfolio + Rank Fix
+# Lowcap Radar AI v7.6.2 — Radar Engine Restore
 
-База поверх v7.6 Clean Skeleton:
-- блок «Моя позиция» больше не обнуляется после сохранения;
-- сумма входа и цена входа остаются в полях;
-- PnL показывает ▲ зелёным / ▼ красным / 0 серым;
-- добавлен маленький × для удаления позиции;
-- клики внутри позиции не сворачивают карточку;
-- в compact и expanded карточке добавлен рыночный ранг: CMC/CG # или Ранг #—;
-- сохранён чистый скелет v7.6.
+UI from v7.6 + portfolio/rank fix + restored /api/scan engine.

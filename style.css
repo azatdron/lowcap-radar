@@ -120,32 +120,5 @@ body.light .tabs{background:rgba(255,255,255,.94)}
   .score{font-size:28px}
 }
 
-/* v7.6.1 Portfolio + Rank */
-.posSummary{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  flex-wrap:wrap;
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.35;
-  margin-top:7px;
-}
-.pnlUp{color:var(--green)!important;font-weight:850}
-.pnlDown{color:var(--red)!important;font-weight:850}
-.pnlFlat{color:var(--muted)!important;font-weight:850}
-.posDelete{
-  width:24px;
-  height:24px;
-  border-radius:50%;
-  border:1px solid var(--line);
-  background:var(--btn);
-  color:var(--muted);
-  display:inline-grid;
-  place-items:center;
-  font-size:16px;
-  font-weight:900;
-  line-height:1;
-}
-.posDelete:hover{color:var(--red)}
-.rankBadge{border-color:rgba(96,165,250,.35)!important}
+/* v7.6.2 Portfolio + Rank */
+.posSummary{display:flex;align-items:center;gap:7px;flex-wrap:wrap;color:var(--muted);font-size:13px;line-height:1.35;margin-top:7px}.pnlUp{color:var(--green)!important;font-weight:850}.pnlDown{color:var(--red)!important;font-weight:850}.pnlFlat{color:var(--muted)!important;font-weight:850}.posDelete{width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:var(--btn);color:var(--muted);display:inline-grid;place-items:center;font-size:16px;font-weight:900;line-height:1}.posDelete:hover{color:var(--red)}.rankBadge{border-color:rgba(96,165,250,.35)!important}button,.fieldButton,.topChip,.tab{touch-action:manipulation}

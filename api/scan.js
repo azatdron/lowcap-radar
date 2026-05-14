@@ -5,11 +5,32 @@ const DEX_BASE="https://api.dexscreener.com/latest/dex";
 const TERMS={auto:["ai","rwa","defi","depin","gaming","infrastructure","yield","bridge","rpc","agent","network"],ai:["ai","agent","gpu","compute","data","inference","render","virtual"],rwa:["rwa","real world assets","tokenized","treasury","credit","yield","ondo","asset"],depin:["depin","node","storage","compute","network","infrastructure"],gaming:["gaming","gamefi","game","play","nft","esports","guild"],infra:["oracle","storage","infrastructure","data","index","bridge","security","node","rpc","api","network"],defi:["defi","dex","yield","liquidity","swap","lending","staking","perp","vault"],l2:["layer2","layer 2","modular","rollup","zk","optimism","arbitrum","starknet","mantle","base"],meme:["meme","inu","dog","cat","frog","pepe","bonk","wif"]};
 const CHAIN={ethereum:"ethereum",solana:"solana",base:"base",bsc:"bsc",arbitrum:"arbitrum",polygon:"polygon",avalanche:"avalanche",optimism:"optimism"};
 function norm(x){return String(x||"").toLowerCase().replace(/[^a-z0-9]/g,"")}function num(x){x=Number(x||0);return Number.isFinite(x)?x:0}
-function isMajor(c){const s=norm(c.symbol),n=norm(c.name);return ["btc","bitcoin","wbtc","eth","ethereum","weth","bnb","sol","solana","xrp","usdc","usdt","dai"].includes(s)||["bitcoin","ethereum","wrappedbitcoin","wrappedether","solana","tether","usdcoin"].includes(n)}
+function isMajor(c){
+ const s=norm(c.symbol),n=norm(c.name);
+ const majors=[
+  "btc","bitcoin","wbtc","wrappedbitcoin",
+  "eth","ethereum","weth","wrappedether",
+  "bnb","binancecoin","xrp","ripple",
+  "ada","cardano","wada","wrappedcardano",
+  "sol","solana","doge","dogecoin",
+  "trx","tron","matic","polygon",
+  "ltc","litecoin","dot","polkadot",
+  "avax","avalanche","link","chainlink",
+  "xlm","stellar","shib","shibainu",
+  "bch","bitcoincash","etc","ethereumclassic",
+  "ton","toncoin","near","apt","aptos",
+  "atom","cosmos","uni","uniswap",
+  "usdc","usdt","dai","busd","fdusd","usde"
+ ];
+ if(majors.includes(s)||majors.includes(n))return true;
+ if(n.includes("wrapped")&&(n.includes("bitcoin")||n.includes("ethereum")||n.includes("cardano")||n.includes("solana")||n.includes("bnb")))return true;
+ return false
+}
 function risks(c){const cap=num(c.market_cap||c.fdv),vol=num(c.total_volume),liq=num(c.liquidity),ch=Math.abs(num(c.price_change_percentage_24h));const r=[];if(liq&&liq<5000)r.push("низкая ликвидность");if(vol<5000)r.push("слабый объём");if(cap&&cap<100000)r.push("микро-капитализация");if(ch>80)r.push("сильная волатильность");if(isMajor(c))r.push("слишком крупная монета");return r}
 function narrative(c,sector){const t=(c.name+" "+c.symbol+" "+(c.description||"")+" "+(c.url||"")).toLowerCase();if(/ai|agent|gpu|compute|data|render|virtual/.test(t))return"AI";if(/rwa|real|treasury|yield|credit|ondo|asset/.test(t))return"RWA";if(/game|gaming|play|nft|esport|guild/.test(t))return"Gaming";if(/depin|node|storage|oracle|rpc|bridge|network|infra/.test(t))return"Infrastructure";if(/swap|dex|yield|lend|stake|vault|perp/.test(t))return"DeFi";if(/inu|dog|cat|pepe|meme|bonk|wif/.test(t))return"Meme";return sector==="auto"?"General":sector.toUpperCase()}
 function score(c,risk){let sc=30;const cap=num(c.market_cap||c.fdv),vol=num(c.total_volume),liq=num(c.liquidity),ch=num(c.price_change_percentage_24h),vr=cap?vol/cap:0;if(cap>=1e5&&cap<1e6)sc+=10;if(cap>=1e6&&cap<=1e8)sc+=18;if(cap>5e8)sc-=10;if(cap>1e9)sc-=18;if(vol>=1e4)sc+=6;if(vol>=1e5)sc+=8;if(vol>=1e6)sc+=8;if(liq>=1e4)sc+=6;if(liq>=5e4)sc+=8;if(liq>=2.5e5)sc+=8;if(vr>=.005&&vr<=.5)sc+=9;if(ch>3&&ch<45)sc+=8;if(ch<0&&ch>-25)sc+=4;if(ch>80)sc-=12;if(isMajor(c))sc-=25;sc-=risks(c).length*4;if(risk==="conservative")sc-=risks(c).length*3;if(risk==="aggressive")sc+=5;if(c._source==="CoinMarketCap"&&num(c.liquidity)>0)sc+=2;if(c._source==="CoinGecko"&&num(c.liquidity)>0)sc+=2;return Math.max(1,Math.min(99,Math.round(sc)))}
 function budgetOk(c,b){return !b||b==="any"||num(c.current_price)<=Number(b)}function qualityOk(c,r){
+  if(isMajor(c)) return false;
   const liq=num(c.liquidity), vol=num(c.total_volume);
   if(c._source!=="DexScreener" && liq===0) return false;
   if(r==="aggressive") return liq>=3000 && vol>=1000;
@@ -24,4 +45,7 @@ async function fetchDex(chains,sector,risk){const out=[];const terms=(TERMS[sect
 export default async function handler(req,res){res.setHeader("Access-Control-Allow-Origin","*");try{const sector=String(req.query.sector||"auto"),risk=String(req.query.risk||"balanced"),budget=String(req.query.budget||"any"),chains=String(req.query.chains||"auto").split(",").filter(Boolean);const [cg,cmc,dex]=await Promise.all([fetchCoinGecko(),fetchCMC(),fetchDex(chains,sector,risk)]);const cgMap=new Map(cg.map(x=>[norm(x.symbol)+":"+norm(x.name),x]));
 for(const d of dex){const e=cgMap.get(norm(d.symbol)+":"+norm(d.name));if(e){d.image=d.image||e.image;d.market_cap=d.market_cap||e.market_cap;d.fdv=d.fdv||e.fdv;d.price_change_percentage_7d=e.price_change_percentage_7d;d.price_change_percentage_30d=e.price_change_percentage_30d;}}
 const processedRaw=cmc.length+cg.length+dex.length;
-let list=dedupe([...dex]).filter(c=>budgetOk(c,budget)).filter(c=>qualityOk(c,risk)).filter(c=>sectorOk(c,sector)||risk==="aggressive");list.forEach(c=>{c._narrative=narrative(c,sector);c._score=score(c,risk);c.risks=risks(c)});list=list.sort((a,b)=>b._score-a._score).slice(0,80);const sources=[];if(cmc.length)sources.push("CoinMarketCap");if(cg.length)sources.push("CoinGecko");if(dex.length)sources.push("DexScreener");res.status(200).json({ok:true,sources,items:list,count:list.length,processed:processedRaw})}catch(e){res.status(500).json({ok:false,error:String(e.message||e)})}}
+let list=dedupe([...dex]).filter(c=>budgetOk(c,budget)).filter(c=>qualityOk(c,risk)).filter(c=>sectorOk(c,sector)||risk==="aggressive");list=list.filter(c=>!__v74_synthetic(c));list.forEach(c=>{c._narrative=narrative(c,sector);c._score=score(c,risk);c.risks=risks(c)});list=list.sort((a,b)=>b._score-a._score).slice(0,80);const sources=[];if(cmc.length)sources.push("CoinMarketCap");if(cg.length)sources.push("CoinGecko");if(dex.length)sources.push("DexScreener");res.status(200).json({ok:true,sources,items:list,count:list.length,processed:processedRaw})}catch(e){res.status(500).json({ok:false,error:String(e.message||e)})}}
+
+function __v74_norm(x){return String(x||"").toLowerCase().replace(/[^a-z0-9]/g,"")}
+function __v74_synthetic(c){const s=__v74_norm(c.symbol),n=__v74_norm(c.name),text=n+" "+s;const bad=["wrapped","bridged","synthetic","index","fund","etf","vault","staked","liquid","leveraged","bull","bear","lp","janus","sp500","stock"];return bad.some(w=>text.includes(__v74_norm(w)))}

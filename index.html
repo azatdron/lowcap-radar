@@ -13,69 +13,35 @@
     <div class="logo">⌁</div>
     <div class="brand">
       <div class="title">Lowcap Radar AI</div>
-      <div class="subtitle">v7.5.1 · Critical Fix</div>
+      <div class="subtitle">v7.6 · Clean Skeleton</div>
     </div>
-    <button id="themeBtn" class="theme" onclick="toggleTheme()">🌙</button>
+    <button id="themeBtn" class="themeBtn" type="button" aria-label="Theme">●</button>
   </header>
 
-  <section id="radarSec">
-    <div class="panel">
-      <div class="stats">
-        <div class="stat"><div class="label">Найдено</div><div id="found" class="value">0</div></div>
-        <div class="stat"><div class="label">Средний score</div><div id="avg" class="value">—</div></div>
+  <section id="radarPage" class="page">
+    <div class="panel controlsPanel">
+      <div class="topFilters">
+        <button class="topChip" type="button" data-top="100">Top 100</button>
+        <button class="topChip" type="button" data-top="500">Top 500</button>
+        <button class="topChip" type="button" data-top="2000">Top 2000</button>
       </div>
 
-      <div class="presets">
-        <div class="preset active" data-mode="balanced" onclick="setPreset('balanced',this)">Top 100</div>
-        <div class="preset" data-mode="aggressive" onclick="setPreset('aggressive',this)">Top 500</div>
-        <div class="preset" data-mode="conservative" onclick="setPreset('conservative',this)">Top 2000</div>
-      </div>
-
-      <div class="controls">
-        <div class="control">
-          <div class="label">Сектор / narrative</div>
-          <select style="display:none" id="sector" style="display:none">
-            <option value="auto">AUTO / все</option>
-            <option value="ai">AI / Agents</option>
-            <option value="rwa">RWA</option>
-            <option value="depin">DePIN</option>
-            <option value="gaming">Gaming</option>
-            <option value="infra">Infrastructure</option>
-            <option value="defi">DeFi</option>
-            <option value="l2">L2</option>
-            <option value="meme">Meme</option>
-          </select><div id="narrativeBox" class="field narrativeBox" onclick="toggleNarrativeMenu()">AUTO / все</div>
+      <div class="formGrid">
+        <div class="fieldBlock">
+          <div class="fieldLabel">Сектор</div>
+          <button id="narrativeBox" class="fieldButton" type="button">AUTO / все</button>
         </div>
-
-        <div class="control">
-          <div class="label">Сети</div>
-          <div class="chainDrop">
-            <div id="chainBox" class="chainBox" onclick="toggleChainMenu()">Любая</div>
-            <div id="chainMenu" class="chainMenu">
-              <label><input type="checkbox" class="mchain" value="ethereum" onchange="updateChainLabel()">Ethereum</label>
-              <label><input type="checkbox" class="mchain" value="solana" onchange="updateChainLabel()">Solana</label>
-              <label><input type="checkbox" class="mchain" value="base" onchange="updateChainLabel()">Base</label>
-              <label><input type="checkbox" class="mchain" value="bsc" onchange="updateChainLabel()">BSC</label>
-              <label><input type="checkbox" class="mchain" value="arbitrum" onchange="updateChainLabel()">Arbitrum</label>
-              <label><input type="checkbox" class="mchain" value="polygon" onchange="updateChainLabel()">Polygon</label>
-              <label><input type="checkbox" class="mchain" value="avalanche" onchange="updateChainLabel()">Avalanche</label>
-              <label><input type="checkbox" class="mchain" value="optimism" onchange="updateChainLabel()">Optimism</label>
-            </div>
-          </div>
+        <div class="fieldBlock">
+          <div class="fieldLabel">Сети</div>
+          <button id="chainBox" class="fieldButton" type="button">Любая</button>
         </div>
-
-        <div class="control">
-          <div class="label">Риск</div>
-          <select id="risk" style="display:none">
-            <option value="balanced">Сбалансированный</option>
-            <option value="aggressive">Агрессивный</option>
-            <option value="conservative">Осторожный</option>
-          </select>
+        <div class="fieldBlock">
+          <div class="fieldLabel">Риск</div>
+          <button id="riskBox" class="fieldButton" type="button">Средний</button>
         </div>
-
-        <div class="control">
-          <div class="label">Цена монеты</div>
-          <select id="budget">
+        <div class="fieldBlock">
+          <div class="fieldLabel">Цена монеты</div>
+          <select id="budget" class="fieldSelect">
             <option value="any">любая</option>
             <option value="0.01">до $0.01</option>
             <option value="0.1">до $0.10</option>
@@ -86,55 +52,103 @@
         </div>
       </div>
 
-      <div class="buttons">
-        <button class="primary" onclick="scan()">Начать поиск</button>
-        <button class="secondary" onclick="resetSearch()">Сбросить</button>
+      <div class="actionGrid">
+        <button id="scanBtn" class="primaryBtn" type="button">Начать поиск</button>
+        <button id="resetBtn" class="secondaryBtn" type="button">Сбросить</button>
       </div>
-      <div id="note" class="note">AI показывает кандидатов с проверяемыми метриками и расчётной торговой зоной: вход, цели, стоп и риск/прибыль.</div>
+
+      <div class="statsGrid">
+        <div class="statBox"><div class="statLabel">Найдено</div><div id="found" class="statValue">0</div></div>
+        <div class="statBox"><div class="statLabel">Средний score</div><div id="avg" class="statValue">—</div></div>
+      </div>
+
+      <div id="note" class="note">Выбери параметры и нажми «Начать поиск».</div>
     </div>
 
-    <div id="results"></div>
+    <div id="results" class="coinList">
+      <div class="empty">Радар готов к поиску.</div>
+    </div>
   </section>
 
-  <section id="watchSec" class="hidden">
-    <div class="panel"><h1>Избранное</h1><div id="watch"></div></div>
+  <section id="watchPage" class="page hidden">
+    <div class="panel">
+      <h1>Избранное</h1>
+      <div id="watch" class="coinList"></div>
+    </div>
   </section>
 
-  <section id="sourceSec" class="hidden">
-<div class="panel">
-<h1>Источники</h1>
-<div id="backendStatus" class="explain">Проверяю backend...</div>
-<div class="explain"><b>Источники данных:</b><br>• DexScreener — пары, сеть, DEX, ликвидность, объём, возраст пары, цена.<br>• CoinGecko — цена, капитализация, логотипы, категории, market data.<br>• CoinMarketCap — listings, ranking, market data, premium data при своём ключе.<br>• GeckoTerminal / DefiLlama / Birdeye / DEXTools / CryptoRank / Messari — подготовлены для расширенного анализа.</div>
-<div class="explain"><b>Подключить свои API keys</b><br>Ключи сохраняются только в браузере на этом устройстве.
-<div class="keyGrid"><input id="key_cmc" placeholder="CoinMarketCap API Key"><input id="key_cg" placeholder="CoinGecko API Key"><input id="key_birdeye" placeholder="Birdeye API Key"><input id="key_messari" placeholder="Messari API Key"></div>
-<div class="buttons sourceButtons"><button class="saveKeyBtn" onclick="saveApiKeys()">Сохранить ключи</button><button class="clearKeyBtn" onclick="clearApiKeys()">Очистить</button></div>
-<div id="keyStatus" class="mutedSmall">Ключи не загружены.</div></div>
-<div class="explain"><b>Прозрачность:</b> если источник не подключён или данных нет, приложение показывает «нет данных», а не выдумывает аналитику.</div>
-</div></section>
+  <section id="sourcePage" class="page hidden">
+    <div class="panel">
+      <h1>Источники</h1>
+      <div id="backendStatus" class="explain">Проверяю backend...</div>
+
+      <div class="explain">
+        <b>Источники данных:</b><br>
+        • DexScreener — пары, сеть, DEX, ликвидность, объём, возраст пары, цена.<br>
+        • CoinGecko — цена, капитализация, логотипы, категории, market data.<br>
+        • CoinMarketCap — listings, ranking, market data, premium data при своём ключе.<br>
+        • GeckoTerminal / DefiLlama / Birdeye / DEXTools / CryptoRank / Messari — подготовлены для расширенного анализа.
+      </div>
+
+      <div class="explain">
+        <b>API keys</b><br>
+        Ключи сохраняются только в браузере на этом устройстве.
+        <div class="keyGrid">
+          <input id="key_cmc" placeholder="CoinMarketCap API Key">
+          <input id="key_cg" placeholder="CoinGecko API Key">
+          <input id="key_birdeye" placeholder="Birdeye API Key">
+          <input id="key_messari" placeholder="Messari API Key">
+        </div>
+        <div class="sourceButtons">
+          <button id="saveKeysBtn" class="saveKeyBtn" type="button">Сохранить ключи</button>
+          <button id="clearKeysBtn" class="clearKeyBtn" type="button">Очистить</button>
+        </div>
+        <div id="keyStatus" class="mutedSmall">Ключи не загружены.</div>
+      </div>
+    </div>
+  </section>
 </div>
 
-<div id="narrativeBackdrop" class="narrativeBackdrop" onclick="closeNarrativeMenu()"></div>
-<div id="chainBackdrop" class="chainBackdrop" onclick="closeChainMenu()"></div>
+<div id="modalBackdrop" class="modalBackdrop"></div>
 
-<div id="narrativeMenu" class="narrativeMenu">
-  <label><input type="checkbox" class="mnarr" value="auto"> AUTO / все</label>
-  <label><input type="checkbox" class="mnarr" value="ai"> AI</label>
-  <label><input type="checkbox" class="mnarr" value="rwa"> RWA</label>
-  <label><input type="checkbox" class="mnarr" value="gaming"> GameFi</label>
-  <label><input type="checkbox" class="mnarr" value="depin"> DePIN</label>
-  <label><input type="checkbox" class="mnarr" value="infra"> Infrastructure</label>
-  <label><input type="checkbox" class="mnarr" value="defi"> DeFi</label>
-  <label><input type="checkbox" class="mnarr" value="l2"> L2</label>
-  <label><input type="checkbox" class="mnarr" value="meme"> Meme</label>
+<div id="narrativeModal" class="bottomSheet">
+  <div class="sheetTitle">Выбери сектор</div>
+  <label><input type="checkbox" class="narrativeCheck" value="auto"> AUTO / все</label>
+  <label><input type="checkbox" class="narrativeCheck" value="ai"> AI</label>
+  <label><input type="checkbox" class="narrativeCheck" value="rwa"> RWA</label>
+  <label><input type="checkbox" class="narrativeCheck" value="gaming"> GameFi</label>
+  <label><input type="checkbox" class="narrativeCheck" value="depin"> DePIN</label>
+  <label><input type="checkbox" class="narrativeCheck" value="infra"> Infrastructure</label>
+  <label><input type="checkbox" class="narrativeCheck" value="defi"> DeFi</label>
+  <label><input type="checkbox" class="narrativeCheck" value="l2"> L2</label>
+  <label><input type="checkbox" class="narrativeCheck" value="meme"> Meme</label>
+</div>
+
+<div id="chainModal" class="bottomSheet">
+  <div class="sheetTitle">Выбери сети</div>
+  <label><input type="checkbox" class="chainCheck" value="ethereum"> Ethereum</label>
+  <label><input type="checkbox" class="chainCheck" value="solana"> Solana</label>
+  <label><input type="checkbox" class="chainCheck" value="base"> Base</label>
+  <label><input type="checkbox" class="chainCheck" value="bsc"> BSC</label>
+  <label><input type="checkbox" class="chainCheck" value="arbitrum"> Arbitrum</label>
+  <label><input type="checkbox" class="chainCheck" value="polygon"> Polygon</label>
+  <label><input type="checkbox" class="chainCheck" value="avalanche"> Avalanche</label>
+  <label><input type="checkbox" class="chainCheck" value="optimism"> Optimism</label>
+</div>
+
+<div id="riskModal" class="bottomSheet">
+  <div class="sheetTitle">Риск</div>
+  <button class="riskOption" type="button" data-risk="conservative">Низкий</button>
+  <button class="riskOption" type="button" data-risk="balanced">Средний</button>
+  <button class="riskOption" type="button" data-risk="aggressive">Высокий</button>
 </div>
 
 <div id="toast" class="toast">Готово</div>
-<button id="topBtn" class="topbtn" onclick="scrollToTop()">↑</button>
 
 <nav class="tabs">
-  <div id="tabRadar" class="tab active" onclick="showTab('radar')">Радар</div>
-  <div id="tabWatch" class="tab" onclick="showTab('watch')">Избранное</div>
-  <div id="tabSource" class="tab" onclick="showTab('source')">Источники</div>
+  <button id="tabRadar" class="tab active" type="button">Радар</button>
+  <button id="tabWatch" class="tab" type="button">Избранное</button>
+  <button id="tabSource" class="tab" type="button">Источники</button>
 </nav>
 
 <script src="app.js"></script>

@@ -1,15 +1,17 @@
-# Lowcap Radar AI v7.6 — Clean Skeleton
+# Lowcap Radar AI
 
-Полная чистая пересборка frontend-скелета:
-- новый index.html без накопленных дублей;
-- новый style.css;
-- новый app.js;
-- сохранён backend api/scan.js;
-- рабочие compact-карточки Радара и Избранного;
-- карточки раскрываются по нажатию;
-- Top 100 / Top 500 / Top 2000 кликаются и подсвечиваются галочкой;
-- Сектор и Сети — мультивыбор в bottom sheet;
-- Риск — отдельная ячейка;
-- + / − в верхнем углу карточки;
-- Сброс очищает фильтры и результаты;
-- Источники/API keys с зелёной и красной кнопкой.
+Static PWA build.
+
+Main files:
+- index.html — app
+- icon.svg — app icon
+- manifest.webmanifest — PWA manifest
+- sw.js — cache/service worker
+
+Extra files:
+- vercel.json — Vercel static deploy settings
+- .nojekyll — GitHub Pages compatibility
+- README.md — short note
+
+Deploy:
+Upload all files from this folder to the root of the GitHub repository or import this folder directly to Vercel.

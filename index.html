@@ -13,7 +13,7 @@
     <div class="logo">⌁</div>
     <div class="brand">
       <div class="title">Lowcap Radar AI</div>
-      <div class="subtitle">v7.5 · Discovery UI</div>
+      <div class="subtitle">v7.5.1 · Critical Fix</div>
     </div>
     <button id="themeBtn" class="theme" onclick="toggleTheme()">🌙</button>
   </header>
@@ -26,15 +26,15 @@
       </div>
 
       <div class="presets">
-        <div class="preset active" data-mode="balanced" data-top="100" onclick="setPreset('balanced',this)">Top 100</div>
-        <div class="preset" data-mode="aggressive" data-top="500" onclick="setPreset('aggressive',this)">Top 500</div>
-        <div class="preset" data-mode="conservative" data-top="2000" onclick="setPreset('conservative',this)">Top 2000</div>
+        <div class="preset active" data-mode="balanced" onclick="setPreset('balanced',this)">Top 100</div>
+        <div class="preset" data-mode="aggressive" onclick="setPreset('aggressive',this)">Top 500</div>
+        <div class="preset" data-mode="conservative" onclick="setPreset('conservative',this)">Top 2000</div>
       </div>
 
       <div class="controls">
         <div class="control">
           <div class="label">Сектор / narrative</div>
-          <select style="display:none" id="sector">
+          <select style="display:none" id="sector" style="display:none">
             <option value="auto">AUTO / все</option>
             <option value="ai">AI / Agents</option>
             <option value="rwa">RWA</option>
@@ -107,7 +107,7 @@
 <div class="explain"><b>Источники данных:</b><br>• DexScreener — пары, сеть, DEX, ликвидность, объём, возраст пары, цена.<br>• CoinGecko — цена, капитализация, логотипы, категории, market data.<br>• CoinMarketCap — listings, ranking, market data, premium data при своём ключе.<br>• GeckoTerminal / DefiLlama / Birdeye / DEXTools / CryptoRank / Messari — подготовлены для расширенного анализа.</div>
 <div class="explain"><b>Подключить свои API keys</b><br>Ключи сохраняются только в браузере на этом устройстве.
 <div class="keyGrid"><input id="key_cmc" placeholder="CoinMarketCap API Key"><input id="key_cg" placeholder="CoinGecko API Key"><input id="key_birdeye" placeholder="Birdeye API Key"><input id="key_messari" placeholder="Messari API Key"></div>
-<div class="buttons sourceButtons"><button class="secondary smallBtn" onclick="saveApiKeys()">Сохранить ключи</button><button class="danger smallBtn" onclick="clearApiKeys()">Удалить ключи</button></div>
+<div class="buttons sourceButtons"><button class="saveKeyBtn" onclick="saveApiKeys()">Сохранить ключи</button><button class="clearKeyBtn" onclick="clearApiKeys()">Очистить</button></div>
 <div id="keyStatus" class="mutedSmall">Ключи не загружены.</div></div>
 <div class="explain"><b>Прозрачность:</b> если источник не подключён или данных нет, приложение показывает «нет данных», а не выдумывает аналитику.</div>
 </div></section>

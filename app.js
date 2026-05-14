@@ -1,8 +1,29 @@
 
-function setRiskMode(mode){if(window.risk)risk.value=mode;const labels={conservative:"Низкий",balanced:"Средний",aggressive:"Высокий"};if(window.riskBox)riskBox.textContent=labels[mode]||"Средний";if(window.riskMenu)riskMenu.classList.remove("open")}
-function toggleRiskMenu(){if(!window.riskMenu||!window.riskBox)return;const r=riskBox.getBoundingClientRect();riskMenu.style.left=r.left+"px";riskMenu.style.top=(r.bottom+8+window.scrollY)+"px";riskMenu.style.minWidth=r.width+"px";riskMenu.classList.toggle("open")}
-function selectedTopRanks(){return [...document.querySelectorAll("[data-top].activeTop")].map(x=>Number(x.dataset.top)).filter(Boolean)}
-function setupTopFilters(){document.querySelectorAll("[data-top]").forEach(btn=>{btn.onclick=e=>{e.preventDefault();e.stopPropagation();btn.classList.toggle("activeTop")}})}
+function selectedTopRanks(){
+  return [...document.querySelectorAll("[data-top],.topBtn")].filter(x=>x.classList.contains("activeTop")).map(x=>Number(x.dataset.top)).filter(Boolean);
+}
+function setupTopFilters(){
+  document.querySelectorAll("[data-top],.topBtn").forEach(btn=>{
+    if(btn.__topReady)return;
+    btn.__topReady=true;
+    btn.addEventListener("click",e=>{
+      e.preventDefault();
+      e.stopPropagation();
+      btn.classList.toggle("activeTop");
+    });
+  });
+}
+function setRiskMode(mode){
+  const labels={conservative:"Низкий",balanced:"Средний",aggressive:"Высокий"};
+  if(window.risk) risk.value=mode;
+  if(window.riskBox) riskBox.textContent=labels[mode]||"Средний";
+  if(window.riskMenu) riskMenu.classList.remove("open");
+}
+function toggleRiskMenu(){
+  if(!window.riskMenu)return;
+  riskMenu.classList.toggle("open");
+}
+
 
 const $=id=>document.getElementById(id);
 let lastResults=[];
@@ -52,9 +73,10 @@ function resetSearch(){
   budget.value="any";
   risk.value="balanced";
   document.querySelectorAll(".mchain").forEach(x=>x.checked=false);
-  document.querySelectorAll("[data-top]").forEach(x=>x.classList.remove("activeTop"));
+  document.querySelectorAll("[data-top],.topBtn").forEach(x=>x.classList.remove("activeTop"));
   document.querySelectorAll(".mnarr").forEach(x=>x.checked=false);
   updateChainLabel();
+  if(typeof updateNarrativeLabel==="function")updateNarrativeLabel();
   updateNarrativeLabel();
   document.querySelectorAll(".preset").forEach(x=>x.classList.remove("active"));
   const balanced=document.querySelector(".preset[data-mode='balanced']");
@@ -145,7 +167,7 @@ function saveApiKeys(){["cmc","cg","birdeye","messari"].forEach(k=>{const el=doc
 function clearApiKeys(){["cmc","cg","birdeye","messari"].forEach(k=>localStorage.removeItem("api_"+k));loadApiKeys();showToast("Ключи удалены")}
 function loadApiKeys(){const labels={cmc:"CoinMarketCap",cg:"CoinGecko",birdeye:"Birdeye",messari:"Messari"},connected=[];["cmc","cg","birdeye","messari"].forEach(k=>{const v=localStorage.getItem("api_"+k)||"",el=document.getElementById("key_"+k);if(el)el.value=v;if(v)connected.push(labels[k])});const st=document.getElementById("keyStatus");if(st)st.textContent=connected.length?("Подключено: "+connected.join(", ")):"Ключи не загружены."}
 
-function coinCard(c,watchMode){const div=document.createElement("div");div.className="coin"+(watchMode?" watchCompact":" searchCompact");const cap=c.market_cap||c.fdv||0,risks=riskList(c),score=c._score||0,ch=c.price_change_percentage_24h||0;const fallback=(c.symbol||"?").slice(0,3).toUpperCase();const img=c.image?`<img class="avatar" src="${c.image}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${fallback}</div>'">`:`<div class="avatar fallback">${fallback}</div>`;div.innerHTML=`<div class="coinTop">${img}<div style="min-width:0;flex:1"><div class="coinName">${c.name||"Unknown"}</div><div class="coinSub">${(c.symbol||"").toUpperCase()} · ${c._source||"Multi"}</div></div><div class="score ${score<45?"bad":score<70?"mid":""}">${score}</div></div><div class="badges"><span class="badge ${risks.length?"warn":"good"}">Риски: ${risks.length}</span><span class="badge">Сеть: ${c._dexChain||"market"}</span><span class="badge">${narrative(c)}</span><span class="badge">Источник: ${c._source||"multi"}</span>${c.market_cap_rank?`<span class="badge">TOP #${c.market_cap_rank}</span>`:""}</div><div class="sourceLine">Факты подтверждаются ссылками в ячейках. Если данных нет — приложение честно показывает «нет данных».</div><div class="analysisGrid">${metric("Капитализация",fmt(cap),metricProof(c,"cap"))}${metric("Цена монеты",priceFmt(c.current_price),metricProof(c,"price"))}${metric("Объём 24ч",fmt(c.total_volume),metricProof(c,"volume"))}${metric("Рост цены 24ч",`<span class="${ch>=0?"goodText":"badText"}">${pct(ch)}</span>`,metricProof(c,"price"))}${metric("Ликвидность",liqText(c),metricProof(c,"liquidity"))}${metric("Возраст проекта",c.age_days?`${c.age_days}д`:"нет данных",metricProof(c,"age"))}${metric("Соцсети",c.website?"сайт найден":"нет данных",c.website?`<a class="proofLink" target="_blank" href="${c.website}">открыть сайт</a>`:"")}${metric("Комьюнити",trendText(c),metricProof(c,"volume"))}${metric("Фонды / backing",fundsSignal(c),c.backingUrl?`<a class="proofLink" target="_blank" href="${c.backingUrl}">подтверждение</a>`:"")}${metric("Экосистема",ecosystem(c),metricProof(c,"chain"))}${metric("Нарратив / сектор",narrative(c),metricProof(c,"sector"))}</div><div class="explain"><b>Почему AI выбрал:</b> капитализация ${fmt(cap)}, ликвидность ${liqText(c)}, объём 24ч ${fmt(c.total_volume)}, движение ${pct(ch)}. ${risks.length?("Риски: "+risks.join(", ")):"Критичных рисков по доступным данным нет."}</div>${tradeBox(c)}<div class="links">${c.url?`<a class="linkBtn" target="_blank" href="${c.url}">DexScreener</a>`:""}<a class="linkBtn" target="_blank" href="https://coinmarketcap.com/search/?q=${encodeURIComponent(c.name||c.symbol||"")}">CoinMarketCap</a><a class="linkBtn" target="_blank" href="https://www.coingecko.com/en/search?query=${encodeURIComponent(c.name||c.symbol||"")}">CoinGecko</a></div>${watchMode?positionBlock(c):""}${watchMode?`<button class="watchDeleteBtn miniAction" aria-label="Удалить" onclick="event.stopPropagation();removeWatch('${c.id}');showToast('Удалено')">−</button>`:`<button class="watchBtn miniAction" aria-label="Добавить">+</button>`}`;if(!watchMode)div.querySelector(".watchBtn").onclick=()=>addWatch(c);if(watchMode){
+function coinCard(c,watchMode){const div=document.createElement("div");div.className="coin"+(watchMode?" watchCompact":" searchCompact");const cap=c.market_cap||c.fdv||0,risks=riskList(c),score=c._score||0,ch=c.price_change_percentage_24h||0;const fallback=(c.symbol||"?").slice(0,3).toUpperCase();const img=c.image?`<img class="avatar" src="${c.image}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${fallback}</div>'">`:`<div class="avatar fallback">${fallback}</div>`;div.innerHTML=`<div class="coinTop">${img}<div style="min-width:0;flex:1"><div class="coinName">${c.name||"Unknown"}</div><div class="coinSub">${(c.symbol||"").toUpperCase()} · ${c._source||"Multi"}</div></div><div class="score ${score<45?"bad":score<70?"mid":""}">${score}</div></div><div class="badges"><span class="badge ${risks.length?"warn":"good"}">Риски: ${risks.length}</span><span class="badge">Сеть: ${c._dexChain||"market"}</span><span class="badge">${narrative(c)}</span><span class="badge">Источник: ${c._source||"multi"}</span></div><div class="sourceLine">Факты подтверждаются ссылками в ячейках. Если данных нет — приложение честно показывает «нет данных».</div><div class="analysisGrid">${metric("Капитализация",fmt(cap),metricProof(c,"cap"))}${metric("Цена монеты",priceFmt(c.current_price),metricProof(c,"price"))}${metric("Объём 24ч",fmt(c.total_volume),metricProof(c,"volume"))}${metric("Рост цены 24ч",`<span class="${ch>=0?"goodText":"badText"}">${pct(ch)}</span>`,metricProof(c,"price"))}${metric("Ликвидность",liqText(c),metricProof(c,"liquidity"))}${metric("Возраст проекта",c.age_days?`${c.age_days}д`:"нет данных",metricProof(c,"age"))}${metric("Соцсети",c.website?"сайт найден":"нет данных",c.website?`<a class="proofLink" target="_blank" href="${c.website}">открыть сайт</a>`:"")}${metric("Комьюнити",trendText(c),metricProof(c,"volume"))}${metric("Фонды / backing",fundsSignal(c),c.backingUrl?`<a class="proofLink" target="_blank" href="${c.backingUrl}">подтверждение</a>`:"")}${metric("Экосистема",ecosystem(c),metricProof(c,"chain"))}${metric("Нарратив / сектор",narrative(c),metricProof(c,"sector"))}</div><div class="explain"><b>Почему AI выбрал:</b> капитализация ${fmt(cap)}, ликвидность ${liqText(c)}, объём 24ч ${fmt(c.total_volume)}, движение ${pct(ch)}. ${risks.length?("Риски: "+risks.join(", ")):"Критичных рисков по доступным данным нет."}</div>${tradeBox(c)}<div class="links">${c.url?`<a class="linkBtn" target="_blank" href="${c.url}">DexScreener</a>`:""}<a class="linkBtn" target="_blank" href="https://coinmarketcap.com/search/?q=${encodeURIComponent(c.name||c.symbol||"")}">CoinMarketCap</a><a class="linkBtn" target="_blank" href="https://www.coingecko.com/en/search?query=${encodeURIComponent(c.name||c.symbol||"")}">CoinGecko</a></div>${watchMode?positionBlock(c):""}${watchMode?`<button class="watchDeleteBtn miniAction" aria-label="Удалить" onclick="event.stopPropagation();removeWatch('${c.id}');showToast('Удалено')">−</button>`:`<button class="watchBtn miniAction" aria-label="Добавить">+</button>`}`;if(!watchMode)div.querySelector(".watchBtn").onclick=()=>addWatch(c);if(watchMode){
     div.addEventListener("click",(e)=>{
       if(e.target.closest(".portfolioBox") || e.target.closest(".watchDeleteBtn") || e.target.closest("a") || e.target.closest("button") || e.target.closest("input")) return;
       div.classList.toggle("open");
@@ -185,4 +207,35 @@ document.addEventListener('click',e=>{
   if(window.narrativeMenu&&narrativeMenu.classList.contains('open')&&!e.target.closest('.narrativeMenu')&&!e.target.closest('.narrativeBox'))closeNarrativeMenu();
 });
 
-document.addEventListener('click',e=>{if(window.riskMenu&&riskMenu.classList.contains('open')&&!e.target.closest('#riskMenu')&&!e.target.closest('#riskBox'))riskMenu.classList.remove('open');const b=e.target.closest&&e.target.closest('#riskMenu button[data-risk]');if(b)setRiskMode(b.dataset.risk)});
+const v751RiskClick=true;
+document.addEventListener("click",e=>{
+  const rb=e.target.closest&&e.target.closest("#riskMenu button[data-risk]");
+  if(rb){setRiskMode(rb.dataset.risk);return;}
+  if(window.riskMenu&&riskMenu.classList.contains("open")&&!e.target.closest("#riskMenu")&&!e.target.closest("#riskBox"))riskMenu.classList.remove("open");
+});
+document.addEventListener("change",e=>{
+  if(e.target.classList&&e.target.classList.contains("mnarr")){
+    const auto=[...document.querySelectorAll(".mnarr")].find(x=>x.value==="auto");
+    if(e.target.value==="auto"&&e.target.checked){
+      document.querySelectorAll(".mnarr").forEach(x=>{if(x.value!=="auto")x.checked=false});
+    }else if(e.target.checked&&auto){auto.checked=false}
+    updateNarrativeLabel();
+  }
+});
+document.addEventListener("click",e=>{
+  if(window.narrativeMenu&&narrativeMenu.classList.contains("open")&&!e.target.closest(".narrativeMenu")&&!e.target.closest(".narrativeBox"))closeNarrativeMenu();
+});
+
+const v751CardExpand=true;
+document.addEventListener("click",e=>{
+  const card=e.target.closest&&e.target.closest(".coin.searchCompact,.coin.watchCompact");
+  if(!card)return;
+  if(e.target.closest("a")||e.target.closest("button")||e.target.closest("input")||e.target.closest(".portfolioBox"))return;
+  card.classList.toggle("open");
+});
+document.addEventListener("click",e=>{
+  const add=e.target.closest&&e.target.closest(".watchBtn.miniAction");
+  if(add){e.stopPropagation();}
+});
+
+document.addEventListener('DOMContentLoaded',()=>{setupTopFilters();setRiskMode((window.risk&&risk.value)||'balanced');if(typeof updateNarrativeLabel==='function')updateNarrativeLabel();if(typeof loadApiKeys==='function')loadApiKeys();});

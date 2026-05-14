@@ -83,3 +83,74 @@ body.light .tradeBox{background:linear-gradient(180deg,#ffffff,#f5f8ff)}
   -webkit-user-select:text;
   user-select:text;
 }
+
+/* v7.3.3 chain modal fix */
+.chainDrop{position:static}
+.chainBackdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:120;
+  background:rgba(0,0,0,.42);
+  backdrop-filter:blur(8px);
+}
+.chainBackdrop.open{display:block}
+.chainMenu{
+  display:none;
+  position:fixed!important;
+  left:18px!important;
+  right:18px!important;
+  top:auto!important;
+  bottom:92px!important;
+  max-width:540px;
+  margin:auto;
+  z-index:130!important;
+  max-height:58vh!important;
+  overflow-y:auto!important;
+  -webkit-overflow-scrolling:touch;
+  background:linear-gradient(180deg,var(--card),var(--card2));
+  border:1px solid var(--line);
+  border-radius:26px;
+  padding:16px;
+  box-shadow:0 24px 60px rgba(0,0,0,.55);
+}
+.chainMenu.open{display:grid;grid-template-columns:1fr;gap:8px}
+.chainMenu::before{
+  content:"Выбери сети";
+  display:block;
+  font-size:18px;
+  font-weight:850;
+  color:var(--text);
+  margin:0 0 10px;
+}
+.chainMenu label{
+  min-height:48px;
+  padding:8px 4px;
+  font-size:17px;
+}
+.chainMenu input{width:25px;height:25px}
+body.chainModalOpen{overflow:hidden}
+
+/* v7.4 Stable Candidate */
+:root{--bg:#080809;--card:#111214;--card2:#0c0d0f;--line:#2a2d33;--text:#f7f7f8;--muted:#a3a7ae;--green:#4ade80;--pink:#fb7185;--yellow:#fbbf24;--blue:#1b1d22;--btn:#17191d}
+body{background:linear-gradient(180deg,#0b0b0c 0%,#050506 100%)!important;color:var(--text);font-weight:500}
+body.light{--bg:#f5f6f8;--card:#fff;--card2:#f3f4f6;--line:#d8dde6;--text:#111214;--muted:#626b78;--blue:#eef1f5;--btn:#f2f4f7;background:linear-gradient(180deg,#f8f9fb 0%,#eef1f5 100%)!important}
+.logo{background:linear-gradient(145deg,#161719,#0a0b0c)!important;border-color:var(--line)!important;color:var(--green)!important;box-shadow:0 12px 28px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.08)!important}
+body.light .logo{background:#fff!important}
+.panel,.coin{background:linear-gradient(180deg,var(--card),var(--card2))!important;border-color:var(--line)!important;box-shadow:0 18px 42px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.06)!important}
+.stat,.metric,.tradeItem,.portfolioBox,.explain{background:var(--card2)!important;border-color:var(--line)!important}
+.title,.coinName,.value,.score,.primary,.secondary,.preset,.tab{font-weight:850}.label{font-weight:720}
+.coinName,.value,.metric,.explain,.badge,.linkBtn{overflow-wrap:anywhere;word-break:break-word}
+.metric{min-height:96px}.metric .value{font-size:16px;line-height:1.18}.coinName{font-size:22px;letter-spacing:-.3px}.score{font-size:32px}
+.theme{background:var(--btn)!important;border-color:var(--line)!important}.badge,.linkBtn,.proofLink,.compactFact{background:var(--btn)!important;border-color:var(--line)!important}
+.coin.searchCompact{padding:14px;cursor:pointer}.coin.searchCompact .sourceLine,.coin.searchCompact .analysisGrid,.coin.searchCompact .explain,.coin.searchCompact .tradeBox,.coin.searchCompact .links,.coin.searchCompact .watchBtn{display:none}
+.coin.searchCompact.open .sourceLine,.coin.searchCompact.open .explain,.coin.searchCompact.open .tradeBox,.coin.searchCompact.open .links,.coin.searchCompact.open .watchBtn{display:block}.coin.searchCompact.open .analysisGrid{display:grid}
+.compactFacts{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.compactFact{padding:7px 9px;border-radius:999px;color:var(--text);font-size:12px;font-weight:800}.compactFact.good{color:var(--green)}.compactFact.bad{color:var(--pink)}
+.compactHint{margin-top:8px;color:var(--muted);font-size:12px;line-height:1.25}.coin.searchCompact.open .compactHint{display:none}.coin.searchCompact .avatar{width:54px;height:54px;flex-basis:54px}
+.trendPill{margin-left:auto;width:38px;height:38px;border-radius:14px;border:1px solid var(--line);display:grid;place-items:center;font-size:20px;font-weight:900;background:var(--btn)}.trendUp{color:var(--green)}.trendDown{color:var(--pink)}.trendSide{color:#60a5fa}.trendRev{color:var(--yellow)}.trendText{font-size:11px;color:var(--muted);margin-top:3px}
+.keyGrid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}.keyGrid input{width:100%;border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--card);color:var(--text);font-size:14px}.sourceButtons{grid-template-columns:1fr 1fr;margin-top:12px}.smallBtn{min-height:42px;border-radius:14px;font-size:14px;padding:10px 12px}.mutedSmall{font-size:12px;color:var(--muted);margin-top:9px}
+.chainDrop{position:static}.chainBackdrop{display:none;position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.42);backdrop-filter:blur(8px)}.chainBackdrop.open{display:block}
+.chainMenu{display:none;position:fixed!important;left:18px!important;right:18px!important;top:auto!important;bottom:92px!important;max-width:540px;margin:auto;z-index:130!important;max-height:58vh!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch;background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:26px;padding:16px;box-shadow:0 24px 60px rgba(0,0,0,.55)}
+.chainMenu.open{display:grid;grid-template-columns:1fr;gap:8px}.chainMenu::before{content:"Выбери сети";display:block;font-size:18px;font-weight:850;color:var(--text);margin:0 0 10px}.chainMenu label{min-height:48px;padding:8px 4px;font-size:17px}.chainMenu input{width:25px;height:25px}body.chainModalOpen{overflow:hidden}
+.watchCompact>.watchDeleteBtn{display:none}.watchCompact.open>.watchDeleteBtn{display:block}.watchDeleteBtn{width:100%;margin-top:12px;min-height:42px;border-radius:16px;font-size:15px;padding:10px 12px}
+@media(max-width:430px){.coin.searchCompact .coinName{font-size:19px}.compactFact{font-size:11px;padding:6px 8px}.metric{min-height:92px;padding:12px}.metric .value{font-size:15px}}

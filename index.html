@@ -13,7 +13,7 @@
     <div class="logo">⌁</div>
     <div class="brand">
       <div class="title">Lowcap Radar AI</div>
-      <div class="subtitle">v7.3.2 · Favorites Fix</div>
+      <div class="subtitle">v7.4 · Stable Candidate</div>
     </div>
     <button id="themeBtn" class="theme" onclick="toggleTheme()">🌙</button>
   </header>
@@ -101,14 +101,19 @@
   </section>
 
   <section id="sourceSec" class="hidden">
-    <div class="panel">
-      <h1>Источники</h1>
-      <div id="backendStatus" class="explain">Проверяю backend...</div>
-      <div class="explain">v7.2: DexScreener даёт on-chain метрики, CoinGecko/CoinMarketCap используются для проверки и переходов. Монеты без подтверждаемой ликвидности не попадают в основной топ.</div>
-    </div>
-  </section>
+<div class="panel">
+<h1>Источники</h1>
+<div id="backendStatus" class="explain">Проверяю backend...</div>
+<div class="explain"><b>Источники данных:</b><br>• DexScreener — пары, сеть, DEX, ликвидность, объём, возраст пары, цена.<br>• CoinGecko — цена, капитализация, логотипы, категории, market data.<br>• CoinMarketCap — listings, ranking, market data, premium data при своём ключе.<br>• GeckoTerminal / DefiLlama / Birdeye / DEXTools / CryptoRank / Messari — подготовлены для расширенного анализа.</div>
+<div class="explain"><b>Подключить свои API keys</b><br>Ключи сохраняются только в браузере на этом устройстве.
+<div class="keyGrid"><input id="key_cmc" placeholder="CoinMarketCap API Key"><input id="key_cg" placeholder="CoinGecko API Key"><input id="key_birdeye" placeholder="Birdeye API Key"><input id="key_messari" placeholder="Messari API Key"></div>
+<div class="buttons sourceButtons"><button class="secondary smallBtn" onclick="saveApiKeys()">Сохранить ключи</button><button class="danger smallBtn" onclick="clearApiKeys()">Удалить ключи</button></div>
+<div id="keyStatus" class="mutedSmall">Ключи не загружены.</div></div>
+<div class="explain"><b>Прозрачность:</b> если источник не подключён или данных нет, приложение показывает «нет данных», а не выдумывает аналитику.</div>
+</div></section>
 </div>
 
+<div id="chainBackdrop" class="chainBackdrop" onclick="closeChainMenu()"></div>
 <div id="toast" class="toast">Готово</div>
 <button id="topBtn" class="topbtn" onclick="scrollToTop()">↑</button>
 

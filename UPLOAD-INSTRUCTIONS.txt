@@ -1,1 +1,1 @@
-Upload all files and api folder. Redeploy Vercel without cache. Optional env: CMC_API_KEY.
+Разархивируй ZIP, загрузи все файлы и папку api в GitHub, затем Redeploy без cache в Vercel.

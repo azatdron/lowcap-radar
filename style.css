@@ -180,3 +180,85 @@ body:not(.light) .primary{background:linear-gradient(180deg,#f7f7f8,#d8dbe2)!imp
 .score{min-width:52px;text-align:right}.trendPill{flex:0 0 34px!important;width:34px!important;height:34px!important;border-radius:12px!important;font-size:18px!important;margin-left:0!important}
 .empty{border-radius:var(--radius-lg)!important;min-height:120px;display:flex;align-items:center;justify-content:center}
 @media(max-width:430px){.panel{padding:14px!important}.field,select,.chainBox{height:54px!important;min-height:54px!important;max-height:54px!important}.primary,.secondary{min-height:50px!important}.coin.searchCompact,.coin.watchCompact{min-height:132px}.score{font-size:30px!important;min-width:46px}}
+
+/* v7.4.2 critical compact/risk/narrative fixes */
+.riskSelectWrap,#risk{display:none!important}
+.coin.searchCompact:not(.open),
+.coin.watchCompact:not(.open){
+  padding:14px!important;
+  min-height:118px!important;
+  max-height:150px!important;
+  overflow:hidden!important;
+}
+.coin.searchCompact:not(.open) .badges,
+.coin.watchCompact:not(.open) .badges{
+  display:flex!important;
+  max-height:34px!important;
+  overflow:hidden!important;
+}
+.coin.searchCompact:not(.open) .compactFacts,
+.coin.watchCompact:not(.open) .compactFacts{
+  display:flex!important;
+  max-height:34px!important;
+  overflow:hidden!important;
+}
+.coin.searchCompact:not(.open) .sourceLine,
+.coin.searchCompact:not(.open) .analysisGrid,
+.coin.searchCompact:not(.open) .explain,
+.coin.searchCompact:not(.open) .tradeBox,
+.coin.searchCompact:not(.open) .links,
+.coin.searchCompact:not(.open) .watchBtn,
+.coin.searchCompact:not(.open) .portfolioBox,
+.coin.watchCompact:not(.open) .sourceLine,
+.coin.watchCompact:not(.open) .analysisGrid,
+.coin.watchCompact:not(.open) .explain,
+.coin.watchCompact:not(.open) .tradeBox,
+.coin.watchCompact:not(.open) .links,
+.coin.watchCompact:not(.open) .portfolioBox{
+  display:none!important;
+}
+.coin.searchCompact.open,
+.coin.watchCompact.open{
+  max-height:none!important;
+}
+.narrativeBackdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:118;
+  background:rgba(0,0,0,.35);
+  backdrop-filter:blur(8px);
+}
+.narrativeBackdrop.open{display:block}
+.narrativeMenu{
+  display:none;
+  position:fixed!important;
+  left:18px!important;
+  right:18px!important;
+  bottom:92px!important;
+  max-width:540px;
+  margin:auto;
+  z-index:128!important;
+  max-height:58vh!important;
+  overflow-y:auto!important;
+  -webkit-overflow-scrolling:touch;
+  background:linear-gradient(180deg,var(--card),var(--card2));
+  border:1px solid var(--line);
+  border-radius:26px;
+  padding:16px;
+  box-shadow:0 24px 60px rgba(0,0,0,.45);
+}
+.narrativeMenu.open{display:grid;grid-template-columns:1fr;gap:8px}
+.narrativeMenu::before{
+  content:"Выбери sectors / narrative";
+  display:block;
+  font-size:18px;
+  font-weight:850;
+  color:var(--text);
+  margin:0 0 10px;
+}
+.narrativeMenu label{min-height:48px;padding:8px 4px;font-size:17px;display:flex;align-items:center;gap:12px}
+.narrativeMenu input{width:25px;height:25px}
+.narrativeBox{
+  cursor:pointer;
+}

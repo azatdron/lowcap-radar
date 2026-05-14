@@ -13,7 +13,7 @@
     <div class="logo">⌁</div>
     <div class="brand">
       <div class="title">Lowcap Radar AI</div>
-      <div class="subtitle">v7.4.1 · UI Polish</div>
+      <div class="subtitle">v7.4.2 · Compact Fix</div>
     </div>
     <button id="themeBtn" class="theme" onclick="toggleTheme()">🌙</button>
   </header>
@@ -34,7 +34,7 @@
       <div class="controls">
         <div class="control">
           <div class="label">Сектор / narrative</div>
-          <select id="sector">
+          <select style="display:none" id="sector">
             <option value="auto">AUTO / все</option>
             <option value="ai">AI / Agents</option>
             <option value="rwa">RWA</option>
@@ -44,7 +44,7 @@
             <option value="defi">DeFi</option>
             <option value="l2">L2</option>
             <option value="meme">Meme</option>
-          </select>
+          </select><div id="narrativeBox" class="field narrativeBox" onclick="toggleNarrativeMenu()">AUTO / все</div>
         </div>
 
         <div class="control">
@@ -113,7 +113,21 @@
 </div></section>
 </div>
 
+<div id="narrativeBackdrop" class="narrativeBackdrop" onclick="closeNarrativeMenu()"></div>
 <div id="chainBackdrop" class="chainBackdrop" onclick="closeChainMenu()"></div>
+
+<div id="narrativeMenu" class="narrativeMenu">
+  <label><input type="checkbox" class="mnarr" value="auto"> AUTO / все</label>
+  <label><input type="checkbox" class="mnarr" value="ai"> AI</label>
+  <label><input type="checkbox" class="mnarr" value="rwa"> RWA</label>
+  <label><input type="checkbox" class="mnarr" value="gaming"> GameFi</label>
+  <label><input type="checkbox" class="mnarr" value="depin"> DePIN</label>
+  <label><input type="checkbox" class="mnarr" value="infra"> Infrastructure</label>
+  <label><input type="checkbox" class="mnarr" value="defi"> DeFi</label>
+  <label><input type="checkbox" class="mnarr" value="l2"> L2</label>
+  <label><input type="checkbox" class="mnarr" value="meme"> Meme</label>
+</div>
+
 <div id="toast" class="toast">Готово</div>
 <button id="topBtn" class="topbtn" onclick="scrollToTop()">↑</button>
 

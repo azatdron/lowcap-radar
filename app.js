@@ -10,6 +10,33 @@ function toggleTheme(){document.body.classList.toggle("light");localStorage.setI
 function initTheme(){if(localStorage.getItem("theme")==="light"){document.body.classList.add("light");themeBtn.textContent="☀️"}}
 function toggleChainMenu(){chainMenu.classList.toggle('open');chainBackdrop.classList.toggle('open',chainMenu.classList.contains('open'));document.body.classList.toggle('chainModalOpen',chainMenu.classList.contains('open'))}
 function closeChainMenu(){chainMenu.classList.remove('open');chainBackdrop.classList.remove('open');document.body.classList.remove('chainModalOpen')}
+
+function compactNarrativeLabel(names){
+  if(!names||!names.length) return "AUTO / все";
+  const cleaned=names.filter(x=>!x.toLowerCase().includes("auto"));
+  if(!cleaned.length) return "AUTO / все";
+  return cleaned.length===1 ? cleaned[0] : `${cleaned[0]} +${cleaned.length-1}`;
+}
+function selectedNarratives(){
+  const arr=[...document.querySelectorAll(".mnarr:checked")].map(x=>x.value);
+  return arr.length?arr:["auto"];
+}
+function updateNarrativeLabel(){
+  const names=[...document.querySelectorAll(".mnarr:checked")].map(x=>x.parentElement.textContent.trim());
+  if(window.narrativeBox)narrativeBox.textContent=compactNarrativeLabel(names);
+  const first=selectedNarratives()[0]||"auto";
+  if(window.sector)sector.value=first;
+}
+function toggleNarrativeMenu(){
+  narrativeMenu.classList.toggle("open");
+  narrativeBackdrop.classList.toggle("open",narrativeMenu.classList.contains("open"));
+  document.body.classList.toggle("chainModalOpen",narrativeMenu.classList.contains("open"));
+}
+function closeNarrativeMenu(){
+  narrativeMenu.classList.remove("open");
+  narrativeBackdrop.classList.remove("open");
+  document.body.classList.remove("chainModalOpen");
+}
 function compactChainLabel(names){if(!names||!names.length)return 'Любая';return names.length===1?names[0]:`${names[0]} +${names.length-1}`}
 function updateChainLabel(){const names=[...document.querySelectorAll('.mchain:checked')].map(x=>x.parentElement.textContent.trim());chainBox.textContent=compactChainLabel(names)}
 
@@ -20,7 +47,9 @@ function resetSearch(){
   budget.value="any";
   risk.value="balanced";
   document.querySelectorAll(".mchain").forEach(x=>x.checked=false);
+  document.querySelectorAll(".mnarr").forEach(x=>x.checked=false);
   updateChainLabel();
+  updateNarrativeLabel();
   document.querySelectorAll(".preset").forEach(x=>x.classList.remove("active"));
   const balanced=document.querySelector(".preset[data-mode='balanced']");
   if(balanced)balanced.classList.add("active");
@@ -48,7 +77,7 @@ function getPosition(c){try{return JSON.parse(localStorage.getItem(posKey(c))||"
 function savePosition(c,amount,entry){localStorage.setItem(posKey(c),JSON.stringify({amount:Number(amount||0),entry:Number(entry||0),ts:Date.now()}));showToast("Позиция сохранена");renderWatchlist()}
 function lastById(id){return[...lastResults,...watchItems()].find(x=>String(x.id)===String(id))||{}}
 function positionBlock(c){const p=getPosition(c),price=Number(c.current_price||0),amount=Number(p.amount||0),entry=Number(p.entry||0);const nowVal=amount&&entry&&price?amount*(price/entry):amount;const pnl=amount&&nowVal?((nowVal-amount)/amount*100):0;return`<div class="portfolioBox" onclick="event.stopPropagation()" ontouchstart="event.stopPropagation()"><b>Моя позиция</b><div class="mutedSmall">${amount?`Вложено: $${amount.toFixed(2)} · Сейчас: $${nowVal.toFixed(2)} · ${pnl>=0?"▲":"▼"} ${pnl.toFixed(1)}%`:"позиция не добавлена"}</div><div class="portfolioRow"><input id="amt_${c.id}" placeholder="Сумма $" value="${amount||""}"><input id="entry_${c.id}" placeholder="Цена входа" value="${entry||""}"></div><button class="secondary smallBtn" onclick="event.stopPropagation();savePosition(lastById('${c.id}'),document.getElementById('amt_${c.id}').value,document.getElementById('entry_${c.id}').value)">Сохранить позицию</button></div>`}
-async function scan(){found.textContent="—";avg.textContent="—";results.innerHTML='<div class="empty">Сканирую CMC + CoinGecko + DexScreener...</div>';try{const chains=selectedChains().join(",");const r=await fetch(`/api/scan?chains=${encodeURIComponent(chains)}&sector=${encodeURIComponent(sector.value)}&risk=${encodeURIComponent(risk.value)}&budget=${encodeURIComponent(budget.value)}`,{cache:"no-store"});if(!r.ok)throw new Error(await r.text());const data=await r.json();let all=hardDedupe(data.items||[]);
+async function scan(){found.textContent="—";avg.textContent="—";results.innerHTML='<div class="empty">Сканирую CMC + CoinGecko + DexScreener...</div>';try{const chains=selectedChains().join(",");const r=await fetch(`/api/scan?chains=${encodeURIComponent(chains)}&sector=${encodeURIComponent(selectedNarratives().join(","))}&risk=${encodeURIComponent(risk.value)}&budget=${encodeURIComponent(budget.value)}`,{cache:"no-store"});if(!r.ok)throw new Error(await r.text());const data=await r.json();let all=hardDedupe(data.items||[]);
 const riskMode=risk.value;
 const riskCount=x=>(x.risks||[]).length;
 if(riskMode==="aggressive") all.sort((a,b)=>riskCount(b)-riskCount(a)||(b._score||0)-(a._score||0));
@@ -107,7 +136,7 @@ function saveApiKeys(){["cmc","cg","birdeye","messari"].forEach(k=>{const el=doc
 function clearApiKeys(){["cmc","cg","birdeye","messari"].forEach(k=>localStorage.removeItem("api_"+k));loadApiKeys();showToast("Ключи удалены")}
 function loadApiKeys(){const labels={cmc:"CoinMarketCap",cg:"CoinGecko",birdeye:"Birdeye",messari:"Messari"},connected=[];["cmc","cg","birdeye","messari"].forEach(k=>{const v=localStorage.getItem("api_"+k)||"",el=document.getElementById("key_"+k);if(el)el.value=v;if(v)connected.push(labels[k])});const st=document.getElementById("keyStatus");if(st)st.textContent=connected.length?("Подключено: "+connected.join(", ")):"Ключи не загружены."}
 
-function coinCard(c,watchMode){const div=document.createElement("div");div.className="coin"+(watchMode?" watchCompact":"");const cap=c.market_cap||c.fdv||0,risks=riskList(c),score=c._score||0,ch=c.price_change_percentage_24h||0;const fallback=(c.symbol||"?").slice(0,3).toUpperCase();const img=c.image?`<img class="avatar" src="${c.image}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${fallback}</div>'">`:`<div class="avatar fallback">${fallback}</div>`;div.innerHTML=`<div class="coinTop">${img}<div style="min-width:0;flex:1"><div class="coinName">${c.name||"Unknown"}</div><div class="coinSub">${(c.symbol||"").toUpperCase()} · ${c._source||"Multi"}</div></div><div class="score ${score<45?"bad":score<70?"mid":""}">${score}</div></div><div class="badges"><span class="badge ${risks.length?"warn":"good"}">Риски: ${risks.length}</span><span class="badge">Сеть: ${c._dexChain||"market"}</span><span class="badge">${narrative(c)}</span><span class="badge">Источник: ${c._source||"multi"}</span></div><div class="sourceLine">Факты подтверждаются ссылками в ячейках. Если данных нет — приложение честно показывает «нет данных».</div><div class="analysisGrid">${metric("Капитализация",fmt(cap),metricProof(c,"cap"))}${metric("Цена монеты",priceFmt(c.current_price),metricProof(c,"price"))}${metric("Объём 24ч",fmt(c.total_volume),metricProof(c,"volume"))}${metric("Рост цены 24ч",`<span class="${ch>=0?"goodText":"badText"}">${pct(ch)}</span>`,metricProof(c,"price"))}${metric("Ликвидность",liqText(c),metricProof(c,"liquidity"))}${metric("Возраст проекта",c.age_days?`${c.age_days}д`:"нет данных",metricProof(c,"age"))}${metric("Соцсети",c.website?"сайт найден":"нет данных",c.website?`<a class="proofLink" target="_blank" href="${c.website}">открыть сайт</a>`:"")}${metric("Комьюнити",trendText(c),metricProof(c,"volume"))}${metric("Фонды / backing",fundsSignal(c),c.backingUrl?`<a class="proofLink" target="_blank" href="${c.backingUrl}">подтверждение</a>`:"")}${metric("Экосистема",ecosystem(c),metricProof(c,"chain"))}${metric("Нарратив / сектор",narrative(c),metricProof(c,"sector"))}</div><div class="explain"><b>Почему AI выбрал:</b> капитализация ${fmt(cap)}, ликвидность ${liqText(c)}, объём 24ч ${fmt(c.total_volume)}, движение ${pct(ch)}. ${risks.length?("Риски: "+risks.join(", ")):"Критичных рисков по доступным данным нет."}</div>${tradeBox(c)}<div class="links">${c.url?`<a class="linkBtn" target="_blank" href="${c.url}">DexScreener</a>`:""}<a class="linkBtn" target="_blank" href="https://coinmarketcap.com/search/?q=${encodeURIComponent(c.name||c.symbol||"")}">CoinMarketCap</a><a class="linkBtn" target="_blank" href="https://www.coingecko.com/en/search?query=${encodeURIComponent(c.name||c.symbol||"")}">CoinGecko</a></div>${watchMode?positionBlock(c):""}${watchMode?`<button class="watchDeleteBtn miniAction" aria-label="Удалить" onclick="event.stopPropagation();removeWatch('${c.id}');showToast('Удалено')">−</button>`:`<button class="watchBtn miniAction" aria-label="Добавить">+</button>`}`;if(!watchMode)div.querySelector(".watchBtn").onclick=()=>addWatch(c);if(watchMode){
+function coinCard(c,watchMode){const div=document.createElement("div");div.className="coin"+(watchMode?" watchCompact":" searchCompact");const cap=c.market_cap||c.fdv||0,risks=riskList(c),score=c._score||0,ch=c.price_change_percentage_24h||0;const fallback=(c.symbol||"?").slice(0,3).toUpperCase();const img=c.image?`<img class="avatar" src="${c.image}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${fallback}</div>'">`:`<div class="avatar fallback">${fallback}</div>`;div.innerHTML=`<div class="coinTop">${img}<div style="min-width:0;flex:1"><div class="coinName">${c.name||"Unknown"}</div><div class="coinSub">${(c.symbol||"").toUpperCase()} · ${c._source||"Multi"}</div></div><div class="score ${score<45?"bad":score<70?"mid":""}">${score}</div></div><div class="badges"><span class="badge ${risks.length?"warn":"good"}">Риски: ${risks.length}</span><span class="badge">Сеть: ${c._dexChain||"market"}</span><span class="badge">${narrative(c)}</span><span class="badge">Источник: ${c._source||"multi"}</span></div><div class="sourceLine">Факты подтверждаются ссылками в ячейках. Если данных нет — приложение честно показывает «нет данных».</div><div class="analysisGrid">${metric("Капитализация",fmt(cap),metricProof(c,"cap"))}${metric("Цена монеты",priceFmt(c.current_price),metricProof(c,"price"))}${metric("Объём 24ч",fmt(c.total_volume),metricProof(c,"volume"))}${metric("Рост цены 24ч",`<span class="${ch>=0?"goodText":"badText"}">${pct(ch)}</span>`,metricProof(c,"price"))}${metric("Ликвидность",liqText(c),metricProof(c,"liquidity"))}${metric("Возраст проекта",c.age_days?`${c.age_days}д`:"нет данных",metricProof(c,"age"))}${metric("Соцсети",c.website?"сайт найден":"нет данных",c.website?`<a class="proofLink" target="_blank" href="${c.website}">открыть сайт</a>`:"")}${metric("Комьюнити",trendText(c),metricProof(c,"volume"))}${metric("Фонды / backing",fundsSignal(c),c.backingUrl?`<a class="proofLink" target="_blank" href="${c.backingUrl}">подтверждение</a>`:"")}${metric("Экосистема",ecosystem(c),metricProof(c,"chain"))}${metric("Нарратив / сектор",narrative(c),metricProof(c,"sector"))}</div><div class="explain"><b>Почему AI выбрал:</b> капитализация ${fmt(cap)}, ликвидность ${liqText(c)}, объём 24ч ${fmt(c.total_volume)}, движение ${pct(ch)}. ${risks.length?("Риски: "+risks.join(", ")):"Критичных рисков по доступным данным нет."}</div>${tradeBox(c)}<div class="links">${c.url?`<a class="linkBtn" target="_blank" href="${c.url}">DexScreener</a>`:""}<a class="linkBtn" target="_blank" href="https://coinmarketcap.com/search/?q=${encodeURIComponent(c.name||c.symbol||"")}">CoinMarketCap</a><a class="linkBtn" target="_blank" href="https://www.coingecko.com/en/search?query=${encodeURIComponent(c.name||c.symbol||"")}">CoinGecko</a></div>${watchMode?positionBlock(c):""}${watchMode?`<button class="watchDeleteBtn miniAction" aria-label="Удалить" onclick="event.stopPropagation();removeWatch('${c.id}');showToast('Удалено')">−</button>`:`<button class="watchBtn miniAction" aria-label="Добавить">+</button>`}`;if(!watchMode)div.querySelector(".watchBtn").onclick=()=>addWatch(c);if(watchMode){
     div.addEventListener("click",(e)=>{
       if(e.target.closest(".portfolioBox") || e.target.closest(".watchDeleteBtn") || e.target.closest("a") || e.target.closest("button") || e.target.closest("input")) return;
       div.classList.toggle("open");
@@ -129,7 +158,20 @@ function renderWatchlist(){watch.innerHTML="";const items=hardDedupe(watchItems(
 function showTab(t){radarSec.classList.toggle("hidden",t!=="radar");watchSec.classList.toggle("hidden",t!=="watch");sourceSec.classList.toggle("hidden",t!=="source");tabRadar.classList.toggle("active",t==="radar");tabWatch.classList.toggle("active",t==="watch");tabSource.classList.toggle("active",t==="source");if(t==="watch")renderWatchlist()}
 async function checkBackend(){try{const r=await fetch("/api/health",{cache:"no-store"});const j=await r.json();backendStatus.innerHTML=`Backend online · ${j.version||""}`}catch(e){backendStatus.innerHTML="Backend не отвечает."}}
 window.addEventListener("scroll",()=>{topBtn.classList.toggle("show",window.scrollY>700)});
-window.addEventListener("load",()=>{initTheme();updateChainLabel();renderWatchlist();checkBackend();loadApiKeys()});
+window.addEventListener("load",()=>{initTheme();updateChainLabel();updateNarrativeLabel();renderWatchlist();checkBackend();loadApiKeys()});
 
 document.addEventListener('click',e=>{if($('chainMenu')&&chainMenu.classList.contains('open')&&!e.target.closest('.chainMenu')&&!e.target.closest('.chainBox'))closeChainMenu()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeChainMenu()});
+
+document.addEventListener('change',e=>{
+  if(e.target.classList&&e.target.classList.contains('mnarr')){
+    const auto=[...document.querySelectorAll('.mnarr')].find(x=>x.value==='auto');
+    if(e.target.value==='auto'&&e.target.checked){
+      document.querySelectorAll('.mnarr').forEach(x=>{if(x.value!=='auto')x.checked=false});
+    }else if(e.target.checked&&auto){auto.checked=false}
+    updateNarrativeLabel();
+  }
+});
+document.addEventListener('click',e=>{
+  if(window.narrativeMenu&&narrativeMenu.classList.contains('open')&&!e.target.closest('.narrativeMenu')&&!e.target.closest('.narrativeBox'))closeNarrativeMenu();
+});

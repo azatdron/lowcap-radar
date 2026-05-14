@@ -1,393 +1,156 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Lowcap Radar AI</title>
-  <meta name="theme-color" content="#f6f7fb" />
-  <link rel="manifest" href="manifest.webmanifest" />
-  <style>
-    :root{
-      --bg:#f6f7fb; --card:#fff; --soft:#f1f3f7; --line:#dfe4ec;
-      --text:#111318; --muted:#6b7280; --green:#22c76a; --red:#ef4444; --amber:#f59e0b;
-      --shadow:0 18px 45px rgba(18,24,38,.10);
-      --r:24px;
-      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter",Segoe UI,Roboto,Arial,sans-serif;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text);font-weight:750;padding:env(safe-area-inset-top) 14px calc(86px + env(safe-area-inset-bottom));}
-    .app{max-width:430px;margin:0 auto}
-    .top{display:flex;align-items:center;gap:14px;padding:18px 0 14px}
-    .logo,.gear{width:62px;height:62px;border:1.5px solid var(--line);border-radius:22px;background:#fff;display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.04)}
-    .logo svg{width:34px}
-    h1{font-size:34px;line-height:.95;margin:0;letter-spacing:-1.6px}
-    .ver{font-size:15px;color:var(--muted);margin-top:8px}
-    .gear{margin-left:auto;border-radius:50%;font-size:26px}
-    .panel,.coin{background:rgba(255,255,255,.82);border:1.5px solid var(--line);border-radius:28px;box-shadow:var(--shadow);padding:18px;margin:10px 0}
-    .tabs3,.grid2{display:grid;gap:12px}
-    .tabs3{grid-template-columns:1fr 1fr 1fr}
-    .pill,.btn,.select,.mini,.metric,.position-row{
-      border:1.5px solid var(--line);background:var(--soft);border-radius:22px;padding:16px 14px;min-height:58px;
-    }
-    .pill{text-align:center;font-size:19px}
-    .pill.active{background:#eafaf1;border-color:#7cdaa6;color:var(--green)}
-    .grid2{grid-template-columns:1fr 1fr;margin-top:18px}
-    label{display:block;color:var(--muted);font-size:16px;margin:0 0 8px 4px}
-    select,input{width:100%;border:0;background:transparent;font:inherit;color:var(--text);outline:0}
-    .btn{font-size:22px;text-align:center;background:linear-gradient(#f8f9fb,#e7ebf1)}
-    .btn.secondary{background:#f8f9fb}
-    .stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-    .stat{border:1.5px solid var(--line);background:#f4f6fa;border-radius:20px;padding:14px}
-    .stat small{display:block;color:var(--muted);font-size:14px;margin-bottom:8px}
-    .stat b{font-size:31px;line-height:1}
-    .source{font-size:16px;line-height:1.4;color:var(--muted);margin-top:14px;font-weight:700}
-    .coin{position:relative;overflow:hidden}
-    .coin-head{display:grid;grid-template-columns:58px 1fr auto auto;gap:12px;align-items:start}
-    .icon{width:58px;height:58px;border:1.5px solid var(--line);border-radius:20px;background:#fff;object-fit:cover}
-    .name{font-size:24px;letter-spacing:-.6px}
-    .sub{color:var(--muted);font-size:16px;margin-top:3px}
-    .score{font-size:38px;color:var(--green);line-height:1}
-    .add{width:42px;height:42px;border:1.5px solid var(--line);border-radius:50%;display:grid;place-items:center;background:#f6f7fb;font-size:28px}
-    .trend{width:42px;height:42px;border:1.5px solid var(--line);border-radius:14px;display:grid;place-items:center;background:#f6f7fb;font-size:26px}
-    .trend.up{color:var(--green);font-weight:1000}
-    .trend.down{color:var(--red);font-weight:1000}
-    .trend.flat{color:var(--muted)}
-    .chips{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}
-    .chip{border:1.5px solid var(--line);background:#f8f9fb;border-radius:16px;padding:8px 10px;font-size:14px}
-    .chip.green{color:var(--green)}
-    .chip.red{color:var(--red)}
-    .details{display:none;margin-top:12px}
-    .coin.open .details{display:block}
-    .metrics{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .metric{min-height:106px}
-    .metric small{display:block;color:var(--muted);font-size:15px;margin-bottom:9px}
-    .metric b{display:block;font-size:23px;line-height:1.05;word-break:break-word}
-    .metric a,.metric button{margin-top:8px;display:inline-block;border:1.5px solid var(--line);border-radius:16px;padding:7px 12px;background:#fff;color:#111;text-decoration:none;font:inherit;font-size:14px}
-    .greenText{color:var(--green)!important}.redText{color:var(--red)!important}.amberText{color:var(--amber)!important}
-    .posbox{margin-top:12px;border:1.5px solid var(--line);border-radius:22px;padding:14px;background:#fff}
-    .posgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .posgrid input{background:#f4f6fa;border:1.5px solid var(--line);border-radius:16px;padding:12px;font-size:16px}
-    .savepos{margin-top:10px;width:100%;border:0;border-radius:18px;padding:13px;background:#111;color:#fff;font:inherit}
-    .position-row{display:flex;align-items:center;gap:8px;margin-top:10px;padding:10px 12px;min-height:auto;font-size:14px}
-    .position-row span{flex:1}
-    .position-row .x{border:0;background:#fff;border-radius:50%;width:24px;height:24px;font-size:18px;line-height:24px;color:var(--red);font-weight:1000}
-    .upBtn{
-      position:fixed;right:calc(18px + env(safe-area-inset-right));bottom:calc(92px + env(safe-area-inset-bottom));
-      width:48px;height:48px;border:1.5px solid var(--line);border-radius:50%;
-      background:rgba(255,255,255,.94);box-shadow:0 12px 28px rgba(18,24,38,.14);
-      display:grid;place-items:center;font-size:24px;font-weight:1000;color:#111;z-index:6;
-      opacity:0;pointer-events:none;transform:translateY(10px);transition:.18s ease;
-    }
-    .upBtn.show{opacity:1;pointer-events:auto;transform:translateY(0)}
-    .upBtn:active{transform:translateY(0) scale(.96)}
-    .bottom{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));width:min(400px,calc(100vw - 28px));background:rgba(255,255,255,.93);border:1.5px solid var(--line);border-radius:28px;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr 1fr 1fr;padding:8px;z-index:5}
-    .bottom button{border:0;background:transparent;border-radius:22px;padding:16px 6px;font:inherit;color:var(--muted)}
-    .bottom button.active{background:#f1f2f5;color:#111}
-
-    button{color:var(--text);-webkit-tap-highlight-color:transparent}
-    .top{gap:12px;padding:14px 0 12px}
-    .logo,.gear{width:58px;height:58px;border-radius:20px;flex:0 0 auto}
-    h1{font-size:29px;line-height:1.02;letter-spacing:-1.3px;white-space:normal}
-    .ver{font-size:14px;margin-top:6px}
-    .panel,.coin{border-radius:26px;padding:16px;margin:10px 0}
-    .tabs3{gap:10px}
-    .pill{font-size:18px;min-height:54px;padding:12px 10px;color:var(--text)}
-    .pill.active{color:var(--green)}
-    .select,.btn{min-height:54px;padding:13px 13px}
-    .btn{font-size:20px;color:var(--text)}
-    .stat b{font-size:29px}
-    .coin{padding:16px 16px 18px}
-    .coin-head{grid-template-columns:58px 1fr 44px 58px;gap:10px;padding-right:42px}
-    .name{font-size:22px}
-    .sub{font-size:15px;line-height:1.25}
-    .score{font-size:36px}
-    .add{position:absolute;top:18px;right:16px;width:40px;height:40px;font-size:26px;color:var(--text)}
-    .trend{width:40px;height:40px}
-    .chips{gap:8px;margin:12px 0 0}
-    .chip{font-size:14px;padding:7px 10px}
-    .metric{min-height:96px;padding:14px}
-    .metric small{font-size:14px}
-    .metric b{font-size:22px}
-    .sourceCard{border:1.5px solid var(--line);background:#f4f6fa;border-radius:20px;padding:14px;margin-top:12px}
-    .sourceCard b{display:block;font-size:19px;margin-bottom:6px}
-    .sourceCard span{display:block;color:var(--muted);font-size:15px;line-height:1.35}
-
-    .hidden{display:none}
-    .err{color:var(--red);font-size:14px;margin-top:10px}
-  </style>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="app">
-  <header class="top">
-    <div class="logo"><svg viewBox="0 0 64 64" fill="none"><path d="M10 23l16 10 7-11 21 14" stroke="#22c76a" stroke-width="9" stroke-linejoin="round"/></svg></div>
-    <div><h1>Lowcap Radar AI</h1><div class="ver">v7.6.4 · GitHub Ready</div></div>
-    <button class="gear" onclick="showTab('sources')">•</button>
+  <header class="header">
+    <div class="logo">⌁</div>
+    <div class="brand">
+      <div class="title">Lowcap Radar AI</div>
+      <div class="subtitle">v7.6 · Clean Skeleton</div>
+    </div>
+    <button id="themeBtn" class="themeBtn" type="button" aria-label="Theme">●</button>
   </header>
 
-  <section id="radar">
-    <div class="panel">
-      <div class="tabs3">
-        <button class="pill cap" data-cap="100">Top 100</button>
-        <button class="pill cap" data-cap="500">Top 500</button>
-        <button class="pill cap active" data-cap="2000">✓ Top 2000</button>
+  <section id="radarPage" class="page">
+    <div class="panel controlsPanel">
+      <div class="topFilters">
+        <button class="topChip" type="button" data-top="100">Top 100</button>
+        <button class="topChip" type="button" data-top="500">Top 500</button>
+        <button class="topChip" type="button" data-top="2000">Top 2000</button>
       </div>
 
-      <div class="grid2">
-        <div><label>Сектор</label><div class="select"><select id="sector"><option value="all">AUTO / все</option><option value="AI">AI</option><option value="RWA">RWA</option><option value="DePIN">DePIN</option><option value="GameFi">GameFi</option><option value="Meme">Meme</option></select></div></div>
-        <div><label>Сети</label><div class="select"><select id="network"><option value="all">Все сети</option><option value="ethereum">Ethereum</option><option value="solana">Solana</option><option value="base">Base</option><option value="bsc">BNB Chain</option><option value="polygon">Polygon</option><option value="arbitrum">Arbitrum</option><option value="optimism">Optimism</option></select></div></div>
-        <div><label>Риск</label><div class="select"><select id="risk"><option value="low">Низкий</option><option value="mid">Средний</option><option value="high">Высокий</option></select></div></div>
-        <div><label>Цена монеты</label><div class="select"><select id="price"><option value="1">до $1</option><option value="10">до $10</option><option value="1000000">любая</option></select></div></div>
+      <div class="formGrid">
+        <div class="fieldBlock">
+          <div class="fieldLabel">Сектор</div>
+          <button id="narrativeBox" class="fieldButton" type="button">AUTO / все</button>
+        </div>
+        <div class="fieldBlock">
+          <div class="fieldLabel">Сети</div>
+          <button id="chainBox" class="fieldButton" type="button">Любая</button>
+        </div>
+        <div class="fieldBlock">
+          <div class="fieldLabel">Риск</div>
+          <button id="riskBox" class="fieldButton" type="button">Средний</button>
+        </div>
+        <div class="fieldBlock">
+          <div class="fieldLabel">Цена монеты</div>
+          <select id="budget" class="fieldSelect">
+            <option value="any">любая</option>
+            <option value="0.01">до $0.01</option>
+            <option value="0.1">до $0.10</option>
+            <option value="1">до $1</option>
+            <option value="5">до $5</option>
+            <option value="10">до $10</option>
+          </select>
+        </div>
       </div>
 
-      <div class="grid2">
-        <button class="btn" onclick="runSearch()">Начать поиск</button>
-        <button class="btn secondary" onclick="resetFilters()">Сбросить</button>
+      <div class="actionGrid">
+        <button id="scanBtn" class="primaryBtn" type="button">Начать поиск</button>
+        <button id="resetBtn" class="secondaryBtn" type="button">Сбросить</button>
       </div>
 
-      <div class="stats">
-        <div class="stat"><small>Найдено</small><b id="found">0</b></div>
-        <div class="stat"><small>Средний score</small><b id="avg">0</b></div>
+      <div class="statsGrid">
+        <div class="statBox"><div class="statLabel">Найдено</div><div id="found" class="statValue">0</div></div>
+        <div class="statBox"><div class="statLabel">Средний score</div><div id="avg" class="statValue">—</div></div>
       </div>
-      <div class="source" id="status">Источники: CoinGecko + DexScreener. Данные не подменяются заглушками.</div>
-      <div class="err" id="err"></div>
+
+      <div id="note" class="note">Выбери параметры и нажми «Начать поиск».</div>
     </div>
 
-    <div id="list"></div>
-  </section>
-
-  <section id="fav" class="hidden">
-    <div class="panel">
-      <div class="stats">
-        <div class="stat"><small>В избранном</small><b id="favCount">0</b></div>
-        <div class="stat"><small>Позиций</small><b id="posCount">0</b></div>
-      </div>
+    <div id="results" class="coinList">
+      <div class="empty">Радар готов к поиску.</div>
     </div>
-    <div id="favList"></div>
   </section>
 
-  <section id="sources" class="hidden">
+  <section id="watchPage" class="page hidden">
     <div class="panel">
-      <label>CoinGecko API key</label><div class="select"><input id="cgKey" placeholder="необязательно"></div>
-      <label style="margin-top:12px">CoinMarketCap API key</label><div class="select"><input id="cmcKey" placeholder="для будущего прокси/API"></div>
-      <div class="grid2">
-        <button class="btn" style="color:var(--green)" onclick="saveKeys()">Сохранить</button>
-        <button class="btn secondary" style="color:var(--red)" onclick="clearKeys()">Удалить ключи</button>
+      <h1>Избранное</h1>
+      <div id="watch" class="coinList"></div>
+    </div>
+  </section>
+
+  <section id="sourcePage" class="page hidden">
+    <div class="panel">
+      <h1>Источники</h1>
+      <div id="backendStatus" class="explain">Проверяю backend...</div>
+
+      <div class="explain">
+        <b>Источники данных:</b><br>
+        • DexScreener — пары, сеть, DEX, ликвидность, объём, возраст пары, цена.<br>
+        • CoinGecko — цена, капитализация, логотипы, категории, market data.<br>
+        • CoinMarketCap — listings, ranking, market data, premium data при своём ключе.<br>
+        • GeckoTerminal / DefiLlama / Birdeye / DEXTools / CryptoRank / Messari — подготовлены для расширенного анализа.
       </div>
-      <div class="source">Ключи хранятся только в localStorage телефона/браузера.</div>
-      <div class="sourceCard"><b>CoinGecko</b><span>Основной источник: цена, капитализация, объём, ранг по капитализации и изменение цены 24ч.</span></div>
-      <div class="sourceCard"><b>DexScreener</b><span>Используется для быстрой проверки токена, ликвидности, пары и графика через ссылки в карточке.</span></div>
-      <div class="sourceCard"><b>CoinMarketCap</b><span>Ключ оставлен под следующий этап: проверка ранга, листингов и дополнительной сверки через API/прокси.</span></div>
+
+      <div class="explain">
+        <b>API keys</b><br>
+        Ключи сохраняются только в браузере на этом устройстве.
+        <div class="keyGrid">
+          <input id="key_cmc" placeholder="CoinMarketCap API Key">
+          <input id="key_cg" placeholder="CoinGecko API Key">
+          <input id="key_birdeye" placeholder="Birdeye API Key">
+          <input id="key_messari" placeholder="Messari API Key">
+        </div>
+        <div class="sourceButtons">
+          <button id="saveKeysBtn" class="saveKeyBtn" type="button">Сохранить ключи</button>
+          <button id="clearKeysBtn" class="clearKeyBtn" type="button">Очистить</button>
+        </div>
+        <div id="keyStatus" class="mutedSmall">Ключи не загружены.</div>
+      </div>
     </div>
   </section>
 </div>
 
-<button id="upBtn" class="upBtn" onclick="scrollTopFast()" aria-label="Наверх">↑</button>
+<div id="modalBackdrop" class="modalBackdrop"></div>
 
-<nav class="bottom">
-  <button id="tabRadar" class="active" onclick="showTab('radar')">Радар</button>
-  <button id="tabFav" onclick="showTab('fav')">Избранное</button>
-  <button id="tabSources" onclick="showTab('sources')">Источники</button>
+<div id="narrativeModal" class="bottomSheet">
+  <div class="sheetTitle">Выбери сектор</div>
+  <label><input type="checkbox" class="narrativeCheck" value="auto"> AUTO / все</label>
+  <label><input type="checkbox" class="narrativeCheck" value="ai"> AI</label>
+  <label><input type="checkbox" class="narrativeCheck" value="rwa"> RWA</label>
+  <label><input type="checkbox" class="narrativeCheck" value="gaming"> GameFi</label>
+  <label><input type="checkbox" class="narrativeCheck" value="depin"> DePIN</label>
+  <label><input type="checkbox" class="narrativeCheck" value="infra"> Infrastructure</label>
+  <label><input type="checkbox" class="narrativeCheck" value="defi"> DeFi</label>
+  <label><input type="checkbox" class="narrativeCheck" value="l2"> L2</label>
+  <label><input type="checkbox" class="narrativeCheck" value="meme"> Meme</label>
+</div>
+
+<div id="chainModal" class="bottomSheet">
+  <div class="sheetTitle">Выбери сети</div>
+  <label><input type="checkbox" class="chainCheck" value="ethereum"> Ethereum</label>
+  <label><input type="checkbox" class="chainCheck" value="solana"> Solana</label>
+  <label><input type="checkbox" class="chainCheck" value="base"> Base</label>
+  <label><input type="checkbox" class="chainCheck" value="bsc"> BSC</label>
+  <label><input type="checkbox" class="chainCheck" value="arbitrum"> Arbitrum</label>
+  <label><input type="checkbox" class="chainCheck" value="polygon"> Polygon</label>
+  <label><input type="checkbox" class="chainCheck" value="avalanche"> Avalanche</label>
+  <label><input type="checkbox" class="chainCheck" value="optimism"> Optimism</label>
+</div>
+
+<div id="riskModal" class="bottomSheet">
+  <div class="sheetTitle">Риск</div>
+  <button class="riskOption" type="button" data-risk="conservative">Низкий</button>
+  <button class="riskOption" type="button" data-risk="balanced">Средний</button>
+  <button class="riskOption" type="button" data-risk="aggressive">Высокий</button>
+</div>
+
+<div id="toast" class="toast">Готово</div>
+
+<nav class="tabs">
+  <button id="tabRadar" class="tab active" type="button">Радар</button>
+  <button id="tabWatch" class="tab" type="button">Избранное</button>
+  <button id="tabSource" class="tab" type="button">Источники</button>
 </nav>
 
-<script>
-const $ = s => document.querySelector(s);
-let state = {
-  cap: +(localStorage.lr_cap || 2000),
-  coins: [],
-  fav: JSON.parse(localStorage.lr_fav || "[]"),
-  positions: JSON.parse(localStorage.lr_positions || "{}")
-};
-
-document.querySelectorAll(".cap").forEach(b=>{
-  b.onclick=()=>{
-    const nextCap = +b.dataset.cap;
-    if (state.cap === nextCap) {
-      syncCaps();
-      return;
-    }
-    state.cap = nextCap;
-    localStorage.lr_cap = state.cap;
-    document.querySelectorAll(".cap").forEach(x => x.classList.remove("active"));
-    b.classList.add("active");
-    syncCaps();
-    runSearch();
-  };
-});
-function syncCaps(){
-  document.querySelectorAll(".cap").forEach(b=>{
-    const on=+b.dataset.cap===state.cap; b.classList.toggle("active",on);
-    b.textContent=(on?"✓ ":"")+"Top "+b.dataset.cap;
-  });
-}
-function fmt(n,p=1){ if(n==null||Number.isNaN(+n)) return "нет данных"; n=+n; if(Math.abs(n)>=1e9)return "$"+(n/1e9).toFixed(p)+"B"; if(Math.abs(n)>=1e6)return "$"+(n/1e6).toFixed(p)+"M"; if(Math.abs(n)>=1e3)return "$"+(n/1e3).toFixed(0)+"K"; return "$"+Number(n).toPrecision(3).replace(/\.0+$/,'');}
-function pct(n){ if(n==null||Number.isNaN(+n))return "нет данных"; return (+n>=0?"+":"")+(+n).toFixed(1)+"%"; }
-function trendClass(v){ return v>0?'up':v<0?'down':'flat'; }
-function trendIcon(v){ return v>0?'↗':v<0?'↘':'→'; }
-function riskScore(c){
-  let r=0;
-  if((c.market_cap||0)<5e6) r+=2;
-  if((c.total_volume||0)<100000) r+=2;
-  if((c.price_change_percentage_24h||0)<-12) r+=1;
-  if(!c.image) r+=1;
-  return r;
-}
-function score(c){
-  let s=55;
-  const mc=c.market_cap||0, vol=c.total_volume||0, ch=c.price_change_percentage_24h||0;
-  if(mc>10e6 && mc<300e6) s+=12;
-  if(vol>300000) s+=10;
-  if(vol>1000000) s+=6;
-  if(ch>-8 && ch<25) s+=8;
-  if(c.market_cap_rank && c.market_cap_rank<=state.cap) s+=8;
-  s-=riskScore(c)*5;
-  return Math.max(1,Math.min(99,Math.round(s)));
-}
-function sectorGuess(c){
-  const txt=((c.name||"")+" "+(c.symbol||"")).toLowerCase();
-  if(/ai|gpt|syn|agent|gen/.test(txt)) return "AI";
-  if(/real|rwa|form|credit|yield/.test(txt)) return "RWA";
-  if(/game|play|guild/.test(txt)) return "GameFi";
-  if(/pepe|dog|cat|inu|meme/.test(txt)) return "Meme";
-  return "AUTO";
-}
-function chainGuess(c){
-  const txt=((c.name||"")+" "+(c.symbol||"")).toLowerCase();
-  if(/sol/.test(txt)) return "solana";
-  if(/base/.test(txt)) return "base";
-  if(/bnb|bsc/.test(txt)) return "bsc";
-  return "ethereum";
-}
-async function fetchCG(){
-  const key=localStorage.lr_cg || "";
-  const headers=key?{"x-cg-demo-api-key":key}:{};
-  const url=`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_asc&per_page=250&page=1&sparkline=false&price_change_percentage=24h`;
-  const r=await fetch(url,{headers});
-  if(!r.ok) throw new Error("CoinGecko недоступен: "+r.status);
-  return await r.json();
-}
-async function runSearch(){
-  $("#err").textContent="";
-  $("#status").textContent="Загрузка реальных данных CoinGecko…";
-  try{
-    let data=await fetchCG();
-    const sector=$("#sector").value, network=$("#network").value, price=+$("#price").value, risk=$("#risk").value;
-    let arr=data
-      .filter(c=>(!c.market_cap_rank || c.market_cap_rank<=state.cap))
-      .filter(c=>(c.current_price||0)<=price)
-      .map(c=>({...c, sector:sectorGuess(c), chain:chainGuess(c)}));
-    if(sector!=="all") arr=arr.filter(c=>c.sector===sector);
-    if(network!=="all") arr=arr.filter(c=>c.chain===network);
-    if(risk==="low") arr=arr.filter(c=>riskScore(c)<=2);
-    if(risk==="mid") arr=arr.filter(c=>riskScore(c)<=4);
-    arr=arr.map(c=>({...c, score:score(c), risks:riskScore(c)})).sort((a,b)=>b.score-a.score).slice(0,40);
-    state.coins=arr;
-    localStorage.lr_cache = JSON.stringify(arr);
-    $("#found").textContent=arr.length;
-    $("#avg").textContent=arr.length?Math.round(arr.reduce((a,c)=>a+c.score,0)/arr.length):0;
-    $("#status").textContent=`Обработано кандидатов: ${data.length}. Источники: CoinGecko. DexScreener ссылки доступны в карточках.`;
-    renderList();
-  }catch(e){
-    $("#err").textContent=e.message;
-    $("#status").textContent="Данные не загружены. Заглушки не показаны.";
-  }
-}
-function resetFilters(){
-  $("#sector").value="all"; $("#network").value="all"; $("#risk").value="low"; $("#price").value="1";
-  state.cap=2000; localStorage.lr_cap=2000; syncCaps(); runSearch();
-}
-function card(c, favMode=false){
-  const change=c.price_change_percentage_24h;
-  const pos=state.positions[c.id];
-  const posHtml=pos?positionHtml(c,pos):"";
-  const isFav=state.fav.includes(c.id);
-  return `<article class="coin" data-id="${c.id}">
-    <div class="coin-head" onclick="toggleOpen(event,'${c.id}')">
-      <img class="icon" src="${c.image||''}" onerror="this.style.display='none'">
-      <div><div class="name">${c.name}</div><div class="sub">${(c.symbol||'').toUpperCase()} · CoinGecko · ранг #${c.market_cap_rank||'—'}</div><div class="sub">${change>=0?'восходящий':'нисходящий'}</div></div>
-      <div class="trend ${trendClass(change)}">${trendIcon(change)}</div>
-      <div class="score">${c.score}</div>
-    </div>
-    <button class="add" onclick="${isFav?'removeFav':'addFav'}('${c.id}')">${isFav?'−':'+'}</button>
-    <div class="chips">
-      <span class="chip green">Риски: ${c.risks}</span><span class="chip">${c.chain}</span><span class="chip">${c.sector}</span>
-      <span class="chip">Ранг #${c.market_cap_rank||'—'}</span>
-      <span class="chip ${change>=0?'greenText':'redText'}">Цена 24ч ${pct(change)}</span>
-    </div>
-    <div class="details">
-      <div class="metrics">
-        ${metric("Капитализация",fmt(c.market_cap),"проверить CG",`https://www.coingecko.com/en/coins/${c.id}`)}
-        ${metric("Место по капитализации","#"+(c.market_cap_rank||"—"),"проверить CG",`https://www.coingecko.com/en/coins/${c.id}`)}
-        ${metric("Цена монеты",fmt(c.current_price),"проверить CG",`https://www.coingecko.com/en/coins/${c.id}`)}
-        ${metric("Цена 24ч",`<span class="${change>=0?'greenText':'redText'}">${pct(change)}</span>`,"проверить CG",`https://www.coingecko.com/en/coins/${c.id}`)}
-        ${metric("Объём 24ч",fmt(c.total_volume),"проверить CG",`https://www.coingecko.com/en/coins/${c.id}`)}
-        ${metric("Ликвидность","нет данных","проверить Dex",`https://dexscreener.com/search?q=${encodeURIComponent(c.symbol||c.name)}`)}
-      </div>
-      <div class="posbox">
-        <label>Моя позиция</label>
-        <div class="posgrid">
-          <input id="amt_${c.id}" inputmode="decimal" placeholder="$ сумма" value="${pos?.amount||''}">
-          <input id="buy_${c.id}" inputmode="decimal" placeholder="цена входа" value="${pos?.buy||''}">
-          <input id="target_${c.id}" inputmode="decimal" placeholder="цель" value="${pos?.target||''}">
-          <input value="${fmt(c.current_price)} сейчас" readonly>
-        </div>
-        <button class="savepos" onclick="savePosition('${c.id}')">Сохранить позицию</button>
-        <div id="pos_${c.id}">${posHtml}</div>
-      </div>
-    </div>
-  </article>`;
-}
-function metric(t,v,btn,url){ return `<div class="metric"><small>${t}</small><b>${v}</b><a target="_blank" href="${url}">${btn}</a></div>` }
-function positionHtml(c,p){
-  const cur=+c.current_price, buy=+p.buy, target=+p.target, amount=+p.amount;
-  const pnl=buy?((cur-buy)/buy*100):0;
-  const toTarget=(target&&cur)?((target-cur)/cur*100):0;
-  return `<div class="position-row">
-    <span>$${amount||0} · вход ${buy||"—"} · P/L <b class="${pnl>=0?'greenText':'redText'}">${pct(pnl)}</b> · цель ${target||"—"} ${target?`· до цели ${pct(toTarget)}`:""}</span>
-    <button class="x" onclick="deletePosition('${c.id}')">×</button>
-  </div>`;
-}
-function renderList(){ $("#list").innerHTML=state.coins.map(c=>card(c)).join(""); renderFav(); }
-function toggleOpen(e,id){ if(e.target.closest('button,a,input')) return; document.querySelector(`[data-id="${id}"]`)?.classList.toggle("open"); }
-function addFav(id){ if(!state.fav.includes(id)) state.fav.push(id); localStorage.lr_fav=JSON.stringify(state.fav); renderList(); renderFav(); }
-function removeFav(id){ state.fav=state.fav.filter(x=>x!==id); localStorage.lr_fav=JSON.stringify(state.fav); renderList(); renderFav(); }
-function savePosition(id){
-  const a=$("#amt_"+CSS.escape(id))?.value, b=$("#buy_"+CSS.escape(id))?.value, t=$("#target_"+CSS.escape(id))?.value;
-  state.positions[id]={amount:a,buy:b,target:t,ts:Date.now()};
-  localStorage.lr_positions=JSON.stringify(state.positions);
-  const c=state.coins.find(x=>x.id===id) || JSON.parse(localStorage.lr_cache||"[]").find(x=>x.id===id);
-  if(c) $("#pos_"+CSS.escape(id)).innerHTML=positionHtml(c,state.positions[id]);
-  renderFav();
-}
-function deletePosition(id){ delete state.positions[id]; localStorage.lr_positions=JSON.stringify(state.positions); renderList(); }
-function renderFav(){
-  const cached = JSON.parse(localStorage.lr_cache || "[]");
-  const all=[...state.coins, ...cached];
-  const unique = [];
-  const seen = new Set();
-  all.forEach(c => { if(c && c.id && !seen.has(c.id)){ seen.add(c.id); unique.push(c); } });
-  const saved=state.fav.map(id=>unique.find(c=>c.id===id)).filter(Boolean);
-  $("#favCount").textContent=state.fav.length; $("#posCount").textContent=Object.keys(state.positions).length;
-  $("#favList").innerHTML=saved.length?saved.map(c=>card(c,true)).join(""):`<div class="panel source">Пока пусто. Добавь монеты через “+” на радаре.</div>`;
-}
-function showTab(id){
-  ["radar","fav","sources"].forEach(x=>$("#"+x).classList.toggle("hidden",x!==id));
-  $("#tabRadar").classList.toggle("active",id==="radar");
-  $("#tabFav").classList.toggle("active",id==="fav");
-  $("#tabSources").classList.toggle("active",id==="sources");
-  if(id==="fav") renderFav();
-}
-function saveKeys(){ localStorage.lr_cg=$("#cgKey").value.trim(); localStorage.lr_cmc=$("#cmcKey").value.trim(); alert("Ключи сохранены"); }
-function clearKeys(){ localStorage.removeItem("lr_cg"); localStorage.removeItem("lr_cmc"); $("#cgKey").value=""; $("#cmcKey").value=""; alert("Ключи удалены"); }
-$("#cgKey").value=localStorage.lr_cg||""; $("#cmcKey").value=localStorage.lr_cmc||"";
-syncCaps(); runSearch();
-function scrollTopFast(){
-  window.scrollTo({top:0, behavior:"smooth"});
-}
-window.addEventListener("scroll", ()=>{
-  const b = $("#upBtn");
-  if (!b) return;
-  b.classList.toggle("show", window.scrollY > 420);
-}, {passive:true});
-if("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(()=>{});
-</script>
-</body></html>
+<script src="app.js"></script>
+</body>
+</html>

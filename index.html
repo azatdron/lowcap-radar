@@ -71,15 +71,6 @@
     .position-row{display:flex;align-items:center;gap:8px;margin-top:10px;padding:10px 12px;min-height:auto;font-size:14px}
     .position-row span{flex:1}
     .position-row .x{border:0;background:#fff;border-radius:50%;width:24px;height:24px;font-size:18px;line-height:24px;color:var(--red);font-weight:1000}
-    .upBtn{
-      position:fixed;right:calc(18px + env(safe-area-inset-right));bottom:calc(92px + env(safe-area-inset-bottom));
-      width:48px;height:48px;border:1.5px solid var(--line);border-radius:50%;
-      background:rgba(255,255,255,.94);box-shadow:0 12px 28px rgba(18,24,38,.14);
-      display:grid;place-items:center;font-size:24px;font-weight:1000;color:#111;z-index:6;
-      opacity:0;pointer-events:none;transform:translateY(10px);transition:.18s ease;
-    }
-    .upBtn.show{opacity:1;pointer-events:auto;transform:translateY(0)}
-    .upBtn:active{transform:translateY(0) scale(.96)}
     .bottom{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));width:min(400px,calc(100vw - 28px));background:rgba(255,255,255,.93);border:1.5px solid var(--line);border-radius:28px;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr 1fr 1fr;padding:8px;z-index:5}
     .bottom button{border:0;background:transparent;border-radius:22px;padding:16px 6px;font:inherit;color:var(--muted)}
     .bottom button.active{background:#f1f2f5;color:#111}
@@ -91,7 +82,7 @@
 <div class="app">
   <header class="top">
     <div class="logo"><svg viewBox="0 0 64 64" fill="none"><path d="M10 23l16 10 7-11 21 14" stroke="#22c76a" stroke-width="9" stroke-linejoin="round"/></svg></div>
-    <div><h1>Lowcap Radar AI</h1><div class="ver">v7.6.2 · Clean Skeleton</div></div>
+    <div><h1>Lowcap Radar AI</h1><div class="ver">v7.6.1 · Clean Skeleton</div></div>
     <button class="gear" onclick="showTab('sources')">•</button>
   </header>
 
@@ -149,8 +140,6 @@
   </section>
 </div>
 
-<button id="upBtn" class="upBtn" onclick="scrollTopFast()" aria-label="Наверх">↑</button>
-
 <nav class="bottom">
   <button id="tabRadar" class="active" onclick="showTab('radar')">Радар</button>
   <button id="tabFav" onclick="showTab('fav')">Избранное</button>
@@ -167,19 +156,7 @@ let state = {
 };
 
 document.querySelectorAll(".cap").forEach(b=>{
-  b.onclick=()=>{
-    const nextCap = +b.dataset.cap;
-    if (state.cap === nextCap) {
-      syncCaps();
-      return;
-    }
-    state.cap = nextCap;
-    localStorage.lr_cap = state.cap;
-    document.querySelectorAll(".cap").forEach(x => x.classList.remove("active"));
-    b.classList.add("active");
-    syncCaps();
-    runSearch();
-  };
+  b.onclick=()=>{ state.cap=+b.dataset.cap; localStorage.lr_cap=state.cap; syncCaps(); runSearch(); };
 });
 function syncCaps(){
   document.querySelectorAll(".cap").forEach(b=>{
@@ -343,14 +320,6 @@ function saveKeys(){ localStorage.lr_cg=$("#cgKey").value.trim(); localStorage.l
 function clearKeys(){ localStorage.removeItem("lr_cg"); localStorage.removeItem("lr_cmc"); $("#cgKey").value=""; $("#cmcKey").value=""; alert("Ключи удалены"); }
 $("#cgKey").value=localStorage.lr_cg||""; $("#cmcKey").value=localStorage.lr_cmc||"";
 syncCaps(); runSearch();
-function scrollTopFast(){
-  window.scrollTo({top:0, behavior:"smooth"});
-}
-window.addEventListener("scroll", ()=>{
-  const b = $("#upBtn");
-  if (!b) return;
-  b.classList.toggle("show", window.scrollY > 420);
-}, {passive:true});
 if("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(()=>{});
 </script>
 </body></html>

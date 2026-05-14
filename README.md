@@ -1,10 +1,3 @@
-# Lowcap Radar AI v7.4.2 — Compact / Risk / Narrative Fix
+# Lowcap Radar AI v7.5 — Discovery UI
 
-Исправлено поверх v7.4.1:
-- карточки в Радаре и Избранном реально свёрнуты по умолчанию;
-- полная аналитика открывается только по нажатию;
-- убран дублирующий выпадающий риск;
-- риск управляется верхними кнопками: Средний / Высокий / Низкий;
-- sector/narrative стал мультивыбором с галочками как сети;
-- подпись narrative компактная: RWA +5;
-- фиксированные высоты ячеек и ровная сетка.
+Top 100/500/2000, Risk cell, compact expandable cards, +/− actions, multi-select narrative/chains, reset clears results, API keys.

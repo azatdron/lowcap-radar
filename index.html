@@ -13,7 +13,7 @@
     <div class="logo">⌁</div>
     <div class="brand">
       <div class="title">Lowcap Radar AI</div>
-      <div class="subtitle">v7.4.2 · Compact Fix</div>
+      <div class="subtitle">v7.5 · Discovery UI</div>
     </div>
     <button id="themeBtn" class="theme" onclick="toggleTheme()">🌙</button>
   </header>
@@ -26,9 +26,9 @@
       </div>
 
       <div class="presets">
-        <div class="preset active" data-mode="balanced" onclick="setPreset('balanced',this)">Средний риск</div>
-        <div class="preset" data-mode="aggressive" onclick="setPreset('aggressive',this)">Высокий риск</div>
-        <div class="preset" data-mode="conservative" onclick="setPreset('conservative',this)">Низкий риск</div>
+        <div class="preset active" data-mode="balanced" data-top="100" onclick="setPreset('balanced',this)">Top 100</div>
+        <div class="preset" data-mode="aggressive" data-top="500" onclick="setPreset('aggressive',this)">Top 500</div>
+        <div class="preset" data-mode="conservative" data-top="2000" onclick="setPreset('conservative',this)">Top 2000</div>
       </div>
 
       <div class="controls">
@@ -66,7 +66,7 @@
 
         <div class="control">
           <div class="label">Риск</div>
-          <select id="risk">
+          <select id="risk" style="display:none">
             <option value="balanced">Сбалансированный</option>
             <option value="aggressive">Агрессивный</option>
             <option value="conservative">Осторожный</option>

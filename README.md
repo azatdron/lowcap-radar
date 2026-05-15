@@ -1,3 +1,3 @@
-# Lowcap Radar AI v7.6.4 — Layout Safe Fix
+# Lowcap Radar AI v7.6.5 — Card + Position + Theme Fix
 
-База: v7.6 Clean Skeleton. Исправлена структура фильтров, Top radio-style, rank badge и portfolio fix.
+База: v7.6.4 Layout Safe Fix. 24ч в compact-card, цена/кап/ликв второй ряд, зелёная кнопка позиции, theme toggle, Все сектора/Все сети.

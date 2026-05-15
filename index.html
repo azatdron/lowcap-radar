@@ -13,9 +13,9 @@
     <div class="logo">⌁</div>
     <div class="brand">
       <div class="title">Lowcap Radar AI</div>
-      <div class="subtitle">v7.6.4 · Layout Safe Fix</div>
+      <div class="subtitle">v7.6.5 · Card + Position Fix</div>
     </div>
-    <button id="themeBtn" class="themeBtn" type="button" aria-label="Theme">●</button>
+    <button id="themeBtn" class="themeBtn" type="button" aria-label="Theme">🌙</button>
   </header>
 
   <section id="radarPage" class="page">
@@ -34,11 +34,11 @@
       <div class="formGrid">
         <div class="fieldBlock">
           <div class="fieldLabel">Сектор</div>
-          <button id="narrativeBox" class="fieldButton" type="button">AUTO / все</button>
+          <button id="narrativeBox" class="fieldButton" type="button">Все сектора</button>
         </div>
         <div class="fieldBlock">
           <div class="fieldLabel">Сети</div>
-          <button id="chainBox" class="fieldButton" type="button">Любая</button>
+          <button id="chainBox" class="fieldButton" type="button">Все сети</button>
         </div>
         <div class="fieldBlock">
           <div class="fieldLabel">Риск</div>
@@ -113,7 +113,7 @@
 
 <div id="narrativeModal" class="bottomSheet">
   <div class="sheetTitle">Выбери сектор</div>
-  <label><input type="checkbox" class="narrativeCheck" value="auto"> AUTO / все</label>
+  <label><input type="checkbox" class="narrativeCheck" value="auto"> Все сектора</label>
   <label><input type="checkbox" class="narrativeCheck" value="ai"> AI</label>
   <label><input type="checkbox" class="narrativeCheck" value="rwa"> RWA</label>
   <label><input type="checkbox" class="narrativeCheck" value="gaming"> GameFi</label>
@@ -126,6 +126,7 @@
 
 <div id="chainModal" class="bottomSheet">
   <div class="sheetTitle">Выбери сети</div>
+  <label><input type="checkbox" class="chainCheck chainAll" value="auto"> Все сети</label>
   <label><input type="checkbox" class="chainCheck" value="ethereum"> Ethereum</label>
   <label><input type="checkbox" class="chainCheck" value="solana"> Solana</label>
   <label><input type="checkbox" class="chainCheck" value="base"> Base</label>

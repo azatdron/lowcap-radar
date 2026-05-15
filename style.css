@@ -136,3 +136,17 @@ body.light .tabs{background:rgba(255,255,255,.94)}
 .posDelete{width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:var(--btn);color:var(--muted);display:inline-grid;place-items:center;font-size:16px;font-weight:900;line-height:1}
 .saveKeyBtn{background:#22c55e!important;color:#fff!important}.clearKeyBtn{background:#ef4444!important;color:#fff!important}
 @media(max-width:430px){.topChip{font-size:14px!important;padding:0 6px!important}.formGrid,.actionGrid,.statsGrid{gap:10px!important}}
+
+/* v7.6.5 Card + Position + Theme Fix */
+.themeBtn{font-size:22px!important;display:grid!important;place-items:center!important}
+.compactFacts{display:flex!important;flex-wrap:nowrap!important;gap:7px!important;overflow:hidden!important;margin-top:9px!important}
+.compactFact{max-width:132px!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+.badge.changeUp,.compactFact.changeUp{color:var(--green)!important;border-color:rgba(34,197,94,.35)!important}
+.badge.changeDown,.compactFact.changeDown{color:var(--red)!important;border-color:rgba(239,68,68,.35)!important}
+.badge.changeFlat,.compactFact.changeFlat{color:var(--muted)!important}
+.savePosBtn{background:#22c55e!important;color:#fff!important;border:0!important;box-shadow:0 10px 22px rgba(34,197,94,.20)!important}
+.posSummary{display:flex;align-items:center;gap:7px;flex-wrap:wrap;color:var(--muted);font-size:13px;line-height:1.35;margin-top:7px}
+.pnlUp{color:var(--green)!important;font-weight:850}.pnlDown{color:var(--red)!important;font-weight:850}.pnlFlat{color:var(--muted)!important;font-weight:850}
+.posDelete{width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:var(--btn);color:var(--muted);display:inline-grid;place-items:center;font-size:16px;font-weight:900;line-height:1}
+.posDelete:hover{color:var(--red)}
+.bottomSheet label:first-of-type{font-weight:900}

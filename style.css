@@ -206,3 +206,70 @@ body.light .tabs{background:rgba(255,255,255,.94)}
 .pnlText .loss{color:var(--red);font-weight:950}
 .pnlText .flat{color:var(--muted);font-weight:950}
 .pnlMini{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:999px;padding:6px 9px;background:var(--btn);white-space:nowrap}
+
+/* v7.7.4 Compact PnL */
+#watchPage h2,
+.watchTitle{
+  font-size:34px!important;
+  line-height:1!important;
+  margin-top:0!important;
+  margin-bottom:10px!important;
+}
+.pnlBox{
+  position:sticky;
+  top:8px;
+  z-index:20;
+  width:100%;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.018));
+  border-radius:22px;
+  padding:12px 14px!important;
+  margin:0 0 12px!important;
+  box-shadow:0 10px 24px var(--shadow);
+  backdrop-filter:blur(14px);
+}
+body.light .pnlBox{
+  background:rgba(255,255,255,.86);
+}
+.pnlBox.profitGlow{
+  border-color:rgba(34,197,94,.32)!important;
+  box-shadow:0 10px 28px rgba(34,197,94,.11),0 10px 24px var(--shadow)!important;
+}
+.pnlBox.lossGlow{
+  border-color:rgba(239,68,68,.32)!important;
+  box-shadow:0 10px 28px rgba(239,68,68,.10),0 10px 24px var(--shadow)!important;
+}
+.pnlTitle{
+  display:none!important;
+}
+.pnlText{
+  display:block!important;
+  font-size:14px!important;
+  line-height:1.25!important;
+}
+.pnlMain{
+  font-size:24px;
+  line-height:1;
+  font-weight:950;
+  letter-spacing:-.02em;
+  margin-bottom:7px;
+}
+.pnlMain.profit{color:var(--green)}
+.pnlMain.loss{color:var(--red)}
+.pnlMain.flat{color:var(--muted)}
+.pnlSub{
+  color:var(--muted);
+  font-size:13px;
+  font-weight:800;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.pnlSub b{
+  color:var(--text);
+}
+@media(max-width:430px){
+  #watchPage h2,.watchTitle{font-size:30px!important}
+  .pnlMain{font-size:22px}
+  .pnlSub{font-size:12px}
+}

@@ -166,15 +166,19 @@ function calcPortfolioPnl(){
 }
 function renderPnlBox(){
   if(!window.pnlText)return;
+  const box=window.pnlBox;
   const p=calcPortfolioPnl();
+  if(box){box.classList.remove("profitGlow","lossGlow")}
   if(!p.count){
-    pnlText.innerHTML='<span class="muted">Позиции не добавлены.</span>';
+    pnlText.innerHTML='<div class="pnlMain flat">PnL • $0.00 (0.00%)</div><div class="pnlSub">Позиции не добавлены.</div>';
     return;
   }
   const cls=p.pnl>0?'profit':p.pnl<0?'loss':'flat';
+  if(box && p.pnl>0)box.classList.add("profitGlow");
+  if(box && p.pnl<0)box.classList.add("lossGlow");
   const arrow=p.pnl>0?'▲':p.pnl<0?'▼':'•';
   const sign=p.pnl>0?'+':'';
-  pnlText.innerHTML=`<span class="pnlMini muted">Позиций: ${p.count}</span><span class="pnlMini">Вложено: $${p.invested.toFixed(2)}</span><span class="pnlMini">Сейчас: $${p.current.toFixed(2)}</span><span class="pnlMini ${cls}">${arrow} ${sign}$${p.pnl.toFixed(2)} / ${sign}${p.pct.toFixed(2)}%</span>`;
+  pnlText.innerHTML=`<div class="pnlMain ${cls}">${arrow} ${sign}$${p.pnl.toFixed(2)} (${sign}${p.pct.toFixed(2)}%)</div><div class="pnlSub">Вложено <b>$${p.invested.toFixed(0)}</b> · Сейчас <b>$${p.current.toFixed(0)}</b> · <b>${p.count}</b> позиций</div>`;
 }
 
 function renderWatch(keepKey=openCoinKey){

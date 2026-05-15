@@ -179,3 +179,19 @@ body.light .tabs{background:rgba(255,255,255,.94)}
 .portfolioBox{scroll-margin-bottom:140px}
 .posSummary .pnlUp::before{content:""}
 .posSummary .pnlDown::before{content:""}
+
+/* v7.7.2 Rank + Links + Button Fix */
+.primaryBtn,
+.savePosBtn{
+  color:#fff!important;
+  text-shadow:0 1px 1px rgba(0,0,0,.20)!important;
+}
+.primaryBtn *,.savePosBtn *{color:#fff!important}
+.rankBadge.realRank{
+  color:var(--blue)!important;
+  border-color:rgba(96,165,250,.60)!important;
+}
+.rankBadge.noRank{
+  color:var(--muted)!important;
+  border-color:var(--line)!important;
+}

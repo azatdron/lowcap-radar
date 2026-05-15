@@ -306,3 +306,28 @@ button,select,input,a{pointer-events:auto!important;touch-action:manipulation}
 .langBtn{
   letter-spacing:.02em!important;
 }
+
+/* v7.7.11 Clean Tab Pages */
+#watchPage h1,
+#watchPage h2,
+#watchPage .pageTitle,
+#watchPage .sectionTitle,
+#watchPage .watchTitle,
+#sourcesPage h1,
+#sourcesPage h2,
+#sourcesPage .pageTitle,
+#sourcesPage .sectionTitle,
+#sourcesPage .sourcesTitle{
+  display:none!important;
+  height:0!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+}
+#watchPage .panel,
+#sourcesPage .panel{
+  margin-top:0!important;
+}
+#watchPage .pnlBox{
+  margin-top:0!important;
+}

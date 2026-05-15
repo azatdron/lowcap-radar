@@ -41,7 +41,6 @@ function deletePos(c){
   toast("Позиция удалена");
   renderWatch();
 }
-
 function proof(c,type){const ds=c.url||"",cg=`https://www.coingecko.com/en/search?query=${encodeURIComponent(c.name||c.symbol||"")}`,cmc=`https://coinmarketcap.com/search/?q=${encodeURIComponent(c.name||c.symbol||"")}`;if(["liquidity","volume","chain","age"].includes(type)&&ds)return`<a class="proofLink" target="_blank" href="${ds}">проверить Dex</a>`;if(["cap","price"].includes(type))return`<a class="proofLink" target="_blank" href="${cg}">проверить CG</a>`;return`<a class="proofLink" target="_blank" href="${cmc}">проверить CMC</a>`}
 function metric(label,value,link){return`<div class="metric"><div class="metricLabel">${label}</div><div class="metricValue">${value}</div>${link||""}</div>`}
 
@@ -104,12 +103,4 @@ document.addEventListener("DOMContentLoaded",()=>{
   tabRadar.onclick=()=>showPage("radar");tabWatch.onclick=()=>showPage("watch");tabSource.onclick=()=>showPage("source");
   saveKeysBtn.onclick=saveApiKeys;clearKeysBtn.onclick=clearApiKeys;
   updateChainLabel();updateNarrativeLabel();setRisk("balanced");renderWatch();loadApiKeys();checkBackend();
-});
-
-const v763ExpandDelegate=true;
-document.addEventListener("click",e=>{
-  const card=e.target.closest&&e.target.closest(".coin");
-  if(!card)return;
-  if(e.target.closest("a")||e.target.closest("button")||e.target.closest("input")||e.target.closest(".portfolioBox"))return;
-  card.classList.toggle("open");
 });

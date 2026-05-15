@@ -1,11 +1,3 @@
-# Lowcap Radar AI v7.6.3 — Stable Upgrade
+# Lowcap Radar AI v7.6.4 — Layout Safe Fix
 
-База: v7.6 Clean Skeleton.
-
-Добавлено точечно:
-- Найдено / Средний score возвращены наверх.
-- Top 100 / Top 500 / Top 2000 работают как radio-style: активен только один.
-- Карточки compact + expandable.
-- В карточке добавлен рыночный ранг: CMC/CG или Ранг #—.
-- Portfolio fix: сумма/цена входа не обнуляются, PnL зелёный/красный, маленький × удаляет позицию.
-- Сохранена стабильная структура v7.6.
+База: v7.6 Clean Skeleton. Исправлена структура фильтров, Top radio-style, rank badge и portfolio fix.

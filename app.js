@@ -1,5 +1,45 @@
 
 const $=id=>document.getElementById(id);
+
+const I18N={
+  ru:{
+    found:"Найдено",avgScore:"Средний score",sector:"Сектор",chains:"Сети",risk:"Риск",coinPrice:"Цена монеты",
+    startSearch:"Начать поиск",reset:"Сбросить",radar:"Радар",favorites:"Избранное",sources:"Источники",
+    allSectors:"Все сектора",allChains:"Все сети",medium:"Средний",low:"Низкий",high:"Высокий",
+    myPnl:"Мой PnL",positions:"позиций",invested:"Вложено",now:"Сейчас",noPositions:"Позиции не добавлены.",
+    addPosition:"Сохранить позицию",myPosition:"Моя позиция",positionNotAdded:tr("positionNotAdded"),
+    amount:"Сумма $",entry:"Цена входа",added:"Добавлено",removed:"Удалено",saved:"Позиция сохранена"
+  },
+  en:{
+    found:"Found",avgScore:"Avg score",sector:"Sector",chains:"Chains",risk:"Risk",coinPrice:"Coin price",
+    startSearch:"Start scan",reset:"Reset",radar:"Radar",favorites:"Favorites",sources:"Sources",
+    allSectors:"All sectors",allChains:"All chains",medium:"Medium",low:"Low",high:"High",
+    myPnl:"My PnL",positions:"positions",invested:"Invested",now:"Now",noPositions:"No positions added.",
+    addPosition:"Save position",myPosition:"My position",positionNotAdded:"position not added",
+    amount:"Amount $",entry:"Entry price",added:"Added",removed:"Removed",saved:"Position saved"
+  }
+};
+let currentLang=localStorage.getItem("lang") || ((navigator.language||"").toLowerCase().startsWith("ru")?"ru":"en");
+function tr(k){return (I18N[currentLang]&&I18N[currentLang][k])||I18N.ru[k]||k}
+function applyLang(){
+  document.documentElement.lang=currentLang;
+  if(window.langBtn)langBtn.textContent=currentLang.toUpperCase();
+  document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=tr(el.dataset.i18n)});
+  if(window.narrativeBox && (narrativeBox.textContent==="Все сектора"||narrativeBox.textContent==="All sectors")) narrativeBox.textContent=tr("allSectors");
+  if(window.chainBox && (chainBox.textContent==="Все сети"||chainBox.textContent==="All chains")) chainBox.textContent=tr("allChains");
+  if(window.riskBox){
+    const m={conservative:tr("low"),balanced:tr("medium"),aggressive:tr("high")};
+    riskBox.textContent=m[riskMode]||tr("medium");
+  }
+  renderPnlBox();
+}
+function toggleLang(){
+  currentLang=currentLang==="ru"?"en":"ru";
+  localStorage.setItem("lang",currentLang);
+  applyLang();
+  renderWatch(openCoinKey);
+}
+
 const PRO_MODE = localStorage.getItem("lowcap_pro")==="1";
 function isPro(){return PRO_MODE}
 
@@ -89,7 +129,7 @@ function savePosByKey(k){
   const entry=document.getElementById("entry_"+sid)?.value||c.current_price||0;
   localStorage.setItem("pos_"+k,JSON.stringify({amount:Number(amount),entry:Number(entry),ts:Date.now()}));
   openCoinKey=k;
-  toast("Позиция сохранена");
+  toast(tr("saved"));
   renderPnlBox();
   renderWatch(k);
   requestAnimationFrame(()=>{
@@ -111,8 +151,8 @@ function dedupe(arr){const m=new Map();for(const c of arr){const k=key(c),old=m.
 
 function watchItems(){try{return JSON.parse(localStorage.getItem("watch_tokens")||"[]")}catch(e){return[]}}
 function saveWatch(items){localStorage.setItem("watch_tokens",JSON.stringify(dedupe(items)));renderWatch()}
-function addWatch(c){const items=watchItems();if(!items.find(x=>key(x)===key(c))){items.unshift(c);saveWatch(items);toast("Добавлено")}else toast("Уже добавлено")}
-function removeWatch(c){saveWatch(watchItems().filter(x=>key(x)!==key(c)));toast("Удалено")}
+function addWatch(c){const items=watchItems();if(!items.find(x=>key(x)===key(c))){items.unshift(c);saveWatch(items);toast(tr("added"))}else toast("Уже добавлено")}
+function removeWatch(c){saveWatch(watchItems().filter(x=>key(x)!==key(c)));toast(tr("removed"))}
 function posKey(c){return"pos_"+key(c)}
 function getPos(c){try{return JSON.parse(localStorage.getItem(posKey(c))||"{}")}catch(e){return{}}}
 function portfolio(c){
@@ -129,13 +169,13 @@ function portfolio(c){
   const arrow=pnl>0?"▲":pnl<0?"▼":"•";
   const del=has?`<button class="posDelete" type="button" onclick="event.stopPropagation();deletePosByKey('${k}')">×</button>`:"";
   return`<div class="portfolioBox" onclick="event.stopPropagation()">
-    <b>Моя позиция</b>
-    <div class="posSummary">${has?`<span>Вложено: $${amount.toFixed(2)}</span><span>Сейчас: $${now.toFixed(2)}</span><span class="${cls}">${arrow} ${pnl.toFixed(1)}%</span>${del}`:"позиция не добавлена"}</div>
+    <b>${tr("myPosition")}</b>
+    <div class="posSummary">${has?`<span>Вложено: $${amount.toFixed(2)}</span><span>Сейчас: $${now.toFixed(2)}</span><span class="${cls}">${arrow} ${pnl.toFixed(1)}%</span>${del}`:tr("positionNotAdded")}</div>
     <div class="portfolioRow">
-      <input id="amt_${sid}" placeholder="Сумма $" value="${amount||""}" onclick="event.stopPropagation()">
-      <input id="entry_${sid}" placeholder="Цена входа" value="${entry||""}" onclick="event.stopPropagation()">
+      <input id="amt_${sid}" placeholder="${tr("amount")}" value="${amount||""}" onclick="event.stopPropagation()">
+      <input id="entry_${sid}" placeholder="${tr("entry")}" value="${entry||""}" onclick="event.stopPropagation()">
     </div>
-    <button class="smallBtn savePosBtn" type="button" onclick="event.stopPropagation();savePosByKey('${k}')">Сохранить позицию</button>
+    <button class="smallBtn savePosBtn" type="button" onclick="event.stopPropagation();savePosByKey('${k}')">${tr("addPosition")}</button>
   </div>`
 }
 function coinCard(c,watchMode=false){
@@ -168,17 +208,17 @@ function renderPnlBox(){
   if(!window.pnlText)return;
   const box=window.pnlBox;
   const p=calcPortfolioPnl();
-  if(box){box.classList.remove("profitGlow","lossGlow")}
+  if(box){box.classList.remove("profitGlow","lossGlow","livePulse")}
   if(!p.count){
-    pnlText.innerHTML='<div class="pnlMain flat">PnL • $0.00 (0.00%)</div><div class="pnlSub">Позиции не добавлены.</div>';
+    pnlText.innerHTML=`<div class="pnlMain flat">PnL • $0.00 (0.00%)</div><div class="pnlSub">${tr("noPositions")}</div>`;
     return;
   }
   const cls=p.pnl>0?'profit':p.pnl<0?'loss':'flat';
-  if(box && p.pnl>0)box.classList.add("profitGlow");
-  if(box && p.pnl<0)box.classList.add("lossGlow");
+  if(box && p.pnl>0)box.classList.add("profitGlow","livePulse");
+  if(box && p.pnl<0)box.classList.add("lossGlow","livePulse");
   const arrow=p.pnl>0?'▲':p.pnl<0?'▼':'•';
   const sign=p.pnl>0?'+':'';
-  pnlText.innerHTML=`<div class="pnlMain ${cls}">${arrow} ${sign}$${p.pnl.toFixed(2)} (${sign}${p.pct.toFixed(2)}%)</div><div class="pnlSub">Вложено <b>$${p.invested.toFixed(0)}</b> · Сейчас <b>$${p.current.toFixed(0)}</b> · <b>${p.count}</b> позиций</div>`;
+  pnlText.innerHTML=`<div class="pnlMain ${cls}">${arrow} ${sign}$${p.pnl.toFixed(2)} (${sign}${p.pct.toFixed(2)}%)</div><div class="pnlSub">${tr("invested")} <b>$${p.invested.toFixed(0)}</b> · ${tr("now")} <b>$${p.current.toFixed(0)}</b> · <b>${p.count}</b> ${tr("positions")}</div>`;
 }
 
 function renderWatch(keepKey=openCoinKey){
@@ -201,6 +241,8 @@ async function checkBackend(){try{const r=await fetch("/api/health",{cache:"no-s
 
 document.addEventListener("DOMContentLoaded",()=>{
   toastEl=$("toast");
+  if(window.langBtn)langBtn.onclick=toggleLang;
+  applyLang();
   themeBtn.onclick=()=>{document.body.classList.toggle("light");localStorage.setItem("theme",document.body.classList.contains("light")?"light":"dark");updateThemeIcon()};
   if(localStorage.getItem("theme")==="light")document.body.classList.add("light");updateThemeIcon();updateThemeIcon();
   narrativeBox.onclick=()=>openModal(narrativeModal);

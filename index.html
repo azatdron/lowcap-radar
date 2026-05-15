@@ -13,16 +13,17 @@
     <div class="logo">⌁</div>
     <div class="brand">
       <div class="title">Lowcap Radar AI</div>
-      <div class="subtitle">v7.7.4 · Compact PnL</div>
+      <div class="subtitle">v7.7.5 · Favorites + EN</div>
     </div>
-    <button id="themeBtn" class="themeBtn" type="button" aria-label="Theme">🌙</button>
+    <button id="langBtn" class="langBtn" type="button" aria-label="Language">RU</button>
+      <button id="themeBtn" class="themeBtn" type="button" aria-label="Theme">🌙</button>
   </header>
 
   <section id="radarPage" class="page">
     <div class="panel controlsPanel">
       <div class="statsGrid">
-        <div class="statBox"><div class="statLabel">Найдено</div><div id="found" class="statValue">0</div></div>
-        <div class="statBox"><div class="statLabel">Средний score</div><div id="avg" class="statValue">—</div></div>
+        <div class="statBox"><div class="statLabel" data-i18n="found">Найдено</div><div id="found" class="statValue">0</div></div>
+        <div class="statBox"><div class="statLabel" data-i18n="avgScore">Средний score</div><div id="avg" class="statValue">—</div></div>
       </div>
 
       <div class="topFilters">
@@ -33,19 +34,19 @@
 
       <div class="formGrid">
         <div class="fieldBlock">
-          <div class="fieldLabel">Сектор</div>
+          <div class="fieldLabel" data-i18n="sector">Сектор</div>
           <button id="narrativeBox" class="fieldButton" type="button">Все сектора</button>
         </div>
         <div class="fieldBlock">
-          <div class="fieldLabel">Сети</div>
+          <div class="fieldLabel" data-i18n="chains">Сети</div>
           <button id="chainBox" class="fieldButton" type="button">Все сети</button>
         </div>
         <div class="fieldBlock">
-          <div class="fieldLabel">Риск</div>
+          <div class="fieldLabel" data-i18n="risk">Риск</div>
           <button id="riskBox" class="fieldButton" type="button">Средний</button>
         </div>
         <div class="fieldBlock">
-          <div class="fieldLabel">Цена монеты</div>
+          <div class="fieldLabel" data-i18n="coinPrice">Цена монеты</div>
           <select id="budget" class="fieldSelect">
             <option value="any">любая</option>
             <option value="0.01">до $0.01</option>
@@ -58,8 +59,8 @@
       </div>
 
       <div class="actionGrid">
-        <button id="scanBtn" class="primaryBtn" type="button">Начать поиск</button>
-        <button id="resetBtn" class="secondaryBtn" type="button">Сбросить</button>
+        <button id="scanBtn" class="primaryBtn" type="button" data-i18n="startSearch">Начать поиск</button>
+        <button id="resetBtn" class="secondaryBtn" type="button" data-i18n="reset">Сбросить</button>
       </div>
 
       <div id="note" class="note">Выбери параметры и нажми «Начать поиск».</div>
@@ -72,7 +73,7 @@
 
   <section id="watchPage" class="page hidden">
     <div class="panel">
-      <h1>Избранное</h1>
+      <h1 data-i18n="favorites">Избранное</h1>
       <div id="pnlBox" class="pnlBox"><div class="pnlTitle">Мой PnL</div><div id="pnlText" class="pnlText">Позиции не добавлены.</div></div>
     <div id="watch" class="coinList"></div>
     </div>
@@ -80,7 +81,7 @@
 
   <section id="sourcePage" class="page hidden">
     <div class="panel">
-      <h1>Источники</h1>
+      <h1 data-i18n="sources">Источники</h1>
       <div id="backendStatus" class="explain">Проверяю backend...</div>
 
       <div class="explain">
@@ -145,7 +146,7 @@
 </div>
 
 <div id="riskModal" class="bottomSheet">
-  <div class="sheetTitle">Риск</div>
+  <div class="sheetTitle" data-i18n="risk">Риск</div>
   <button class="riskOption" type="button" data-risk="conservative">Низкий</button>
   <button class="riskOption" type="button" data-risk="balanced">Средний</button>
   <button class="riskOption" type="button" data-risk="aggressive">Высокий</button>
@@ -155,9 +156,9 @@
 <button id="scrollTopBtn" class="scrollTopBtn" type="button" aria-label="Наверх">↑</button>
 
 <nav class="tabs">
-  <button id="tabRadar" class="tab active" type="button">Радар</button>
-  <button id="tabWatch" class="tab" type="button">Избранное</button>
-  <button id="tabSource" class="tab" type="button">Источники</button>
+  <button id="tabRadar" class="tab active" type="button" data-i18n="radar">Радар</button>
+  <button id="tabWatch" class="tab" type="button" data-i18n="favorites">Избранное</button>
+  <button id="tabSource" class="tab" type="button" data-i18n="sources">Источники</button>
 </nav>
 
 <script src="app.js"></script>

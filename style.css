@@ -195,3 +195,14 @@ body.light .tabs{background:rgba(255,255,255,.94)}
   color:var(--muted)!important;
   border-color:var(--line)!important;
 }
+
+/* v7.7.3 PnL Dashboard */
+#watchPage h2,.watchTitle{margin-top:4px!important;margin-bottom:12px!important}
+.pnlBox{width:100%;border:1px solid var(--line);background:var(--card);border-radius:24px;padding:14px 16px;margin:0 0 14px;box-shadow:0 12px 26px var(--shadow)}
+.pnlTitle{font-size:13px;font-weight:900;color:var(--muted);margin-bottom:7px}
+.pnlText{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px;font-weight:800;color:var(--text);line-height:1.35}
+.pnlText .muted{color:var(--muted);font-weight:750}
+.pnlText .profit{color:var(--green);font-weight:950}
+.pnlText .loss{color:var(--red);font-weight:950}
+.pnlText .flat{color:var(--muted);font-weight:950}
+.pnlMini{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:999px;padding:6px 9px;background:var(--btn);white-space:nowrap}

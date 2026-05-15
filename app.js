@@ -74,6 +74,7 @@ function deletePosByKey(k){
   localStorage.removeItem("pos_"+k);
   openCoinKey=k;
   toast("Позиция удалена");
+  renderPnlBox();
   renderWatch(k);
   requestAnimationFrame(()=>{
     const card=document.querySelector(`[data-coin-key="${CSS.escape(k)}"]`);
@@ -89,6 +90,7 @@ function savePosByKey(k){
   localStorage.setItem("pos_"+k,JSON.stringify({amount:Number(amount),entry:Number(entry),ts:Date.now()}));
   openCoinKey=k;
   toast("Позиция сохранена");
+  renderPnlBox();
   renderWatch(k);
   requestAnimationFrame(()=>{
     const card=document.querySelector(`[data-coin-key="${CSS.escape(k)}"]`);
@@ -142,15 +144,49 @@ function coinCard(c,watchMode=false){
 async function scan(){found.textContent="—";avg.textContent="—";results.innerHTML='<div class="empty">Сканирую источники...</div>';try{const chains=selectedChains().join(","),sector=selectedNarratives().join(",");const r=await fetch(`/api/scan?chains=${encodeURIComponent(chains)}&sector=${encodeURIComponent(sector)}&risk=${encodeURIComponent(riskMode)}&budget=${encodeURIComponent(budget.value)}`,{cache:"no-store"});if(!r.ok)throw new Error(await r.text());const data=await r.json();let all=dedupe(data.items||[]);if(riskMode==="aggressive")all.sort((a,b)=>riskCount(b)-riskCount(a)||(b._score||0)-(a._score||0));else if(riskMode==="conservative")all.sort((a,b)=>riskCount(a)-riskCount(b)||(b._score||0)-(a._score||0));else all.sort((a,b)=>(b._score||0)-(a._score||0));const tops=selectedTopRanks();if(tops.length){const maxTop=Math.max(...tops);all=all.filter(x=>!x.market_cap_rank||x.market_cap_rank<=maxTop)}all=all.slice(0,25);lastResults=all;found.textContent=all.length;avg.textContent=all.length?Math.round(all.reduce((s,x)=>s+Number(x._score||0),0)/all.length):"—";results.innerHTML="";if(!all.length){results.innerHTML='<div class="empty">Ничего не найдено. Измени фильтры и попробуй снова.</div>'}else all.forEach(c=>results.appendChild(coinCard(c,false)));note.textContent=`Обработано кандидатов: ${data.processed||all.length}. Источники: ${data.sources?.join(" + ")||"backend"}.`}catch(e){results.innerHTML=`<div class="empty">Ошибка поиска: ${String(e.message||e)}</div>`}}
 
 function resetAll(){document.querySelectorAll(".topChip").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".chainCheck,.narrativeCheck").forEach(x=>x.checked=false);budget.value="any";setRisk("balanced");updateChainLabel();updateNarrativeLabel();lastResults=[];found.textContent="0";avg.textContent="—";results.innerHTML='<div class="empty">Радар готов к поиску.</div>';note.textContent='Фильтры сброшены. Результаты очищены.';toast("Сброшено")}
+
+function calcPortfolioPnl(){
+  const items=dedupe(watchItems());
+  let invested=0,current=0,count=0;
+  for(const c of items){
+    coinStore.set(key(c),c);
+    const p=getPos(c);
+    const amount=Number(p.amount||0);
+    const entry=Number(p.entry||0);
+    const price=Number(c.current_price||0);
+    if(amount>0){
+      invested+=amount;
+      current+=entry>0&&price>0?amount*(price/entry):amount;
+      count++;
+    }
+  }
+  const pnl=current-invested;
+  const pct=invested>0?(pnl/invested*100):0;
+  return {invested,current,pnl,pct,count};
+}
+function renderPnlBox(){
+  if(!window.pnlText)return;
+  const p=calcPortfolioPnl();
+  if(!p.count){
+    pnlText.innerHTML='<span class="muted">Позиции не добавлены.</span>';
+    return;
+  }
+  const cls=p.pnl>0?'profit':p.pnl<0?'loss':'flat';
+  const arrow=p.pnl>0?'▲':p.pnl<0?'▼':'•';
+  const sign=p.pnl>0?'+':'';
+  pnlText.innerHTML=`<span class="pnlMini muted">Позиций: ${p.count}</span><span class="pnlMini">Вложено: $${p.invested.toFixed(2)}</span><span class="pnlMini">Сейчас: $${p.current.toFixed(2)}</span><span class="pnlMini ${cls}">${arrow} ${sign}$${p.pnl.toFixed(2)} / ${sign}${p.pct.toFixed(2)}%</span>`;
+}
+
 function renderWatch(keepKey=openCoinKey){
   watch.innerHTML="";
   const items=dedupe(watchItems());
-  if(!items.length){watch.innerHTML='<div class="empty">Пока пусто.</div>';return}
+  if(!items.length){watch.innerHTML='<div class="empty">Пока пусто.</div>';renderPnlBox();return}
   items.forEach(c=>{
     const card=coinCard(c,true);
     if(keepKey && key(c)===keepKey) card.classList.add("open");
     watch.appendChild(card);
   });
+  renderPnlBox();
 }
 function showPage(p){radarPage.classList.toggle("hidden",p!=="radar");watchPage.classList.toggle("hidden",p!=="watch");sourcePage.classList.toggle("hidden",p!=="source");tabRadar.classList.toggle("active",p==="radar");tabWatch.classList.toggle("active",p==="watch");tabSource.classList.toggle("active",p==="source");if(p==="watch")renderWatch(openCoinKey)}
 
@@ -186,6 +222,6 @@ document.addEventListener("DOMContentLoaded",()=>{
   scanBtn.onclick=scan;resetBtn.onclick=resetAll;
   tabRadar.onclick=()=>showPage("radar");tabWatch.onclick=()=>showPage("watch");tabSource.onclick=()=>showPage("source");
   saveKeysBtn.onclick=saveApiKeys;clearKeysBtn.onclick=clearApiKeys;
-  updateChainLabel();updateNarrativeLabel();setRisk("balanced");renderWatch();loadApiKeys();checkBackend();
+  updateChainLabel();updateNarrativeLabel();setRisk("balanced");renderWatch();renderPnlBox();loadApiKeys();checkBackend();
   if(window.scrollTopBtn){scrollTopBtn.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});window.addEventListener('scroll',()=>scrollTopBtn.classList.toggle('show',window.scrollY>420));}
 });

@@ -286,3 +286,23 @@ h1,.appName,.headerTitle h1,.titleBlock h1{font-size:clamp(30px,7vw,40px)!import
 button,select,input,a{pointer-events:auto!important;touch-action:manipulation}
 .primaryBtn,.savePosBtn{color:#fff!important}
 #watchPage h2,.watchTitle{display:none!important}
+
+/* v7.7.9 Clean Tabs + Full Translation */
+#watchPage h2,
+#sourcesPage h2,
+.watchTitle,
+.sourcesTitle{
+  display:none!important;
+}
+#watchPage .panel:first-child,
+#sourcesPage .panel:first-child{
+  margin-top:0!important;
+}
+[data-i18n="sourcesText"]{
+  display:block;
+}
+
+/* v7.7.10 Language Toggle Label */
+.langBtn{
+  letter-spacing:.02em!important;
+}

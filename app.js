@@ -233,8 +233,34 @@ document.addEventListener("DOMContentLoaded",()=>{
 
 /* v7.7.8 Safe RU/EN */
 const LR_I18N={
-  ru:{found:"Найдено",avgScore:"Средний score",sector:"Сектор",chains:"Сети",risk:"Риск",coinPrice:"Цена монеты",startSearch:"Начать поиск",reset:"Сбросить",radar:"Радар",favorites:"Избранное",sources:"Источники",allSectors:"Все сектора",allChains:"Все сети",medium:"Средний",low:"Низкий",high:"Высокий",invested:"Вложено",now:"Сейчас",positions:"позиций"},
-  en:{found:"Found",avgScore:"Avg score",sector:"Sector",chains:"Chains",risk:"Risk",coinPrice:"Coin price",startSearch:"Start scan",reset:"Reset",radar:"Radar",favorites:"Favorites",sources:"Sources",allSectors:"All sectors",allChains:"All chains",medium:"Medium",low:"Low",high:"High",invested:"Invested",now:"Now",positions:"positions"}
+  ru:{
+    found:"Найдено",avgScore:"Средний score",sector:"Сектор",chains:"Сети",risk:"Риск",coinPrice:"Цена монеты",
+    startSearch:"Начать поиск",reset:"Сбросить",radar:"Радар",favorites:"Избранное",sources:"Источники",
+    allSectors:"Все сектора",allChains:"Все сети",medium:"Средний",low:"Низкий",high:"Высокий",
+    invested:"Вложено",now:"Сейчас",positions:"позиций",noPositions:"Позиции не добавлены.",
+    addPosition:"Сохранить позицию",myPosition:"Моя позиция",positionNotAdded:"позиция не добавлена",
+    amount:"Сумма $",entry:"Цена входа",saved:"Позиция сохранена",added:"Добавлено",removed:"Удалено",
+    dataSourcesTitle:"Источники данных:",apiKeysTitle:"API keys",keysLocalNote:"Ключи сохраняются только в браузере на этом устройстве.",
+    saveKeys:"Сохранить ключи",clearKeys:"Очистить",keysNotLoaded:"Ключи не загружены.",keysSaved:"Ключи сохранены.",keysCleared:"Ключи очищены.",
+    proMode:"PRO режим",proText:"Архитектура подготовлена под Free/PRO: сейчас PRO-режим не требует оплаты и не блокирует функции.",
+    radarReady:"Радар готов к поиску.",chooseParams:"Выбери параметры и нажми «Начать поиск».",
+    cmcKey:"CoinMarketCap API Key",cgKey:"CoinGecko API Key",birdeyeKey:"Birdeye API Key",messariKey:"Messari API Key",
+    sourcesText:"• DexScreener — пары, сеть, DEX, ликвидность, объём, возраст пары, цена.<br>• CoinGecko — цена, капитализация, логотипы, категории, market data.<br>• CoinMarketCap — listings, ranking, market data, premium data при своём ключе.<br>• GeckoTerminal / DefiLlama / Birdeye / DEXTools / CryptoRank / Messari — подготовлены для расширенного анализа."
+  },
+  en:{
+    found:"Found",avgScore:"Avg score",sector:"Sector",chains:"Chains",risk:"Risk",coinPrice:"Coin price",
+    startSearch:"Start scan",reset:"Reset",radar:"Radar",favorites:"Favorites",sources:"Sources",
+    allSectors:"All sectors",allChains:"All chains",medium:"Medium",low:"Low",high:"High",
+    invested:"Invested",now:"Now",positions:"positions",noPositions:"No positions added.",
+    addPosition:"Save position",myPosition:"My position",positionNotAdded:"position not added",
+    amount:"Amount $",entry:"Entry price",saved:"Position saved",added:"Added",removed:"Removed",
+    dataSourcesTitle:"Data sources:",apiKeysTitle:"API keys",keysLocalNote:"Keys are stored only in this browser on this device.",
+    saveKeys:"Save keys",clearKeys:"Clear",keysNotLoaded:"No keys loaded.",keysSaved:"Keys saved.",keysCleared:"Keys cleared.",
+    proMode:"PRO mode",proText:"Free/PRO architecture is prepared. PRO mode currently does not require payment and does not block features.",
+    radarReady:"Radar is ready to scan.",chooseParams:"Choose filters and tap “Start scan”.",
+    cmcKey:"CoinMarketCap API Key",cgKey:"CoinGecko API Key",birdeyeKey:"Birdeye API Key",messariKey:"Messari API Key",
+    sourcesText:"• DexScreener — pairs, chain, DEX, liquidity, volume, pair age and price.<br>• CoinGecko — price, market cap, logos, categories and market data.<br>• CoinMarketCap — listings, ranking, market data and premium data with your own key.<br>• GeckoTerminal / DefiLlama / Birdeye / DEXTools / CryptoRank / Messari — prepared for extended analysis."
+  }
 };
 let lrLang=localStorage.getItem("lang")||((navigator.language||"").toLowerCase().startsWith("ru")?"ru":"en");
 function lrT(k){return (LR_I18N[lrLang]&&LR_I18N[lrLang][k])||LR_I18N.ru[k]||k}
@@ -242,8 +268,12 @@ function lrApplyLang(){
   try{
     document.documentElement.lang=lrLang;
     const lb=document.getElementById("langBtn");
-    if(lb)lb.textContent=lrLang.toUpperCase();
-    document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=lrT(el.dataset.i18n)});
+    if(lb)lb.textContent=lrLang==="ru"?"EN":"RU";
+    document.querySelectorAll("[data-i18n]").forEach(el=>{
+      const val=lrT(el.dataset.i18n);
+      if(String(val).includes("<br>")) el.innerHTML=val; else el.textContent=val;
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(el=>{el.placeholder=lrT(el.dataset.i18nPlaceholder)});
     if(window.narrativeBox && /^(Все сектора|All sectors|AUTO \/ все)$/.test(narrativeBox.textContent.trim())) narrativeBox.textContent=lrT("allSectors");
     if(window.chainBox && /^(Все сети|All chains|Любая)$/.test(chainBox.textContent.trim())) chainBox.textContent=lrT("allChains");
     if(window.riskBox && typeof riskMode!=="undefined"){

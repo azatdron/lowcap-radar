@@ -440,3 +440,25 @@ h1,
   }
   .themeBtn{font-size:18px!important}
 }
+
+/* v7.7.7 Interaction Restore Fix */
+button, select, input, a {
+  pointer-events:auto!important;
+  touch-action:manipulation;
+}
+.modalBackdrop,
+.bottomSheet,
+.sheet,
+.nav,
+.tabbar,
+.langBtn,
+.themeBtn,
+.primaryBtn,
+.secondaryBtn,
+.topChip,
+.fieldButton,
+.fieldSelect {
+  pointer-events:auto!important;
+}
+.headerActions{position:relative;z-index:30}
+.controlsPanel{position:relative;z-index:5}

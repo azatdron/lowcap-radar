@@ -4,6 +4,7 @@ const PRO_MODE = localStorage.getItem("lowcap_pro")==="1";
 function isPro(){return PRO_MODE}
 
 let lastResults=[];
+let openCoinKey=null;
 const coinStore=new Map();
 let riskMode="balanced";
 
@@ -50,18 +51,31 @@ function rankText(c){
 function safeId(k){return String(k).replace(/[^a-zA-Z0-9_-]/g,"_")}
 function deletePosByKey(k){
   localStorage.removeItem("pos_"+k);
+  openCoinKey=k;
   toast("Позиция удалена");
-  renderWatch();
+  renderWatch(k);
+  requestAnimationFrame(()=>{
+    const card=document.querySelector(`[data-coin-key="${CSS.escape(k)}"]`);
+    if(card) card.classList.add("open");
+  });
 }
 function savePosByKey(k){
   const c=coinStore.get(k)||watchItems().find(x=>key(x)===k)||lastResults.find(x=>key(x)===k);
   if(!c){toast("Монета не найдена");return}
   const sid=safeId(k);
   const amount=document.getElementById("amt_"+sid)?.value||0;
-  const entry=document.getElementById("entry_"+sid)?.value||0;
+  const entry=document.getElementById("entry_"+sid)?.value||c.current_price||0;
   localStorage.setItem("pos_"+k,JSON.stringify({amount:Number(amount),entry:Number(entry),ts:Date.now()}));
+  openCoinKey=k;
   toast("Позиция сохранена");
-  renderWatch();
+  renderWatch(k);
+  requestAnimationFrame(()=>{
+    const card=document.querySelector(`[data-coin-key="${CSS.escape(k)}"]`);
+    if(card){
+      card.classList.add("open");
+      card.scrollIntoView({block:"center",behavior:"smooth"});
+    }
+  });
 }
 
 function proof(c,type){const ds=c.url||"",cg=`https://www.coingecko.com/en/search?query=${encodeURIComponent(c.name||c.symbol||"")}`,cmc=`https://coinmarketcap.com/search/?q=${encodeURIComponent(c.name||c.symbol||"")}`;if(["liquidity","volume","chain","age"].includes(type)&&ds)return`<a class="proofLink" target="_blank" href="${ds}">проверить Dex</a>`;if(["cap","price"].includes(type))return`<a class="proofLink" target="_blank" href="${cg}">проверить CG</a>`;return`<a class="proofLink" target="_blank" href="${cmc}">проверить CMC</a>`}
@@ -81,7 +95,10 @@ function getPos(c){try{return JSON.parse(localStorage.getItem(posKey(c))||"{}")}
 function portfolio(c){
   const k=key(c),sid=safeId(k);
   coinStore.set(k,c);
-  const p=getPos(c),price=Number(c.current_price||0),amount=Number(p.amount||0),entry=Number(p.entry||price||0);
+  const p=getPos(c);
+  const price=Number(c.current_price||0);
+  const amount=Number(p.amount||0);
+  const entry=Number(p.entry||price||0);
   const has=amount>0;
   const now=has&&entry>0&&price>0?amount*(price/entry):amount;
   const pnl=has&&amount>0?((now-amount)/amount*100):0;
@@ -99,13 +116,22 @@ function portfolio(c){
   </div>`
 }
 function coinCard(c,watchMode=false){
-  coinStore.set(key(c),c);const t=trend(c),score=Number(c._score||0),ch=Number(c.price_change_percentage_24h||0),cap=c.market_cap||c.fdv||0,rs=risks(c),fallback=(c.symbol||"?").slice(0,3).toUpperCase();const img=c.image?`<img class="avatar" src="${c.image}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${fallback}</div>'">`:`<div class="avatar fallback">${fallback}</div>`;const div=document.createElement("div");div.dataset.coinKey=key(c);div.className="coin "+(watchMode?"watchCard":"radarCard");div.innerHTML=`<button class="miniAction" type="button" aria-label="${watchMode?"Удалить":"Добавить"}">${watchMode?"−":"+"}</button><div class="coinTop">${img}<div class="coinMain"><div class="coinName">${c.name||"Unknown"}</div><div class="coinSub">${(c.symbol||"").toUpperCase()} · ${c._source||"Multi"}</div><div class="trendText">${t.text}</div></div><div class="trendPill ${trendCls(t)}">${t.icon}</div><div class="score ${score<45?"bad":score<70?"mid":""}">${score}</div></div><div class="badges"><span class="badge ${rs.length?"bad":"good"}">Риски: ${rs.length}</span><span class="badge">${c._dexChain||"market"}</span><span class="badge">${narrative(c)}</span><span class="badge rankBadge ${rankSource(c)?"realRank":""}">${rankText(c)}</span><span class="badge ${ch>0?"changeUp":ch<0?"changeDown":"changeFlat"}">24ч ${pct(ch)}</span></div><div class="compactFacts"><span class="compactFact">Цена ${priceFmt(c.current_price)}</span><span class="compactFact">Кап ${fmt(cap)}</span><span class="compactFact">Ликв ${liquidity(c)}</span></div><div class="details"><div class="analysisGrid">${metric("Капитализация",fmt(cap),proof(c,"cap"))}${metric("Ранг рынка",rankText(c),proof(c,"rank"))}${metric("Цена монеты",priceFmt(c.current_price),proof(c,"price"))}${metric("Объём 24ч",fmt(c.total_volume),proof(c,"volume"))}${metric("Рост цены 24ч",`<span class="${ch>=0?"good":"bad"}">${pct(ch)}</span>`,proof(c,"price"))}${metric("Ликвидность",liquidity(c),proof(c,"liquidity"))}${metric("Возраст проекта",c.age_days?`${c.age_days}д`:"нет данных",proof(c,"age"))}${metric("Тренд",`${t.icon} ${t.text}`,proof(c,"price"))}${metric("Соцсети",social(c),c.website?`<a class="proofLink" target="_blank" href="${c.website}">открыть сайт</a>`:"")}${metric("Комьюнити",community(c),proof(c,"volume"))}${metric("Фонды / backing",backing(c),c.backingUrl?`<a class="proofLink" target="_blank" href="${c.backingUrl}">подтверждение</a>`:"")}${metric("Экосистема",ecosystem(c),proof(c,"chain"))}${metric("Нарратив / сектор",narrative(c),proof(c,"sector"))}</div><div class="explain"><b>Почему AI выбрал:</b> капитализация ${fmt(cap)}, ликвидность ${liquidity(c)}, объём 24ч ${fmt(c.total_volume)}, движение ${pct(ch)}, тренд: ${t.text}. ${rs.length?("Риски: "+rs.join(", ")):"Критичных рисков по доступным данным нет."}</div>${tradeBox(c)}<div class="links">${c.url?`<a class="linkBtn" target="_blank" href="${c.url}">DexScreener</a>`:""}<a class="linkBtn" target="_blank" href="https://coinmarketcap.com/search/?q=${encodeURIComponent(c.name||c.symbol||"")}">CoinMarketCap</a><a class="linkBtn" target="_blank" href="https://www.coingecko.com/en/search?query=${encodeURIComponent(c.name||c.symbol||"")}">CoinGecko</a></div>${watchMode?portfolio(c):""}</div>`;div.querySelector(".miniAction").onclick=e=>{e.stopPropagation();watchMode?removeWatch(c):addWatch(c)};div.addEventListener("click",e=>{if(e.target.closest("a")||e.target.closest("button")||e.target.closest("input")||e.target.closest(".portfolioBox"))return;div.classList.toggle("open")});return div}
+  coinStore.set(key(c),c);const t=trend(c),score=Number(c._score||0),ch=Number(c.price_change_percentage_24h||0),cap=c.market_cap||c.fdv||0,rs=risks(c),fallback=(c.symbol||"?").slice(0,3).toUpperCase();const img=c.image?`<img class="avatar" src="${c.image}" onerror="this.outerHTML='<div class=&quot;avatar fallback&quot;>${fallback}</div>'">`:`<div class="avatar fallback">${fallback}</div>`;const div=document.createElement("div");div.dataset.coinKey=key(c);div.className="coin "+(watchMode?"watchCard":"radarCard");div.innerHTML=`<button class="miniAction" type="button" aria-label="${watchMode?"Удалить":"Добавить"}">${watchMode?"−":"+"}</button><div class="coinTop">${img}<div class="coinMain"><div class="coinName">${c.name||"Unknown"}</div><div class="coinSub">${(c.symbol||"").toUpperCase()} · ${c._source||"Multi"}</div><div class="trendText">${t.text}</div></div><div class="trendPill ${trendCls(t)}">${t.icon}</div><div class="score ${score<45?"bad":score<70?"mid":""}">${score}</div></div><div class="badges"><span class="badge ${rs.length?"bad":"good"}">Риски: ${rs.length}</span><span class="badge">${c._dexChain||"market"}</span><span class="badge">${narrative(c)}</span><span class="badge rankBadge ${rankSource(c)?"realRank":""}">${rankText(c)}</span><span class="badge ${ch>0?"changeUp":ch<0?"changeDown":"changeFlat"}">24ч ${pct(ch)}</span></div><div class="compactFacts"><span class="compactFact">Цена ${priceFmt(c.current_price)}</span><span class="compactFact">Кап ${fmt(cap)}</span><span class="compactFact">Ликв ${liquidity(c)}</span></div><div class="details"><div class="analysisGrid">${metric("Капитализация",fmt(cap),proof(c,"cap"))}${metric("Ранг рынка",rankText(c),proof(c,"rank"))}${metric("Цена монеты",priceFmt(c.current_price),proof(c,"price"))}${metric("Объём 24ч",fmt(c.total_volume),proof(c,"volume"))}${metric("Рост цены 24ч",`<span class="${ch>=0?"good":"bad"}">${pct(ch)}</span>`,proof(c,"price"))}${metric("Ликвидность",liquidity(c),proof(c,"liquidity"))}${metric("Возраст проекта",c.age_days?`${c.age_days}д`:"нет данных",proof(c,"age"))}${metric("Тренд",`${t.icon} ${t.text}`,proof(c,"price"))}${metric("Соцсети",social(c),c.website?`<a class="proofLink" target="_blank" href="${c.website}">открыть сайт</a>`:"")}${metric("Комьюнити",community(c),proof(c,"volume"))}${metric("Фонды / backing",backing(c),c.backingUrl?`<a class="proofLink" target="_blank" href="${c.backingUrl}">подтверждение</a>`:"")}${metric("Экосистема",ecosystem(c),proof(c,"chain"))}${metric("Нарратив / сектор",narrative(c),proof(c,"sector"))}</div><div class="explain"><b>Почему AI выбрал:</b> капитализация ${fmt(cap)}, ликвидность ${liquidity(c)}, объём 24ч ${fmt(c.total_volume)}, движение ${pct(ch)}, тренд: ${t.text}. ${rs.length?("Риски: "+rs.join(", ")):"Критичных рисков по доступным данным нет."}</div>${tradeBox(c)}<div class="links">${c.url?`<a class="linkBtn" target="_blank" href="${c.url}">DexScreener</a>`:""}<a class="linkBtn" target="_blank" href="https://coinmarketcap.com/search/?q=${encodeURIComponent(c.name||c.symbol||"")}">CoinMarketCap</a><a class="linkBtn" target="_blank" href="https://www.coingecko.com/en/search?query=${encodeURIComponent(c.name||c.symbol||"")}">CoinGecko</a></div>${watchMode?portfolio(c):""}</div>`;div.querySelector(".miniAction").onclick=e=>{e.stopPropagation();watchMode?removeWatch(c):addWatch(c)};div.addEventListener("click",e=>{if(e.target.closest("a")||e.target.closest("button")||e.target.closest("input")||e.target.closest(".portfolioBox"))return;div.classList.toggle("open");openCoinKey=div.classList.contains("open")?key(c):null});return div}
 
 async function scan(){found.textContent="—";avg.textContent="—";results.innerHTML='<div class="empty">Сканирую источники...</div>';try{const chains=selectedChains().join(","),sector=selectedNarratives().join(",");const r=await fetch(`/api/scan?chains=${encodeURIComponent(chains)}&sector=${encodeURIComponent(sector)}&risk=${encodeURIComponent(riskMode)}&budget=${encodeURIComponent(budget.value)}`,{cache:"no-store"});if(!r.ok)throw new Error(await r.text());const data=await r.json();let all=dedupe(data.items||[]);if(riskMode==="aggressive")all.sort((a,b)=>riskCount(b)-riskCount(a)||(b._score||0)-(a._score||0));else if(riskMode==="conservative")all.sort((a,b)=>riskCount(a)-riskCount(b)||(b._score||0)-(a._score||0));else all.sort((a,b)=>(b._score||0)-(a._score||0));const tops=selectedTopRanks();if(tops.length){const maxTop=Math.max(...tops);all=all.filter(x=>!x.market_cap_rank||x.market_cap_rank<=maxTop)}all=all.slice(0,25);lastResults=all;found.textContent=all.length;avg.textContent=all.length?Math.round(all.reduce((s,x)=>s+Number(x._score||0),0)/all.length):"—";results.innerHTML="";if(!all.length){results.innerHTML='<div class="empty">Ничего не найдено. Измени фильтры и попробуй снова.</div>'}else all.forEach(c=>results.appendChild(coinCard(c,false)));note.textContent=`Обработано кандидатов: ${data.processed||all.length}. Источники: ${data.sources?.join(" + ")||"backend"}.`}catch(e){results.innerHTML=`<div class="empty">Ошибка поиска: ${String(e.message||e)}</div>`}}
 
 function resetAll(){document.querySelectorAll(".topChip").forEach(x=>x.classList.remove("active"));document.querySelectorAll(".chainCheck,.narrativeCheck").forEach(x=>x.checked=false);budget.value="any";setRisk("balanced");updateChainLabel();updateNarrativeLabel();lastResults=[];found.textContent="0";avg.textContent="—";results.innerHTML='<div class="empty">Радар готов к поиску.</div>';note.textContent='Фильтры сброшены. Результаты очищены.';toast("Сброшено")}
-function renderWatch(){watch.innerHTML="";const items=dedupe(watchItems());if(!items.length){watch.innerHTML='<div class="empty">Пока пусто.</div>';return}items.forEach(c=>watch.appendChild(coinCard(c,true)))}
-function showPage(p){radarPage.classList.toggle("hidden",p!=="radar");watchPage.classList.toggle("hidden",p!=="watch");sourcePage.classList.toggle("hidden",p!=="source");tabRadar.classList.toggle("active",p==="radar");tabWatch.classList.toggle("active",p==="watch");tabSource.classList.toggle("active",p==="source");if(p==="watch")renderWatch()}
+function renderWatch(keepKey=openCoinKey){
+  watch.innerHTML="";
+  const items=dedupe(watchItems());
+  if(!items.length){watch.innerHTML='<div class="empty">Пока пусто.</div>';return}
+  items.forEach(c=>{
+    const card=coinCard(c,true);
+    if(keepKey && key(c)===keepKey) card.classList.add("open");
+    watch.appendChild(card);
+  });
+}
+function showPage(p){radarPage.classList.toggle("hidden",p!=="radar");watchPage.classList.toggle("hidden",p!=="watch");sourcePage.classList.toggle("hidden",p!=="source");tabRadar.classList.toggle("active",p==="radar");tabWatch.classList.toggle("active",p==="watch");tabSource.classList.toggle("active",p==="source");if(p==="watch")renderWatch(openCoinKey)}
 
 function saveApiKeys(){["cmc","cg","birdeye","messari"].forEach(k=>{const el=$("key_"+k);if(el)localStorage.setItem("api_"+k,el.value.trim())});loadApiKeys();toast("Ключи сохранены")}
 function clearApiKeys(){["cmc","cg","birdeye","messari"].forEach(k=>{localStorage.removeItem("api_"+k);const el=$("key_"+k);if(el)el.value=""});loadApiKeys();toast("Очищено")}

@@ -171,3 +171,11 @@ body.light .tabs{background:rgba(255,255,255,.94)}
 .pnlUp{color:var(--green)!important;font-weight:850}.pnlDown{color:var(--red)!important;font-weight:850}.pnlFlat{color:var(--muted)!important;font-weight:850}
 .posDelete{width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:var(--btn);color:var(--muted);display:inline-grid;place-items:center;font-size:16px;font-weight:900;line-height:1}
 .posDelete:hover{color:var(--red)!important}
+
+/* v7.7.1 Portfolio Stay Fix */
+.pnlUp{color:var(--green)!important;font-weight:900}
+.pnlDown{color:var(--red)!important;font-weight:900}
+.pnlFlat{color:var(--muted)!important;font-weight:900}
+.portfolioBox{scroll-margin-bottom:140px}
+.posSummary .pnlUp::before{content:""}
+.posSummary .pnlDown::before{content:""}

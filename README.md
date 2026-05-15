@@ -1,3 +1,3 @@
-# Lowcap Radar AI v7.6.5 — Card + Position + Theme Fix
+# Lowcap Radar AI v7.6.6 — Rank + Position + Scroll Fix
 
-База: v7.6.4 Layout Safe Fix. 24ч в compact-card, цена/кап/ликв второй ряд, зелёная кнопка позиции, theme toggle, Все сектора/Все сети.
+Исправлено: кнопка сохранения позиции, стабильный key для позиции, крестик удаления, стрелка наверх, улучшенный rank badge и попытка подтянуть CG rank для Dex-монет.

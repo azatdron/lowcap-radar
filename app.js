@@ -178,7 +178,7 @@ function renderPnlBox(){
   if(box && p.pnl<0)box.classList.add("lossGlow");
   const arrow=p.pnl>0?'▲':p.pnl<0?'▼':'•';
   const sign=p.pnl>0?'+':'';
-  pnlText.innerHTML=`<div class="pnlMain ${cls}">${arrow} ${sign}$${p.pnl.toFixed(2)} (${sign}${p.pct.toFixed(2)}%)</div><div class="pnlSub">Вложено <b>$${p.invested.toFixed(0)}</b> · Сейчас <b>$${p.current.toFixed(0)}</b> · <b>${p.count}</b> позиций</div>`;
+  pnlText.innerHTML=`<div class="pnlMain ${cls}"><span class="pnlLabel">${typeof lrT==="function"?lrT("myPnl"):(typeof tr==="function"?tr("myPnl"):"My PnL")}</span><span class="pnlValue">${arrow} ${sign}$${p.pnl.toFixed(2)} (${sign}${p.pct.toFixed(2)}%)</span></div><div class="pnlSub">${typeof lrT==="function"?lrT("invested"):(typeof tr==="function"?tr("invested"):"Invested")} <b>$${p.invested.toFixed(0)}</b> · ${typeof lrT==="function"?lrT("now"):(typeof tr==="function"?tr("now"):"Now")} <b>$${p.current.toFixed(0)}</b> · <b>${p.count}</b> ${typeof lrT==="function"?lrT("positions"):(typeof tr==="function"?tr("positions"):"positions")}</div>`;
 }
 
 function renderWatch(keepKey=openCoinKey){
@@ -237,7 +237,7 @@ const LR_I18N={
     found:"Найдено",avgScore:"Средний score",sector:"Сектор",chains:"Сети",risk:"Риск",coinPrice:"Цена монеты",
     startSearch:"Начать поиск",reset:"Сбросить",radar:"Радар",favorites:"Избранное",sources:"Источники",
     allSectors:"Все сектора",allChains:"Все сети",medium:"Средний",low:"Низкий",high:"Высокий",
-    invested:"Вложено",now:"Сейчас",positions:"позиций",noPositions:"Позиции не добавлены.",
+    invested:"Вложено",now:"Сейчас",positions:"позиций",noPositions:"Позиции не добавлены.",myPnl:"Мой PnL",
     addPosition:"Сохранить позицию",myPosition:"Моя позиция",positionNotAdded:"позиция не добавлена",
     amount:"Сумма $",entry:"Цена входа",saved:"Позиция сохранена",added:"Добавлено",removed:"Удалено",
     dataSourcesTitle:"Источники данных:",apiKeysTitle:"API keys",keysLocalNote:"Ключи сохраняются только в браузере на этом устройстве.",
@@ -251,7 +251,7 @@ const LR_I18N={
     found:"Found",avgScore:"Avg score",sector:"Sector",chains:"Chains",risk:"Risk",coinPrice:"Coin price",
     startSearch:"Start scan",reset:"Reset",radar:"Radar",favorites:"Favorites",sources:"Sources",
     allSectors:"All sectors",allChains:"All chains",medium:"Medium",low:"Low",high:"High",
-    invested:"Invested",now:"Now",positions:"positions",noPositions:"No positions added.",
+    invested:"Invested",now:"Now",positions:"positions",noPositions:"No positions added.",myPnl:"My PnL",
     addPosition:"Save position",myPosition:"My position",positionNotAdded:"position not added",
     amount:"Amount $",entry:"Entry price",saved:"Position saved",added:"Added",removed:"Removed",
     dataSourcesTitle:"Data sources:",apiKeysTitle:"API keys",keysLocalNote:"Keys are stored only in this browser on this device.",

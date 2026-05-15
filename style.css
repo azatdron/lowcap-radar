@@ -331,3 +331,31 @@ button,select,input,a{pointer-events:auto!important;touch-action:manipulation}
 #watchPage .pnlBox{
   margin-top:0!important;
 }
+
+/* v7.7.12 PnL Translation Fix */
+.pnlMain{
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  flex-wrap:nowrap!important;
+}
+.pnlLabel{
+  color:var(--muted);
+  font-size:14px;
+  font-weight:950;
+  letter-spacing:.01em;
+  white-space:nowrap;
+}
+.pnlValue{
+  white-space:nowrap;
+}
+.pnlSub{
+  display:block!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+@media(max-width:430px){
+  .pnlLabel{font-size:13px}
+  .pnlMain{gap:8px!important}
+}

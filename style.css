@@ -120,5 +120,25 @@ body.light .tabs{background:rgba(255,255,255,.94)}
   .score{font-size:28px}
 }
 
-/* v7.6.2 Portfolio + Rank */
-.posSummary{display:flex;align-items:center;gap:7px;flex-wrap:wrap;color:var(--muted);font-size:13px;line-height:1.35;margin-top:7px}.pnlUp{color:var(--green)!important;font-weight:850}.pnlDown{color:var(--red)!important;font-weight:850}.pnlFlat{color:var(--muted)!important;font-weight:850}.posDelete{width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:var(--btn);color:var(--muted);display:inline-grid;place-items:center;font-size:16px;font-weight:900;line-height:1}.posDelete:hover{color:var(--red)}.rankBadge{border-color:rgba(96,165,250,.35)!important}button,.fieldButton,.topChip,.tab{touch-action:manipulation}
+/* v7.6.3 Stable Upgrade */
+.statsGrid{margin:0 0 14px!important}
+.topChip.active{
+  background:linear-gradient(180deg,rgba(34,197,94,.18),rgba(34,197,94,.08))!important;
+  color:var(--green)!important;
+  border-color:rgba(34,197,94,.55)!important;
+}
+.topChip.active::before{content:"✓ ";font-weight:900}
+.rankBadge{border-color:rgba(96,165,250,.38)!important}
+.posSummary{display:flex;align-items:center;gap:7px;flex-wrap:wrap;color:var(--muted);font-size:13px;line-height:1.35;margin-top:7px}
+.pnlUp{color:var(--green)!important;font-weight:850}
+.pnlDown{color:var(--red)!important;font-weight:850}
+.pnlFlat{color:var(--muted)!important;font-weight:850}
+.posDelete{width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:var(--btn);color:var(--muted);display:inline-grid;place-items:center;font-size:16px;font-weight:900;line-height:1}
+.posDelete:hover{color:var(--red)}
+.coin{min-height:112px!important;max-height:128px!important;overflow:hidden!important}
+.coin.open{max-height:none!important;overflow:visible!important}
+.coin .details{display:none!important}
+.coin.open .details{display:block!important}
+.miniAction{top:14px!important;right:14px!important;bottom:auto!important}
+.saveKeyBtn{background:#22c55e!important;color:#fff!important}
+.clearKeyBtn{background:#ef4444!important;color:#fff!important}

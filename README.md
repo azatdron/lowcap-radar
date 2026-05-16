@@ -1,7 +1,7 @@
-# Lowcap Radar AI v7.7.8 — Safe Language Interactions
+# Lowcap Radar AI v7.8.5 — Safe Restore
 
-Собрано от рабочей v7.7.4:
-- клики и модалки сохранены;
-- RU/EN добавлен безопасным отдельным слоем;
-- компактная шапка;
-- компактный PnL.
+Восстановительная сборка:
+- исправлен JavaScript crash: Cannot access LR_I18N before initialization;
+- поиск должен снова работать;
+- переключатель языка не должен ломать интерфейс;
+- сохранена структура api/ для Vercel.

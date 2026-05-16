@@ -339,3 +339,26 @@ function safeLangRestoreInit(){
 }
 document.addEventListener("DOMContentLoaded", safeLangRestoreInit);
 setTimeout(safeLangRestoreInit, 100);
+
+
+/* v7.8.6 targeted language/UI fixes */
+function lrApplyTargetedFixes(){
+  try{
+    const price=document.getElementById("priceBox");
+    if(price){
+      const t=(typeof lrLang!=="undefined" && lrLang==="en") ? "Any" : "любая";
+      if(price.textContent.trim()==="любая" || price.textContent.trim()==="Any") price.textContent=t;
+    }
+    const lb=document.getElementById("langBtn");
+    if(lb && typeof lrLang!=="undefined") lb.textContent = lrLang==="ru" ? "EN" : "RU";
+  }catch(e){}
+}
+document.addEventListener("DOMContentLoaded",()=>{
+  setTimeout(lrApplyTargetedFixes,80);
+  const lb=document.getElementById("langBtn");
+  if(lb && !lb.dataset.v786Bound){
+    lb.dataset.v786Bound="1";
+    lb.addEventListener("click",()=>setTimeout(lrApplyTargetedFixes,80));
+  }
+});
+

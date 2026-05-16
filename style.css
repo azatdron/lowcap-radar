@@ -359,3 +359,29 @@ button,select,input,a{pointer-events:auto!important;touch-action:manipulation}
   .pnlLabel{font-size:13px}
   .pnlMain{gap:8px!important}
 }
+
+/* v7.8 Stability + Portfolio Lock */
+.savePosBtn.locked,
+.savePosBtn:disabled{
+  opacity:.62!important;
+  cursor:not-allowed!important;
+  filter:saturate(.55)!important;
+  box-shadow:none!important;
+  background:var(--btn)!important;
+  color:var(--muted)!important;
+}
+.lockedInput,
+.portfolioBox input:disabled{
+  opacity:.72!important;
+  color:var(--muted)!important;
+  background:rgba(255,255,255,.03)!important;
+  cursor:not-allowed!important;
+}
+.positionHint{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:750;
+  line-height:1.35;
+  margin-top:8px;
+}
+.positionHint b{color:var(--text)}

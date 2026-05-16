@@ -74,7 +74,6 @@ function deletePosByKey(k){
   localStorage.removeItem("pos_"+k);
   openCoinKey=k;
   toast("Позиция удалена");
-  renderPnlBox();
   renderWatch(k);
   requestAnimationFrame(()=>{
     const card=document.querySelector(`[data-coin-key="${CSS.escape(k)}"]`);
@@ -82,15 +81,23 @@ function deletePosByKey(k){
   });
 }
 function savePosByKey(k){
+  const existing=localStorage.getItem("pos_"+k);
+  if(existing){
+    toast(typeof lrT==="function"?lrT("deleteToChange"):"Позиция уже сохранена");
+    return;
+  }
   const c=coinStore.get(k)||watchItems().find(x=>key(x)===k)||lastResults.find(x=>key(x)===k);
   if(!c){toast("Монета не найдена");return}
   const sid=safeId(k);
   const amount=document.getElementById("amt_"+sid)?.value||0;
   const entry=document.getElementById("entry_"+sid)?.value||c.current_price||0;
-  localStorage.setItem("pos_"+k,JSON.stringify({amount:Number(amount),entry:Number(entry),ts:Date.now()}));
+  if(Number(amount)<=0 || Number(entry)<=0){
+    toast("Заполни сумму и цену входа");
+    return;
+  }
+  localStorage.setItem("pos_"+k,JSON.stringify({amount:Number(amount),entry:Number(entry),ts:Date.now(),locked:true}));
   openCoinKey=k;
-  toast("Позиция сохранена");
-  renderPnlBox();
+  toast(typeof lrT==="function"?lrT("saved"):"Позиция сохранена");
   renderWatch(k);
   requestAnimationFrame(()=>{
     const card=document.querySelector(`[data-coin-key="${CSS.escape(k)}"]`);
@@ -128,14 +135,21 @@ function portfolio(c){
   const cls=pnl>0?"pnlUp":pnl<0?"pnlDown":"pnlFlat";
   const arrow=pnl>0?"▲":pnl<0?"▼":"•";
   const del=has?`<button class="posDelete" type="button" onclick="event.stopPropagation();deletePosByKey('${k}')">×</button>`:"";
+  const disabled=has?"disabled":"";
+  const lockedClass=has?"lockedInput":"";
+  const btnClass=has?"smallBtn savePosBtn locked":"smallBtn savePosBtn";
+  const btnDisabled=has?"disabled":"";
+  const btnText=has?(typeof lrT==="function"?lrT("positionSaved"):"Позиция сохранена"):(typeof lrT==="function"?lrT("addPosition"):"Сохранить позицию");
+  const hint=has?`<div class="positionHint">${typeof lrT==="function"?lrT("deleteToChange"):"Чтобы изменить позицию, удали её через X и добавь заново."}</div>`:"";
   return`<div class="portfolioBox" onclick="event.stopPropagation()">
-    <b>Моя позиция</b>
-    <div class="posSummary">${has?`<span>Вложено: $${amount.toFixed(2)}</span><span>Сейчас: $${now.toFixed(2)}</span><span class="${cls}">${arrow} ${pnl.toFixed(1)}%</span>${del}`:"позиция не добавлена"}</div>
+    <b>${typeof lrT==="function"?lrT("myPosition"):"Моя позиция"}</b>
+    <div class="posSummary">${has?`<span>${typeof lrT==="function"?lrT("invested"):"Вложено"}: $${amount.toFixed(2)}</span><span>${typeof lrT==="function"?lrT("now"):"Сейчас"}: $${now.toFixed(2)}</span><span class="${cls}">${arrow} ${pnl.toFixed(1)}%</span>${del}`:(typeof lrT==="function"?lrT("positionNotAdded"):"позиция не добавлена")}</div>
     <div class="portfolioRow">
-      <input id="amt_${sid}" placeholder="Сумма $" value="${amount||""}" onclick="event.stopPropagation()">
-      <input id="entry_${sid}" placeholder="Цена входа" value="${entry||""}" onclick="event.stopPropagation()">
+      <input id="amt_${sid}" class="${lockedClass}" placeholder="${typeof lrT==="function"?lrT("amount"):"Сумма $"}" value="${amount||""}" ${disabled} onclick="event.stopPropagation()">
+      <input id="entry_${sid}" class="${lockedClass}" placeholder="${typeof lrT==="function"?lrT("entry"):"Цена входа"}" value="${entry||""}" ${disabled} onclick="event.stopPropagation()">
     </div>
-    <button class="smallBtn savePosBtn" type="button" onclick="event.stopPropagation();savePosByKey('${k}')">Сохранить позицию</button>
+    <button class="${btnClass}" type="button" ${btnDisabled} onclick="event.stopPropagation();savePosByKey('${k}')">${btnText}</button>
+    ${hint}
   </div>`
 }
 function coinCard(c,watchMode=false){
@@ -239,7 +253,7 @@ const LR_I18N={
     allSectors:"Все сектора",allChains:"Все сети",medium:"Средний",low:"Низкий",high:"Высокий",
     invested:"Вложено",now:"Сейчас",positions:"позиций",noPositions:"Позиции не добавлены.",myPnl:"Мой PnL",
     addPosition:"Сохранить позицию",myPosition:"Моя позиция",positionNotAdded:"позиция не добавлена",
-    amount:"Сумма $",entry:"Цена входа",saved:"Позиция сохранена",added:"Добавлено",removed:"Удалено",
+    amount:"Сумма $",entry:"Цена входа",saved:"Позиция сохранена",positionSaved:"Позиция сохранена",deleteToChange:"Чтобы изменить позицию, удали её через X и добавь заново.",added:"Добавлено",removed:"Удалено",
     dataSourcesTitle:"Источники данных:",apiKeysTitle:"API keys",keysLocalNote:"Ключи сохраняются только в браузере на этом устройстве.",
     saveKeys:"Сохранить ключи",clearKeys:"Очистить",keysNotLoaded:"Ключи не загружены.",keysSaved:"Ключи сохранены.",keysCleared:"Ключи очищены.",
     proMode:"PRO режим",proText:"Архитектура подготовлена под Free/PRO: сейчас PRO-режим не требует оплаты и не блокирует функции.",
@@ -253,7 +267,7 @@ const LR_I18N={
     allSectors:"All sectors",allChains:"All chains",medium:"Medium",low:"Low",high:"High",
     invested:"Invested",now:"Now",positions:"positions",noPositions:"No positions added.",myPnl:"My PnL",
     addPosition:"Save position",myPosition:"My position",positionNotAdded:"position not added",
-    amount:"Amount $",entry:"Entry price",saved:"Position saved",added:"Added",removed:"Removed",
+    amount:"Amount $",entry:"Entry price",saved:"Position saved",positionSaved:"Position saved",deleteToChange:"To change this position, delete it with X and add it again.",added:"Added",removed:"Removed",
     dataSourcesTitle:"Data sources:",apiKeysTitle:"API keys",keysLocalNote:"Keys are stored only in this browser on this device.",
     saveKeys:"Save keys",clearKeys:"Clear",keysNotLoaded:"No keys loaded.",keysSaved:"Keys saved.",keysCleared:"Keys cleared.",
     proMode:"PRO mode",proText:"Free/PRO architecture is prepared. PRO mode currently does not require payment and does not block features.",

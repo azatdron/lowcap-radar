@@ -1,8 +1,8 @@
-# Lowcap Radar AI v7.8.1 — App Store Polish + Rank Fix
+# Lowcap Radar AI v7.8.3 — Clean Sources + PnL Width
 
-- мягкий premium PnL visual;
-- RU/EN перевод динамических карточек;
-- перевод risk/rank/trend/AI layer/portfolio labels;
-- убраны верхние заголовки Избранное/Источники;
-- locked position logic сохранена;
-- усилена логика market rank через CoinGecko fallback.
+Исправлено:
+- верхний заголовок Источники/Sources скрыт жёстко;
+- верхний заголовок Избранное/Favorites также скрыт;
+- PnL-блок растянут по ширине карточки;
+- PnL-текст выровнен по центру;
+- сохранена база v7.8.2.

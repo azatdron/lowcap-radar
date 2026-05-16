@@ -385,3 +385,21 @@ button,select,input,a{pointer-events:auto!important;touch-action:manipulation}
   margin-top:8px;
 }
 .positionHint b{color:var(--text)}
+
+/* v7.8.1 App Store Polish + Rank Fix */
+#watchPage h1,#watchPage h2,#watchPage .pageTitle,#watchPage .sectionTitle,#watchPage .watchTitle,
+#sourcesPage h1,#sourcesPage h2,#sourcesPage .pageTitle,#sourcesPage .sectionTitle,#sourcesPage .sourcesTitle{
+  display:none!important;height:0!important;margin:0!important;padding:0!important;overflow:hidden!important;
+}
+.pnlBox{border-color:rgba(34,197,94,.22)!important;box-shadow:0 8px 22px rgba(34,197,94,.07),0 10px 22px var(--shadow)!important}
+.pnlBox.profitGlow{border-color:rgba(34,197,94,.26)!important;box-shadow:0 8px 22px rgba(34,197,94,.09),0 10px 22px var(--shadow)!important}
+.pnlBox.lossGlow{border-color:rgba(239,68,68,.24)!important;box-shadow:0 8px 22px rgba(239,68,68,.08),0 10px 22px var(--shadow)!important}
+.pnlMain{font-size:21px!important;font-weight:760!important;letter-spacing:-.025em!important}
+.pnlValue{font-weight:760!important}
+.pnlLabel{font-size:12px!important;font-weight:850!important;opacity:.82!important}
+.pnlSub{font-size:12px!important;font-weight:680!important;opacity:.88!important}
+.pnlSub b{font-weight:760!important}
+.badge.rankBadge.realRank{color:var(--blue)!important;border-color:rgba(96,165,250,.55)!important}
+.badge.rankBadge.noRank{color:var(--muted)!important;border-color:var(--line)!important}
+.savePosBtn.locked,.savePosBtn:disabled{opacity:.62!important;cursor:not-allowed!important;filter:saturate(.55)!important;box-shadow:none!important;background:var(--btn)!important;color:var(--muted)!important}
+.lockedInput,.portfolioBox input:disabled{opacity:.72!important;color:var(--muted)!important;background:rgba(255,255,255,.03)!important;cursor:not-allowed!important}

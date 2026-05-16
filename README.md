@@ -1,9 +1,8 @@
-# Lowcap Radar AI v7.8 — Stability + Portfolio Lock
+# Lowcap Radar AI v7.8.1 — App Store Polish + Rank Fix
 
-Главное:
-- «Моя позиция» фиксируется как сделка.
-- После сохранения поля становятся неактивными.
-- Кнопка «Сохранить позицию» становится неактивной.
-- Повторное сохранение не перезаписывает позицию.
-- Изменить позицию можно только через X: удалить и добавить заново.
-- PnL считается от сохранённого snapshot.
+- мягкий premium PnL visual;
+- RU/EN перевод динамических карточек;
+- перевод risk/rank/trend/AI layer/portfolio labels;
+- убраны верхние заголовки Избранное/Источники;
+- locked position logic сохранена;
+- усилена логика market rank через CoinGecko fallback.

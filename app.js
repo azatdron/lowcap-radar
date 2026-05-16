@@ -362,3 +362,22 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
 });
 
+
+
+/* v7.8.7 Any translation fix */
+function forceCoinPriceTranslation(){
+ try{
+   const boxes=[...document.querySelectorAll('div,button,span')];
+   boxes.forEach(el=>{
+     const t=(el.textContent||'').trim();
+     if(t==='любая' || t==='Any'){
+       el.textContent=(typeof lrLang!=='undefined' && lrLang==='en') ? 'Any' : 'любая';
+     }
+   });
+ }catch(e){}
+}
+document.addEventListener('DOMContentLoaded',()=>{
+ setTimeout(forceCoinPriceTranslation,100);
+ setTimeout(forceCoinPriceTranslation,500);
+});
+setInterval(forceCoinPriceTranslation,1200);

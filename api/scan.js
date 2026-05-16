@@ -1,4 +1,7 @@
 
+function cmcSlug(v){return String(v||"").trim().toLowerCase().replace(/['’]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"")}
+
+
 const CG_BASE="https://api.coingecko.com/api/v3";
 const CMC_BASE="https://pro-api.coinmarketcap.com/v1";
 const DEX_BASE="https://api.dexscreener.com/latest/dex";

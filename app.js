@@ -432,3 +432,39 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 document.addEventListener('click',()=>setTimeout(v12CoinPriceAnyFix,150));
 setInterval(v12CoinPriceAnyFix,800);
+
+
+/* v13 coin price dropdown symbols fix */
+function v13FixPriceDropdown(){
+  try{
+    const isEnglish = document.body.innerText.includes('Start scan');
+    document.querySelectorAll('div,span,button,li').forEach(el=>{
+      let t=(el.textContent||'').trim();
+
+      if(t==='любая' || t==='Any'){
+        el.textContent='∞';
+      }
+
+      t=(el.textContent||'').trim();
+
+      if(t.startsWith('до $')){
+        el.textContent='≤ ' + t.replace('до ','');
+      }
+
+      if(t.startsWith('up to $')){
+        el.textContent='≤ ' + t.replace('up to ','');
+      }
+    });
+  }catch(e){}
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  setTimeout(v13FixPriceDropdown,100);
+  setTimeout(v13FixPriceDropdown,500);
+});
+
+document.addEventListener('click',()=>{
+  setTimeout(v13FixPriceDropdown,120);
+});
+
+setInterval(v13FixPriceDropdown,700);

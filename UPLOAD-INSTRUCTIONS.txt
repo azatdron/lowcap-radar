@@ -1,17 +1,16 @@
-ВАЖНО ДЛЯ GITHUB / VERCEL
+ЗАГРУЗКА В GITHUB
 
 Загружай содержимое этой папки в корень репозитория.
 
-Правильная структура:
+Должно быть:
 index.html
 app.js
 style.css
+README.md
 package.json
 manifest.json
-vercel.json
 api/
   health.js
   scan.js
 
-Не загружай scan.js и health.js отдельно в корень.
-Они должны лежать внутри папки api.
+Если на главной GitHub после загрузки написано v12 — значит загрузилось правильно.

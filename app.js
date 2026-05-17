@@ -413,3 +413,22 @@ function forceAnyTranslation(){
 }
 setInterval(forceAnyTranslation,500);
 document.addEventListener('DOMContentLoaded',()=>setTimeout(forceAnyTranslation,200));
+
+
+/* v12 exact Coin price Any fix */
+function v12CoinPriceAnyFix(){
+  try{
+    const isEnglish = document.body.innerText.includes('Start scan') || document.body.innerText.includes('Found');
+    document.querySelectorAll('div,span,button').forEach(el=>{
+      const t = (el.textContent || '').trim();
+      if(isEnglish && t === 'любая') el.textContent = 'Any';
+      if(!isEnglish && t === 'Any') el.textContent = 'любая';
+    });
+  }catch(e){}
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  setTimeout(v12CoinPriceAnyFix,100);
+  setTimeout(v12CoinPriceAnyFix,500);
+});
+document.addEventListener('click',()=>setTimeout(v12CoinPriceAnyFix,150));
+setInterval(v12CoinPriceAnyFix,800);

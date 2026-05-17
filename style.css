@@ -545,3 +545,34 @@ button,select,input,a{pointer-events:auto!important;touch-action:manipulation}
 .pnlMain{width:100%!important;display:flex!important;justify-content:center!important;align-items:center!important;text-align:center!important;gap:10px!important;}
 .pnlSub{width:100%!important;text-align:center!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
 .splashPrep{display:none}.onboardingPrep{display:none}
+
+
+/* v17 Bottom Navigation Icons */
+
+.bottom-nav .nav-item,
+.bottomNav .nav-item,
+nav .nav-item{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:6px!important;
+}
+
+.nav-icon{
+    font-size:20px!important;
+    line-height:1!important;
+    opacity:.95;
+}
+
+.nav-label{
+    font-size:13px!important;
+    font-weight:600!important;
+    letter-spacing:.2px!important;
+}
+
+.nav-item.active .nav-icon{
+    color:#32e676!important;
+    text-shadow:0 0 12px rgba(50,230,118,.35);
+}
+

@@ -415,8 +415,8 @@ setInterval(forceAnyTranslation,500);
 document.addEventListener('DOMContentLoaded',()=>setTimeout(forceAnyTranslation,200));
 
 
-/* v12 exact Coin price Any fix */
-function v12CoinPriceAnyFix(){
+/* v14 exact Coin price Any fix */
+function v14CoinPriceAnyFix(){
   try{
     const isEnglish = document.body.innerText.includes('Start scan') || document.body.innerText.includes('Found');
     document.querySelectorAll('div,span,button').forEach(el=>{
@@ -427,15 +427,15 @@ function v12CoinPriceAnyFix(){
   }catch(e){}
 }
 document.addEventListener('DOMContentLoaded',()=>{
-  setTimeout(v12CoinPriceAnyFix,100);
-  setTimeout(v12CoinPriceAnyFix,500);
+  setTimeout(v14CoinPriceAnyFix,100);
+  setTimeout(v14CoinPriceAnyFix,500);
 });
-document.addEventListener('click',()=>setTimeout(v12CoinPriceAnyFix,150));
-setInterval(v12CoinPriceAnyFix,800);
+document.addEventListener('click',()=>setTimeout(v14CoinPriceAnyFix,150));
+setInterval(v14CoinPriceAnyFix,800);
 
 
-/* v13 coin price dropdown symbols fix */
-function v13FixPriceDropdown(){
+/* v14 coin price dropdown symbols fix */
+function v14FixPriceDropdown(){
   try{
     const isEnglish = document.body.innerText.includes('Start scan');
     document.querySelectorAll('div,span,button,li').forEach(el=>{
@@ -459,12 +459,40 @@ function v13FixPriceDropdown(){
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
-  setTimeout(v13FixPriceDropdown,100);
-  setTimeout(v13FixPriceDropdown,500);
+  setTimeout(v14FixPriceDropdown,100);
+  setTimeout(v14FixPriceDropdown,500);
 });
 
 document.addEventListener('click',()=>{
-  setTimeout(v13FixPriceDropdown,120);
+  setTimeout(v14FixPriceDropdown,120);
 });
 
-setInterval(v13FixPriceDropdown,700);
+setInterval(v14FixPriceDropdown,700);
+
+
+/* v14 hard price dropdown + cache-safe fix */
+function v14PriceFix(){
+  try{
+    const isEnglish = document.body.innerText.includes('Start scan') || document.body.innerText.includes('Found');
+    document.querySelectorAll('div,span,button,li').forEach(el=>{
+      let t=(el.textContent||'').trim();
+      if(t==='любая' || t==='Any'){
+        el.textContent='∞';
+      }
+      t=(el.textContent||'').trim();
+      if(t.startsWith('до $')){
+        el.textContent='≤ ' + t.replace('до ','');
+      }
+      if(t.startsWith('up to $')){
+        el.textContent='≤ ' + t.replace('up to ','');
+      }
+    });
+  }catch(e){}
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  setTimeout(v14PriceFix,100);
+  setTimeout(v14PriceFix,500);
+  setTimeout(v14PriceFix,1200);
+});
+document.addEventListener('click',()=>setTimeout(v14PriceFix,120));
+setInterval(v14PriceFix,800);

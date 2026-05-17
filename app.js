@@ -415,8 +415,8 @@ setInterval(forceAnyTranslation,500);
 document.addEventListener('DOMContentLoaded',()=>setTimeout(forceAnyTranslation,200));
 
 
-/* v14 exact Coin price Any fix */
-function v14CoinPriceAnyFix(){
+/* v12 exact Coin price Any fix */
+function v12CoinPriceAnyFix(){
   try{
     const isEnglish = document.body.innerText.includes('Start scan') || document.body.innerText.includes('Found');
     document.querySelectorAll('div,span,button').forEach(el=>{
@@ -427,72 +427,36 @@ function v14CoinPriceAnyFix(){
   }catch(e){}
 }
 document.addEventListener('DOMContentLoaded',()=>{
-  setTimeout(v14CoinPriceAnyFix,100);
-  setTimeout(v14CoinPriceAnyFix,500);
+  setTimeout(v12CoinPriceAnyFix,100);
+  setTimeout(v12CoinPriceAnyFix,500);
 });
-document.addEventListener('click',()=>setTimeout(v14CoinPriceAnyFix,150));
-setInterval(v14CoinPriceAnyFix,800);
+document.addEventListener('click',()=>setTimeout(v12CoinPriceAnyFix,150));
+setInterval(v12CoinPriceAnyFix,800);
 
 
-/* v14 coin price dropdown symbols fix */
-function v14FixPriceDropdown(){
+/* v15 dropdown translation fix */
+function v15TranslatePriceDropdown(){
   try{
     const isEnglish = document.body.innerText.includes('Start scan');
-    document.querySelectorAll('div,span,button,li').forEach(el=>{
-      let t=(el.textContent||'').trim();
+    if(!isEnglish) return;
 
-      if(t==='любая' || t==='Any'){
-        el.textContent='∞';
-      }
+    const map = {
+      'любая':'Any',
+      'до $0.01':'up to $0.01',
+      'до $0.10':'up to $0.10',
+      'до $1':'up to $1',
+      'до $5':'up to $5',
+      'до $10':'up to $10'
+    };
 
-      t=(el.textContent||'').trim();
-
-      if(t.startsWith('до $')){
-        el.textContent='≤ ' + t.replace('до ','');
-      }
-
-      if(t.startsWith('up to $')){
-        el.textContent='≤ ' + t.replace('up to ','');
-      }
-    });
-  }catch(e){}
-}
-
-document.addEventListener('DOMContentLoaded',()=>{
-  setTimeout(v14FixPriceDropdown,100);
-  setTimeout(v14FixPriceDropdown,500);
-});
-
-document.addEventListener('click',()=>{
-  setTimeout(v14FixPriceDropdown,120);
-});
-
-setInterval(v14FixPriceDropdown,700);
-
-
-/* v14 hard price dropdown + cache-safe fix */
-function v14PriceFix(){
-  try{
-    const isEnglish = document.body.innerText.includes('Start scan') || document.body.innerText.includes('Found');
-    document.querySelectorAll('div,span,button,li').forEach(el=>{
-      let t=(el.textContent||'').trim();
-      if(t==='любая' || t==='Any'){
-        el.textContent='∞';
-      }
-      t=(el.textContent||'').trim();
-      if(t.startsWith('до $')){
-        el.textContent='≤ ' + t.replace('до ','');
-      }
-      if(t.startsWith('up to $')){
-        el.textContent='≤ ' + t.replace('up to ','');
+    document.querySelectorAll('div,span,button,li,option').forEach(el=>{
+      const t=(el.textContent||'').trim();
+      if(map[t]){
+        el.textContent = map[t];
       }
     });
   }catch(e){}
 }
-document.addEventListener('DOMContentLoaded',()=>{
-  setTimeout(v14PriceFix,100);
-  setTimeout(v14PriceFix,500);
-  setTimeout(v14PriceFix,1200);
-});
-document.addEventListener('click',()=>setTimeout(v14PriceFix,120));
-setInterval(v14PriceFix,800);
+document.addEventListener('click',()=>setTimeout(v15TranslatePriceDropdown,120));
+document.addEventListener('DOMContentLoaded',()=>setTimeout(v15TranslatePriceDropdown,300));
+setInterval(v15TranslatePriceDropdown,800);

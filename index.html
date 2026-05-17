@@ -6,23 +6,6 @@
   <title>Lowcap Radar AI</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="style.css">
-
-<script>
-(function(){
-  try{
-    if(!localStorage.getItem('lr_v14_cache_clear')){
-      localStorage.setItem('lr_v14_cache_clear','1');
-      if('serviceWorker' in navigator){
-        navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister()));
-      }
-      if(window.caches){
-        caches.keys().then(keys=>keys.forEach(k=>caches.delete(k)));
-      }
-    }
-  }catch(e){}
-})();
-</script>
-
 </head>
 <body>
 <div class="app">
@@ -30,7 +13,7 @@
     <div class="logo">⌁</div>
     <div class="brand">
       <div class="title">Lowcap Radar AI</div>
-      <div class="subtitle">v14</div>
+      <div class="subtitle">v12</div>
     </div>
     <div class="headerActions"><button id="langBtn" class="langBtn" type="button" aria-label="Language">EN</button>
       <button id="themeBtn" class="themeBtn" type="button" aria-label="Theme">🌙</button></div>

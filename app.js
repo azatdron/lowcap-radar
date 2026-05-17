@@ -415,8 +415,8 @@ setInterval(forceAnyTranslation,500);
 document.addEventListener('DOMContentLoaded',()=>setTimeout(forceAnyTranslation,200));
 
 
-/* v12 exact Coin price Any fix */
-function v12CoinPriceAnyFix(){
+/* v16 exact Coin price Any fix */
+function v16CoinPriceAnyFix(){
   try{
     const isEnglish = document.body.innerText.includes('Start scan') || document.body.innerText.includes('Found');
     document.querySelectorAll('div,span,button').forEach(el=>{
@@ -427,15 +427,15 @@ function v12CoinPriceAnyFix(){
   }catch(e){}
 }
 document.addEventListener('DOMContentLoaded',()=>{
-  setTimeout(v12CoinPriceAnyFix,100);
-  setTimeout(v12CoinPriceAnyFix,500);
+  setTimeout(v16CoinPriceAnyFix,100);
+  setTimeout(v16CoinPriceAnyFix,500);
 });
-document.addEventListener('click',()=>setTimeout(v12CoinPriceAnyFix,150));
-setInterval(v12CoinPriceAnyFix,800);
+document.addEventListener('click',()=>setTimeout(v16CoinPriceAnyFix,150));
+setInterval(v16CoinPriceAnyFix,800);
 
 
-/* v15 dropdown translation fix */
-function v15TranslatePriceDropdown(){
+/* v16 dropdown translation fix */
+function v16TranslatePriceDropdown(){
   try{
     const isEnglish = document.body.innerText.includes('Start scan');
     if(!isEnglish) return;
@@ -457,6 +457,63 @@ function v15TranslatePriceDropdown(){
     });
   }catch(e){}
 }
-document.addEventListener('click',()=>setTimeout(v15TranslatePriceDropdown,120));
-document.addEventListener('DOMContentLoaded',()=>setTimeout(v15TranslatePriceDropdown,300));
-setInterval(v15TranslatePriceDropdown,800);
+document.addEventListener('click',()=>setTimeout(v16TranslatePriceDropdown,120));
+document.addEventListener('DOMContentLoaded',()=>setTimeout(v16TranslatePriceDropdown,300));
+setInterval(v16TranslatePriceDropdown,800);
+
+
+/* v16 Stability + Language Polish */
+function v16CurrentLang(){
+  try{
+    if(typeof lrLang !== "undefined") return lrLang;
+    const txt = document.body.innerText || "";
+    if(txt.includes("Start scan") || txt.includes("Found") || txt.includes("Coin price")) return "en";
+    return "ru";
+  }catch(e){ return "ru"; }
+}
+function v16TranslatePriceTexts(){
+  try{
+    const lang = v16CurrentLang();
+    const toEn = {"любая":"Any","до $0.01":"up to $0.01","до $0.10":"up to $0.10","до $1":"up to $1","до $5":"up to $5","до $10":"up to $10"};
+    const toRu = {"Any":"любая","up to $0.01":"до $0.01","up to $0.10":"до $0.10","up to $1":"до $1","up to $5":"до $5","up to $10":"до $10"};
+    const map = lang === "en" ? toEn : toRu;
+    document.querySelectorAll("button,div,span,li,option").forEach(el=>{
+      const t = (el.textContent || "").trim();
+      if(map[t]) el.textContent = map[t];
+    });
+    const priceBox = document.getElementById("priceBox");
+    if(priceBox){
+      const t = (priceBox.textContent || "").trim();
+      if(lang === "en" && t === "любая") priceBox.textContent = "Any";
+      if(lang === "ru" && t === "Any") priceBox.textContent = "любая";
+    }
+  }catch(e){}
+}
+function v16ApplyStatusLanguage(){
+  try{
+    const lang = v16CurrentLang();
+    document.querySelectorAll("div,span,p").forEach(el=>{
+      const t=(el.textContent||"").trim();
+      if(lang==="en"){
+        if(t==="Радар готов к поиску.") el.textContent="Radar is ready to scan.";
+        if(t==="Выбери параметры и нажми «Начать поиск».") el.textContent='Choose filters and tap “Start scan”.';
+      }else{
+        if(t==="Radar is ready to scan.") el.textContent="Радар готов к поиску.";
+        if(t==='Choose filters and tap “Start scan”.') el.textContent="Выбери параметры и нажми «Начать поиск».";
+      }
+    });
+  }catch(e){}
+}
+function v16ApplyAllPolish(){v16TranslatePriceTexts();v16ApplyStatusLanguage();}
+document.addEventListener("DOMContentLoaded",()=>{
+  setTimeout(v16ApplyAllPolish,100);
+  setTimeout(v16ApplyAllPolish,500);
+  const langBtn=document.getElementById("langBtn");
+  if(langBtn && !langBtn.dataset.v16Bound){
+    langBtn.dataset.v16Bound="1";
+    langBtn.addEventListener("click",()=>setTimeout(v16ApplyAllPolish,160));
+  }
+});
+document.addEventListener("click",()=>setTimeout(v16ApplyAllPolish,120));
+setInterval(v16ApplyAllPolish,900);
+

@@ -394,3 +394,22 @@ document.addEventListener("DOMContentLoaded",()=>{
 });
 setInterval(v10ApplyCoinPriceTranslation,1000);
 
+
+
+/* v11 exact Any translation fix */
+function forceAnyTranslation(){
+  try{
+    const isEn = document.body.innerText.includes('Start scan');
+    document.querySelectorAll('div,span,button').forEach(el=>{
+      const t=(el.textContent||'').trim();
+      if(isEn && t==='любая'){
+        el.textContent='Any';
+      }
+      if(!isEn && t==='Any'){
+        el.textContent='любая';
+      }
+    });
+  }catch(e){}
+}
+setInterval(forceAnyTranslation,500);
+document.addEventListener('DOMContentLoaded',()=>setTimeout(forceAnyTranslation,200));

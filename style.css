@@ -640,10 +640,13 @@ button,select,input,a{pointer-events:auto!important;touch-action:manipulation}
 }
 .coin.open .explain{margin-top:8px!important;}
 
-
-/* v22 remove duplicated chips */
+/* v23 no flicker */
+.positionPanelV19[data-stable-position="1"],
+.positionPanelV20[data-stable-position="1"],
+.positionPanelV21[data-stable-position="1"],
+.tradePositionV18[data-stable-position="1"]{animation:none!important;transition:none!important}
+.positionPanelV19,.positionPanelV20,.positionPanelV21{contain:layout style}
 .compactExtraV20 + .compactExtraV21,
 .compactExtraV21 + .compactExtraV20,
-.compactExtraV21 + .compactExtraV21{
-display:none!important;
-}
+.compactExtraV21 + .compactExtraV21,
+.compactExtraV20 + .compactExtraV20{display:none!important}

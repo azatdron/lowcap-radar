@@ -555,7 +555,7 @@ function v20xTrend(c){const s=String((c&&(c._trend||c.trend))||"").toLowerCase()
 function v20xChipHtml(c){try{const ch=Number((c&&c.price_change_percentage_24h)||0),cls=ch>0?"good":(ch<0?"bad":""),age=(c&&c.age_days)?`${c.age_days}${v20xT("д","d")}`:"—",vol=(c&&c.total_volume)?v20xFmt(c.total_volume):"—",dex=(c&&(c.dex||c.exchange||c.chain))||"";return`<div class="compactExtraV20" onclick="event.stopPropagation()"><span class="compactChipV20">${v20xT("Объём","Vol")} ${vol}</span><span class="compactChipV20 ${cls}">${v20xT("24ч","24h")} ${isFinite(ch)?(ch>0?"+":"")+ch.toFixed(1)+"%":"—"}</span><span class="compactChipV20">${v20xTrend(c)}</span><span class="compactChipV20">${v20xT("Возраст","Age")} ${age}</span>${dex?`<span class="compactChipV20">${String(dex).slice(0,18)}</span>`:""}</div>`}catch(e){return""}}
 function v20xInject(){try{document.querySelectorAll("[data-coin-key]").forEach(card=>{if(!card.classList.contains("open"))return;if(card.querySelector(".compactExtraV20"))return;const k=card.getAttribute("data-coin-key");const c=(typeof coinStore!=="undefined"&&coinStore.get(k))||(typeof watchItems==="function"?watchItems().find(x=>key(x)===k):null)||(typeof lastResults!=="undefined"?lastResults.find(x=>key(x)===k):null);if(!c)return;const details=card.querySelector(".details")||card;const h=document.createElement("div");h.innerHTML=v20xChipHtml(c);const row=h.firstElementChild;const before=details.querySelector(".compactLinksV19,.compactLinksV20,.links,.positionPanelV19");if(before)details.insertBefore(row,before);else details.insertBefore(row,details.firstChild)})}catch(e){}}
 function v20xHide(){try{document.querySelectorAll(".coin.open .analysisGrid,.coin.open .metricGrid,.coin.open .metricsGrid,.coin.open .detailGrid,.coin.open .bigMetrics,.coin.open .detailsGrid").forEach(el=>el.style.display="none")}catch(e){}}
-document.addEventListener("DOMContentLoaded",()=>{setInterval(()=>{v20xInject();v20xHide()},700)})
+
 document.addEventListener("click",()=>setTimeout(()=>{v20xInject();v20xHide()},120))
 
 
@@ -642,45 +642,65 @@ function v21ReorderExpanded(){
     });
   }catch(e){}
 }
-document.addEventListener("DOMContentLoaded",()=>{setInterval(v21ReorderExpanded,700);});
+
 document.addEventListener("click",()=>setTimeout(v21ReorderExpanded,120));
 
 
 
-/* v22 remove duplicated chips */
-function v22Cleanup(){
-try{
-document.querySelectorAll("[data-coin-key].open").forEach(card=>{
-const details=card.querySelector(".details")||card;
-
-const chips=details.querySelectorAll(".compactExtraV20,.compactExtraV21");
-
-if(chips.length>1){
-for(let i=1;i<chips.length;i++){
-chips[i].remove();
+/* v23 Stable Position Render — no flicker */
+function v23T(ru,en){
+  try{
+    if(typeof lrLang!=="undefined" && lrLang==="en") return en;
+    const b=document.body.innerText||"";
+    if(b.includes("Start scan") || b.includes("Found")) return en;
+  }catch(e){}
+  return ru;
 }
+function v23StableCleanup(){
+  try{
+    document.querySelectorAll("[data-coin-key].open").forEach(card=>{
+      const details = card.querySelector(".details") || card;
+      const chips = [...details.querySelectorAll(".compactExtraV20,.compactExtraV21")];
+      chips.forEach((el,i)=>{ if(i>0) el.remove(); });
+      const first = details.querySelector(".compactExtraV20,.compactExtraV21");
+      const explain = details.querySelector(".explain");
+      if(first && explain) details.insertBefore(first, explain);
+      const links = details.querySelector(".compactLinksV21,.compactLinksV20,.compactLinksV19,.links");
+      if(links && explain) details.insertBefore(links, explain.nextSibling);
+      details.querySelectorAll(".tradeBox,.aiTrade,.tradeLayer").forEach(el=>el.remove());
+      const pos = details.querySelector(".positionPanelV19,.positionPanelV20,.positionPanelV21,.tradePositionV18");
+      if(pos) pos.dataset.stablePosition = "1";
+    });
+  }catch(e){}
 }
-
-const explain=details.querySelector(".explain");
-const first=details.querySelector(".compactExtraV20,.compactExtraV21");
-
-if(first&&explain){
-details.insertBefore(first,explain);
+function v23UpdateOnlyPnlNumbers(){
+  try{
+    if(typeof v19Totals!=="function" || typeof v19Fmt!=="function") return;
+    document.querySelectorAll("[data-coin-key].open").forEach(card=>{
+      const k=card.getAttribute("data-coin-key");
+      const c=(typeof coinStore!=="undefined"&&coinStore.get(k))||
+              (typeof watchItems==="function"?watchItems().find(x=>key(x)===k):null)||
+              (typeof lastResults!=="undefined"?lastResults.find(x=>key(x)===k):null);
+      if(!c)return;
+      const t=v19Totals(c);
+      const s=card.querySelector(".posSummaryV19,.posSummaryV20");
+      if(!s)return;
+      const spans=s.querySelectorAll(".top span");
+      if(spans[0]) spans[0].innerHTML=`${v23T("Кол-во","Qty")}: <b>${t.qty?t.qty.toLocaleString():"—"}</b>`;
+      if(spans[1]) spans[1].innerHTML=`${v23T("Средняя","Avg")}: <b>${t.avg?v19Price(t.avg):"—"}</b>`;
+      if(spans[2]) spans[2].innerHTML=`${v23T("Вложено","Invested")}: <b>${v19Fmt(t.invested)}</b>`;
+      if(spans[3]) spans[3].innerHTML=`${v23T("Сейчас","Now")}: <b>${v19Fmt(t.now)}</b>`;
+      const pnl=s.querySelector(".pnl");
+      if(pnl){
+        const cls=t.pnl>=0?"profit":"loss";
+        pnl.classList.remove("profit","loss");
+        pnl.classList.add(cls);
+        pnl.textContent=`${t.pnl>=0?"▲":"▼"} ${v19Fmt(t.pnl)} / ${isFinite(t.pct)?t.pct.toFixed(1):"0.0"}%`;
+      }
+    });
+  }catch(e){}
 }
-
-const links=details.querySelector(".compactLinksV21,.compactLinksV20,.compactLinksV19,.links");
-
-if(links&&explain){
-details.insertBefore(links,explain.nextSibling);
-}
-});
-}catch(e){}
-}
-
-document.addEventListener("DOMContentLoaded",()=>{
-setInterval(v22Cleanup,600);
-});
-
-document.addEventListener("click",()=>{
-setTimeout(v22Cleanup,120);
-});
+function v23RunStablePass(){v23StableCleanup();v23UpdateOnlyPnlNumbers();}
+document.addEventListener("DOMContentLoaded",()=>{setTimeout(v23RunStablePass,150);setTimeout(v23RunStablePass,600);});
+document.addEventListener("click",()=>{setTimeout(v23RunStablePass,120);setTimeout(v23RunStablePass,500);});
+setInterval(v23UpdateOnlyPnlNumbers,5000);

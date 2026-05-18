@@ -415,8 +415,8 @@ setInterval(forceAnyTranslation,500);
 document.addEventListener('DOMContentLoaded',()=>setTimeout(forceAnyTranslation,200));
 
 
-/* v16 exact Coin price Any fix */
-function v16CoinPriceAnyFix(){
+/* v18 exact Coin price Any fix */
+function v18CoinPriceAnyFix(){
   try{
     const isEnglish = document.body.innerText.includes('Start scan') || document.body.innerText.includes('Found');
     document.querySelectorAll('div,span,button').forEach(el=>{
@@ -427,15 +427,15 @@ function v16CoinPriceAnyFix(){
   }catch(e){}
 }
 document.addEventListener('DOMContentLoaded',()=>{
-  setTimeout(v16CoinPriceAnyFix,100);
-  setTimeout(v16CoinPriceAnyFix,500);
+  setTimeout(v18CoinPriceAnyFix,100);
+  setTimeout(v18CoinPriceAnyFix,500);
 });
-document.addEventListener('click',()=>setTimeout(v16CoinPriceAnyFix,150));
-setInterval(v16CoinPriceAnyFix,800);
+document.addEventListener('click',()=>setTimeout(v18CoinPriceAnyFix,150));
+setInterval(v18CoinPriceAnyFix,800);
 
 
-/* v16 dropdown translation fix */
-function v16TranslatePriceDropdown(){
+/* v18 dropdown translation fix */
+function v18TranslatePriceDropdown(){
   try{
     const isEnglish = document.body.innerText.includes('Start scan');
     if(!isEnglish) return;
@@ -457,13 +457,13 @@ function v16TranslatePriceDropdown(){
     });
   }catch(e){}
 }
-document.addEventListener('click',()=>setTimeout(v16TranslatePriceDropdown,120));
-document.addEventListener('DOMContentLoaded',()=>setTimeout(v16TranslatePriceDropdown,300));
-setInterval(v16TranslatePriceDropdown,800);
+document.addEventListener('click',()=>setTimeout(v18TranslatePriceDropdown,120));
+document.addEventListener('DOMContentLoaded',()=>setTimeout(v18TranslatePriceDropdown,300));
+setInterval(v18TranslatePriceDropdown,800);
 
 
-/* v16 Stability + Language Polish */
-function v16CurrentLang(){
+/* v18 Stability + Language Polish */
+function v18CurrentLang(){
   try{
     if(typeof lrLang !== "undefined") return lrLang;
     const txt = document.body.innerText || "";
@@ -471,9 +471,9 @@ function v16CurrentLang(){
     return "ru";
   }catch(e){ return "ru"; }
 }
-function v16TranslatePriceTexts(){
+function v18TranslatePriceTexts(){
   try{
-    const lang = v16CurrentLang();
+    const lang = v18CurrentLang();
     const toEn = {"любая":"Any","до $0.01":"up to $0.01","до $0.10":"up to $0.10","до $1":"up to $1","до $5":"up to $5","до $10":"up to $10"};
     const toRu = {"Any":"любая","up to $0.01":"до $0.01","up to $0.10":"до $0.10","up to $1":"до $1","up to $5":"до $5","up to $10":"до $10"};
     const map = lang === "en" ? toEn : toRu;
@@ -489,9 +489,9 @@ function v16TranslatePriceTexts(){
     }
   }catch(e){}
 }
-function v16ApplyStatusLanguage(){
+function v18ApplyStatusLanguage(){
   try{
-    const lang = v16CurrentLang();
+    const lang = v18CurrentLang();
     document.querySelectorAll("div,span,p").forEach(el=>{
       const t=(el.textContent||"").trim();
       if(lang==="en"){
@@ -504,16 +504,39 @@ function v16ApplyStatusLanguage(){
     });
   }catch(e){}
 }
-function v16ApplyAllPolish(){v16TranslatePriceTexts();v16ApplyStatusLanguage();}
+function v18ApplyAllPolish(){v18TranslatePriceTexts();v18ApplyStatusLanguage();}
 document.addEventListener("DOMContentLoaded",()=>{
-  setTimeout(v16ApplyAllPolish,100);
-  setTimeout(v16ApplyAllPolish,500);
+  setTimeout(v18ApplyAllPolish,100);
+  setTimeout(v18ApplyAllPolish,500);
   const langBtn=document.getElementById("langBtn");
-  if(langBtn && !langBtn.dataset.v16Bound){
-    langBtn.dataset.v16Bound="1";
-    langBtn.addEventListener("click",()=>setTimeout(v16ApplyAllPolish,160));
+  if(langBtn && !langBtn.dataset.v18Bound){
+    langBtn.dataset.v18Bound="1";
+    langBtn.addEventListener("click",()=>setTimeout(v18ApplyAllPolish,160));
   }
 });
-document.addEventListener("click",()=>setTimeout(v16ApplyAllPolish,120));
-setInterval(v16ApplyAllPolish,900);
+document.addEventListener("click",()=>setTimeout(v18ApplyAllPolish,120));
+setInterval(v18ApplyAllPolish,900);
+
+
+
+/* v18 Live Refresh + Compact Trade UX */
+function v18T(ru,en){try{if(typeof lrLang!=="undefined"&&lrLang==="en")return en;let b=document.body.innerText||"";if(b.includes("Start scan")||b.includes("Found"))return en}catch(e){}return ru}
+function v18EnhanceNavIcons(){try{[{id:"tabRadar",i:"⌁",ru:"Радар",en:"Radar"},{id:"tabWatch",i:"★",ru:"Избранное",en:"Favorites"},{id:"tabSource",i:"▣",ru:"Источники",en:"Sources"}].forEach(x=>{let el=document.getElementById(x.id);if(!el)return;let label=v18T(x.ru,x.en);if(el.dataset.v18Label===label)return;el.innerHTML=`<span class="navIconV18">${x.i}</span><span class="navLabelV18">${label}</span>`;el.dataset.v18Label=label})}catch(e){}}
+function v18LastUpdatedText(ts){let d=ts?new Date(ts):new Date();return v18T("Обновлено: ","Updated: ")+String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")}
+function v18AddUpdatedLine(){try{let panel=document.querySelector(".filters,.filterPanel,.scanPanel,.panel");if(!panel)return;let el=document.getElementById("lastUpdatedV18");if(!el){el=document.createElement("div");el.id="lastUpdatedV18";el.className="lastUpdatedV18";panel.appendChild(el)}el.textContent=v18LastUpdatedText(Number(localStorage.getItem("v18_last_refresh")||Date.now()))}catch(e){}}
+async function v18SoftRefresh(){try{localStorage.setItem("v18_last_refresh",String(Date.now()));if(typeof lrApplyLang==="function")lrApplyLang();if(typeof v16ApplyAllPolish==="function")v16ApplyAllPolish();v18EnhanceNavIcons();v18AddUpdatedLine();if(typeof renderWatch==="function")renderWatch(window.openCoinKey||null);if(typeof renderPnlBox==="function")renderPnlBox();let has=(document.body.innerText||"").includes("DexScreener");if(has&&typeof startScan==="function")await startScan()}catch(e){}}
+function v18SetupPullRefresh(){try{if(document.getElementById("pullRefreshV18"))return;let pr=document.createElement("div");pr.id="pullRefreshV18";pr.className="pullRefreshV18";pr.innerHTML='<div class="ring"></div>';document.body.appendChild(pr);let startY=0,pulling=false,dist=0,busy=false;window.addEventListener("touchstart",e=>{if(window.scrollY<=2&&e.touches&&e.touches[0]){startY=e.touches[0].clientY;pulling=true;dist=0}},{passive:true});window.addEventListener("touchmove",e=>{if(!pulling||busy||!e.touches||!e.touches[0])return;dist=Math.max(0,e.touches[0].clientY-startY);if(dist>18){pr.classList.add("show");pr.style.setProperty("--pull-rot",Math.min(270,dist*3)+"deg")}},{passive:true});window.addEventListener("touchend",()=>{if(!pulling||busy){pulling=false;return}pulling=false;if(dist>86){busy=true;pr.classList.add("show","loading");setTimeout(async()=>{await v18SoftRefresh();pr.classList.remove("loading");setTimeout(()=>{pr.classList.remove("show");busy=false},260)},500)}else pr.classList.remove("show");dist=0},{passive:true})}catch(e){}}
+function v18FreshOnOpen(){try{let last=Number(localStorage.getItem("v18_last_refresh")||0);if(!last||(Date.now()-last)>5*60*1000)setTimeout(()=>v18SoftRefresh(),700);else v18AddUpdatedLine()}catch(e){}}
+function v18PosKey(k){return"posmulti_"+k}
+function v18GetBuys(k){try{return JSON.parse(localStorage.getItem(v18PosKey(k))||"[]")||[]}catch(e){return[]}}
+function v18SaveBuys(k,a){localStorage.setItem(v18PosKey(k),JSON.stringify(a||[]))}
+function v18Fmt(n){n=Number(n||0);if(!isFinite(n))n=0;return Math.abs(n)>=1000?"$"+n.toLocaleString(undefined,{maximumFractionDigits:0}):"$"+n.toFixed(2)}
+function v18BuildTradePosition(c){try{if(!c||typeof key!=="function")return"";let k=key(c),sid=(typeof safeId==="function")?safeId(k):k.replace(/[^a-z0-9]/gi,"_"),buys=v18GetBuys(k),price=Number(c.current_price||0);let totalQty=buys.reduce((s,x)=>s+Number(x.qty||0),0),invested=buys.reduce((s,x)=>s+Number(x.qty||0)*Number(x.entry||0),0),avg=totalQty?invested/totalQty:0,now=totalQty*price,pnl=invested?((now-invested)/invested*100):0,cls=pnl>=0?"pnlUp":"pnlDown",arrow=pnl>=0?"▲":"▼";let plan=(typeof tradePlan==="function")?tradePlan(c):{};let buysHtml=buys.map((b,i)=>`<div class="buyRowV18"><span>${Number(b.qty).toLocaleString()} × $${Number(b.entry).toPrecision(5)}</span><b>${v18Fmt(Number(b.qty)*Number(b.entry))}</b><button onclick="event.stopPropagation();v18DeleteBuy('${k}',${i})">×</button></div>`).join("");return `<div class="tradePositionV18" onclick="event.stopPropagation()"><h3>${v18T("AI Trade + моя позиция","AI Trade + My position")}</h3><div class="tradeGridV18"><div class="tradeMiniV18"><small>${v18T("Зона входа","Entry zone")}</small><b>${plan.entry||"—"}</b></div><div class="tradeMiniV18"><small>${v18T("Стоп","Stop")}</small><b>${plan.stop||"—"}</b></div><div class="tradeMiniV18"><small>${v18T("Цель 1","Target 1")}</small><b>${plan.t1||"—"}</b></div><div class="tradeMiniV18"><small>${v18T("Цель 2","Target 2")}</small><b>${plan.t2||"—"}</b></div></div><div class="avgBlockV18"><div class="row"><span>${v18T("Кол-во","Qty")}: <b>${totalQty?totalQty.toLocaleString():"—"}</b></span><span>${v18T("Средняя","Avg")}: <b>${avg?("$"+avg.toPrecision(5)):"—"}</b></span></div><div class="row"><span>${v18T("Вложено","Invested")}: <b>${v18Fmt(invested)}</b></span><span>${v18T("Сейчас","Now")}: <b>${v18Fmt(now)}</b></span></div><div class="pnl ${cls}">${arrow} ${v18Fmt(now-invested)} / ${isFinite(pnl)?pnl.toFixed(1):"0.0"}%</div></div><div class="multiBuyV18"><input id="qty_${sid}" inputmode="decimal" placeholder="${v18T("Количество монет","Coin quantity")}"><input id="entry_${sid}" inputmode="decimal" placeholder="${v18T("Цена покупки","Buy price")}" value="${price||""}"></div><div class="multiBuyActionsV18"><button class="smallBtn savePosBtn" onclick="event.stopPropagation();v18AddBuy('${k}')">${v18T("Добавить покупку","Add buy")}</button><button class="smallBtn" onclick="event.stopPropagation();v18ClearBuys('${k}')">${v18T("Очистить","Clear")}</button></div><div class="buyListV18">${buysHtml}</div><div class="compactHintV18">${v18T("Можно добавить несколько покупок: приложение усреднит цену и пересчитает PnL.","Add several buys: the app averages entry and recalculates PnL.")}</div></div>`}catch(e){return""}}
+function v18AddBuy(k){try{let c=(typeof coinStore!=="undefined"&&coinStore.get(k))||(typeof watchItems==="function"?watchItems().find(x=>key(x)===k):null)||(typeof lastResults!=="undefined"?lastResults.find(x=>key(x)===k):null),sid=(typeof safeId==="function")?safeId(k):k.replace(/[^a-z0-9]/gi,"_");let qty=Number((document.getElementById("qty_"+sid)||{}).value||0),entry=Number((document.getElementById("entry_"+sid)||{}).value||Number(c&&c.current_price||0));if(qty<=0||entry<=0){if(typeof toast==="function")toast(v18T("Заполни количество и цену","Fill quantity and price"));return}let arr=v18GetBuys(k);arr.push({qty,entry,ts:Date.now()});v18SaveBuys(k,arr);if(typeof toast==="function")toast(v18T("Покупка добавлена","Buy added"));if(typeof renderWatch==="function")renderWatch(k);if(typeof renderPnlBox==="function")renderPnlBox()}catch(e){}}
+function v18DeleteBuy(k,i){let a=v18GetBuys(k);a.splice(i,1);v18SaveBuys(k,a);if(typeof renderWatch==="function")renderWatch(k);if(typeof renderPnlBox==="function")renderPnlBox()}
+function v18ClearBuys(k){localStorage.removeItem(v18PosKey(k));if(typeof renderWatch==="function")renderWatch(k);if(typeof renderPnlBox==="function")renderPnlBox()}
+function v18InjectCompactTradeBlocks(){try{document.querySelectorAll(".portfolioBox").forEach(box=>{let card=box.closest("[data-coin-key]");if(!card)return;let k=card.getAttribute("data-coin-key"),c=(typeof coinStore!=="undefined"&&coinStore.get(k))||(typeof watchItems==="function"?watchItems().find(x=>key(x)===k):null)||(typeof lastResults!=="undefined"?lastResults.find(x=>key(x)===k):null);if(!c)return;let wrap=document.createElement("div");wrap.innerHTML=v18BuildTradePosition(c);if(wrap.firstElementChild)box.replaceWith(wrap.firstElementChild)})}catch(e){}}
+function v18TranslateMixedExpandedText(){try{if(v18T("ru","en")!=="en")return;let pairs={"нет данных":"no data","сильный рост 24ч":"strong 24h growth","DEX-профиль":"DEX profile","Объём сильно выше ликвидности.":"Volume is much higher than liquidity."};document.querySelectorAll("div,span,p,b").forEach(el=>{let t=(el.textContent||"").trim();if(pairs[t])el.textContent=pairs[t]})}catch(e){}}
+document.addEventListener("DOMContentLoaded",()=>{setTimeout(v18EnhanceNavIcons,80);setTimeout(v18SetupPullRefresh,120);setTimeout(v18FreshOnOpen,400);setInterval(()=>{v18EnhanceNavIcons();v18AddUpdatedLine();v18InjectCompactTradeBlocks();v18TranslateMixedExpandedText()},1200);let lb=document.getElementById("langBtn");if(lb&&!lb.dataset.v18Bound){lb.dataset.v18Bound="1";lb.addEventListener("click",()=>setTimeout(()=>{v18EnhanceNavIcons();v18InjectCompactTradeBlocks();v18TranslateMixedExpandedText()},200))}})
+document.addEventListener("click",()=>setTimeout(()=>{v18EnhanceNavIcons();v18InjectCompactTradeBlocks();v18TranslateMixedExpandedText()},180))
 

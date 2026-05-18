@@ -547,32 +547,32 @@ button,select,input,a{pointer-events:auto!important;touch-action:manipulation}
 .splashPrep{display:none}.onboardingPrep{display:none}
 
 
-/* v17 Bottom Navigation Icons */
-
-.bottom-nav .nav-item,
-.bottomNav .nav-item,
-nav .nav-item{
-    display:flex!important;
-    flex-direction:column!important;
-    align-items:center!important;
-    justify-content:center!important;
-    gap:6px!important;
-}
-
-.nav-icon{
-    font-size:20px!important;
-    line-height:1!important;
-    opacity:.95;
-}
-
-.nav-label{
-    font-size:13px!important;
-    font-weight:600!important;
-    letter-spacing:.2px!important;
-}
-
-.nav-item.active .nav-icon{
-    color:#32e676!important;
-    text-shadow:0 0 12px rgba(50,230,118,.35);
-}
-
+/* v18 Live Refresh + Compact Trade UX */
+#tabRadar,#tabWatch,#tabSource{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:4px!important;min-height:64px!important}
+.navIconV18{display:block;font-size:18px;line-height:1;margin-bottom:1px}
+.navLabelV18{display:block;font-size:13px;line-height:1.1;font-weight:800}
+.pullRefreshV18{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);width:46px;height:46px;margin-left:-23px;border-radius:999px;background:rgba(20,22,27,.88);border:1px solid rgba(255,255,255,.14);box-shadow:0 10px 30px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(-18px) scale(.88);transition:.18s ease;z-index:9999;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.pullRefreshV18.show{opacity:1;transform:translateY(0) scale(1)}
+.pullRefreshV18 .ring{width:22px;height:22px;border-radius:999px;border:3px solid rgba(255,255,255,.18);border-top-color:#22c55e;transform:rotate(var(--pull-rot,0deg))}
+.pullRefreshV18.loading .ring{animation:v18Spin .8s linear infinite}
+@keyframes v18Spin{to{transform:rotate(360deg)}}
+.lastUpdatedV18{font-size:12px;font-weight:750;color:var(--muted,#6b7280);margin-top:8px}
+.metric a,.proof,.checkBtn,a[href*="coingecko"],a[href*="coinmarketcap"],a[href*="dexscreener"]{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:34px!important;height:28px!important;padding:0 10px!important;border-radius:999px!important;font-size:0!important;line-height:1!important}
+.metric a::after,.proof::after,.checkBtn::after,a[href*="coingecko"]::after,a[href*="coinmarketcap"]::after,a[href*="dexscreener"]::after{content:"↗";font-size:15px!important;font-weight:900!important}
+.tradePositionV18{margin-top:14px;padding:14px;border-radius:24px;background:rgba(148,163,184,.08);border:1px solid rgba(148,163,184,.22)}
+.tradePositionV18 h3{margin:0 0 10px 0;font-size:18px;letter-spacing:-.02em}
+.tradeGridV18{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tradeMiniV18{padding:10px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(148,163,184,.18)}
+.tradeMiniV18 small{display:block;color:var(--muted,#6b7280);font-size:11px;font-weight:850;margin-bottom:4px}
+.tradeMiniV18 b{display:block;font-size:15px;line-height:1.15}
+.avgBlockV18{margin-top:10px;padding:12px;border-radius:20px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.22)}
+.avgBlockV18 .row{display:flex;justify-content:space-between;gap:8px;font-size:13px;font-weight:800;color:var(--muted,#6b7280)}
+.avgBlockV18 .pnl{margin-top:6px;font-size:20px;font-weight:900}
+.multiBuyV18{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.multiBuyV18 input{width:100%;min-width:0}
+.multiBuyActionsV18{margin-top:10px;display:flex;gap:8px}
+.multiBuyActionsV18 button{flex:1}
+.buyListV18{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.buyRowV18{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(148,163,184,.16);font-size:12px;font-weight:800}
+.buyRowV18 button{width:26px!important;height:26px!important;min-width:26px!important;padding:0!important;border-radius:999px!important}
+.compactHintV18{margin-top:8px;font-size:12px;line-height:1.35;color:var(--muted,#6b7280)}

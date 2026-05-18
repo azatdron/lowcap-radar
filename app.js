@@ -558,3 +558,90 @@ function v20xHide(){try{document.querySelectorAll(".coin.open .analysisGrid,.coi
 document.addEventListener("DOMContentLoaded",()=>{setInterval(()=>{v20xInject();v20xHide()},700)})
 document.addEventListener("click",()=>setTimeout(()=>{v20xInject();v20xHide()},120))
 
+
+
+/* v21 Chips order + source labels */
+function v21T(ru,en){
+  try{
+    if(typeof lrLang!=="undefined"&&lrLang==="en")return en;
+    const b=document.body.innerText||"";
+    if(b.includes("Start scan")||b.includes("Found"))return en;
+  }catch(e){}
+  return ru;
+}
+function v21Fmt(n){
+  n=Number(n||0);
+  if(!isFinite(n))n=0;
+  if(Math.abs(n)>=1e9)return "$"+(n/1e9).toFixed(1)+"B";
+  if(Math.abs(n)>=1e6)return "$"+(n/1e6).toFixed(1)+"M";
+  if(Math.abs(n)>=1e3)return "$"+(n/1e3).toFixed(0)+"K";
+  if(Math.abs(n)<0.01&&n!==0)return "$"+n.toPrecision(3);
+  return "$"+n.toFixed(2);
+}
+function v21Trend(c){
+  const s=String((c&&(c._trend||c.trend))||"").toLowerCase();
+  if(s.includes("up")||s.includes("вос"))return v21T("тренд ↑","trend ↑");
+  if(s.includes("down")||s.includes("нис"))return v21T("тренд ↓","trend ↓");
+  if(s.includes("rev")||s.includes("раз"))return v21T("разворот","reversal");
+  return v21T("боковик","sideways");
+}
+function v21ChipHtml(c){
+  try{
+    const ch=Number((c&&c.price_change_percentage_24h)||0);
+    const age=(c&&c.age_days)?`${c.age_days}${v21T("д","d")}`:"—";
+    const vol=(c&&c.total_volume)?v21Fmt(c.total_volume):"—";
+    const dex=(c&&(c.dex||c.exchange||c.chain))||"";
+    const cls=ch>0?"good":(ch<0?"bad":"");
+    return `<div class="compactExtraV21" onclick="event.stopPropagation()">
+      <span class="compactChipV21">${v21T("Объём","Vol")} ${vol}</span>
+      <span class="compactChipV21 ${cls}">${v21T("24ч","24h")} ${isFinite(ch)?(ch>0?"+":"")+ch.toFixed(1)+"%":"—"}</span>
+      <span class="compactChipV21">${v21Trend(c)}</span>
+      <span class="compactChipV21">${v21T("Возраст","Age")} ${age}</span>
+      ${dex?`<span class="compactChipV21">${String(dex).slice(0,18)}</span>`:""}
+    </div>`;
+  }catch(e){return ""}
+}
+function v21FixSourceButtons(card){
+  try{
+    const links=[...card.querySelectorAll(".links a,.compactLinksV19 a,.compactLinksV20 a,.linkBtn")];
+    links.forEach(a=>{
+      const href=(a.href||"").toLowerCase();
+      if(href.includes("dexscreener")) a.textContent="DS";
+      else if(href.includes("coinmarketcap")) a.textContent="CMC";
+      else if(href.includes("coingecko")) a.textContent="CG";
+    });
+    const linksBox=card.querySelector(".links,.compactLinksV19,.compactLinksV20");
+    if(linksBox){
+      linksBox.classList.add("compactLinksV21");
+      const details=card.querySelector(".details")||card;
+      const explain=details.querySelector(".explain");
+      if(explain && linksBox.parentElement===details){
+        details.insertBefore(linksBox, explain.nextSibling);
+      }
+    }
+  }catch(e){}
+}
+function v21ReorderExpanded(){
+  try{
+    document.querySelectorAll("[data-coin-key]").forEach(card=>{
+      if(!card.classList.contains("open"))return;
+      const details=card.querySelector(".details")||card;
+      const old=details.querySelector(".compactExtraV20,.compactExtraV21");
+      if(old) old.remove();
+      const k=card.getAttribute("data-coin-key");
+      const c=(typeof coinStore!=="undefined"&&coinStore.get(k))||(typeof watchItems==="function"?watchItems().find(x=>key(x)===k):null)||(typeof lastResults!=="undefined"?lastResults.find(x=>key(x)===k):null);
+      if(c){
+        const holder=document.createElement("div");
+        holder.innerHTML=v21ChipHtml(c);
+        const chips=holder.firstElementChild;
+        const explain=details.querySelector(".explain");
+        if(explain) details.insertBefore(chips, explain);
+        else details.insertBefore(chips, details.firstChild);
+      }
+      v21FixSourceButtons(card);
+    });
+  }catch(e){}
+}
+document.addEventListener("DOMContentLoaded",()=>{setInterval(v21ReorderExpanded,700);});
+document.addEventListener("click",()=>setTimeout(v21ReorderExpanded,120));
+

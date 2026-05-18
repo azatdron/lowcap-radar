@@ -614,3 +614,28 @@ button,select,input,a{pointer-events:auto!important;touch-action:manipulation}
 .buyActionsV19 button{min-height:39px!important;border-radius:15px!important;font-size:13px!important}
 .buyRowV19{padding:7px 9px!important;border-radius:13px!important;font-size:12px!important}
 @media(max-width:430px){.tradeLineV19{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+
+
+/* v21 Chips order + source labels */
+.compactExtraV20,.compactExtraV21{
+  display:flex!important;flex-wrap:wrap!important;gap:7px!important;margin:10px 0 10px 0!important;
+}
+.compactChipV20,.compactChipV21{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:4px!important;
+  min-height:30px!important;padding:6px 10px!important;border-radius:999px!important;
+  background:rgba(148,163,184,.08)!important;border:1px solid rgba(148,163,184,.22)!important;
+  font-size:12px!important;font-weight:850!important;line-height:1!important;
+}
+.compactLinksV21,.compactLinksV20,.compactLinksV19{
+  display:flex!important;gap:8px!important;margin:8px 0 12px 0!important;
+}
+.compactLinksV21 .linkBtn,.compactLinksV20 .linkBtn,.compactLinksV19 .linkBtn,
+.coin.open .linkBtn,.coin.open .proofLink{
+  width:auto!important;min-width:46px!important;height:32px!important;padding:0 10px!important;
+  border-radius:12px!important;font-size:12px!important;font-weight:900!important;line-height:1!important;overflow:hidden!important;
+}
+.compactLinksV21 .linkBtn::after,.compactLinksV20 .linkBtn::after,.compactLinksV19 .linkBtn::after,
+.coin.open .linkBtn::after,.coin.open .proofLink::after{
+  content:" ↗"!important;font-size:11px!important;font-weight:950!important;
+}
+.coin.open .explain{margin-top:8px!important;}

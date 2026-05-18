@@ -585,3 +585,32 @@ button,select,input,a{pointer-events:auto!important;touch-action:manipulation}
 .buyRowV19 button{width:28px!important;height:28px!important;min-width:28px!important;padding:0!important;border-radius:999px!important}
 .hintV19{margin-top:8px;color:var(--muted,#6b7280);font-size:12px;line-height:1.32}
 @media(max-width:430px){.tradeLineV19{grid-template-columns:repeat(3,minmax(0,1fr))}.tradeCellV19 b{font-size:11px}}
+
+
+/* v20 Compact Chips Expanded Mode */
+.coin.open .analysisGrid,.coin.open .metricGrid,.coin.open .metricsGrid,.coin.open .detailGrid,.coin.open .bigMetrics,.coin.open .detailsGrid{display:none!important}
+.coin.open .details > .metric,.coin.open .details > .metricCard,.coin.open .details > .statCard{display:none!important}
+.coin.open .explain{margin-top:10px!important;padding:12px!important;border-radius:18px!important;font-size:13px!important;line-height:1.38!important}
+.compactExtraV20{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 8px 0}
+.compactChipV20{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-height:30px;padding:6px 10px;border-radius:999px;background:rgba(148,163,184,.08);border:1px solid rgba(148,163,184,.22);font-size:12px;font-weight:850;line-height:1;color:var(--text,#111827)}
+.dark .compactChipV20,[data-theme="dark"] .compactChipV20,body.dark .compactChipV20{color:var(--text,#f9fafb)}
+.compactChipV20.good{border-color:rgba(34,197,94,.35);color:#22c55e}.compactChipV20.bad{border-color:rgba(239,68,68,.35);color:#ef4444}
+.compactLinksV20,.compactLinksV19{display:flex!important;gap:7px!important;margin:8px 0!important}
+.compactLinksV20 .linkBtn,.compactLinksV19 .linkBtn,.coin.open .linkBtn,.coin.open .proofLink{width:34px!important;min-width:34px!important;height:30px!important;padding:0!important;border-radius:12px!important;font-size:0!important;overflow:hidden!important}
+.compactLinksV20 .linkBtn::after,.compactLinksV19 .linkBtn::after,.coin.open .linkBtn::after,.coin.open .proofLink::after{content:"↗";font-size:15px!important;font-weight:950!important}
+.details > h3,.details > .tradeBox,.details > .aiTrade,.details > .tradeLayer{display:none!important}
+.positionPanelV19{margin-top:10px!important;padding:12px!important;border-radius:22px!important}
+.positionPanelV19 h3{font-size:17px!important;margin-bottom:9px!important}
+.tradeLineV19{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:6px!important}
+.tradeCellV19{padding:8px 5px!important;border-radius:14px!important}
+.tradeCellV19 small{font-size:10px!important;margin-bottom:3px!important}
+.tradeCellV19 b{font-size:11px!important;line-height:1.1!important}
+.posSummaryV19{padding:10px!important;border-radius:18px!important;margin-top:8px!important}
+.posSummaryV19 .top{font-size:12px!important;gap:5px!important}
+.posSummaryV19 .pnl{font-size:19px!important;margin-top:6px!important}
+.buyFormV19{margin-top:9px!important;gap:7px!important}
+.buyFormV19 input{padding:10px 11px!important;border-radius:15px!important;font-size:14px!important}
+.buyActionsV19{margin-top:8px!important;gap:7px!important}
+.buyActionsV19 button{min-height:39px!important;border-radius:15px!important;font-size:13px!important}
+.buyRowV19{padding:7px 9px!important;border-radius:13px!important;font-size:12px!important}
+@media(max-width:430px){.tradeLineV19{grid-template-columns:repeat(3,minmax(0,1fr))!important}}

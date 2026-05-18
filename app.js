@@ -645,3 +645,42 @@ function v21ReorderExpanded(){
 document.addEventListener("DOMContentLoaded",()=>{setInterval(v21ReorderExpanded,700);});
 document.addEventListener("click",()=>setTimeout(v21ReorderExpanded,120));
 
+
+
+/* v22 remove duplicated chips */
+function v22Cleanup(){
+try{
+document.querySelectorAll("[data-coin-key].open").forEach(card=>{
+const details=card.querySelector(".details")||card;
+
+const chips=details.querySelectorAll(".compactExtraV20,.compactExtraV21");
+
+if(chips.length>1){
+for(let i=1;i<chips.length;i++){
+chips[i].remove();
+}
+}
+
+const explain=details.querySelector(".explain");
+const first=details.querySelector(".compactExtraV20,.compactExtraV21");
+
+if(first&&explain){
+details.insertBefore(first,explain);
+}
+
+const links=details.querySelector(".compactLinksV21,.compactLinksV20,.compactLinksV19,.links");
+
+if(links&&explain){
+details.insertBefore(links,explain.nextSibling);
+}
+});
+}catch(e){}
+}
+
+document.addEventListener("DOMContentLoaded",()=>{
+setInterval(v22Cleanup,600);
+});
+
+document.addEventListener("click",()=>{
+setTimeout(v22Cleanup,120);
+});

@@ -1,11 +1,1 @@
-Загружай содержимое этой папки в корень репозитория.
-
-index.html
-app.js
-style.css
-README.md
-package.json
-manifest.json
-api/
-  health.js
-  scan.js
+Upload all files to repository root. Full project, not preview.

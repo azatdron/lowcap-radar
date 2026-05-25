@@ -1,1 +1,14 @@
-Upload all files to repository root. Full project, not preview.
+ЗАГРУЗКА В GITHUB
+
+Загружай содержимое этой папки в корень репозитория.
+
+Правильная структура:
+index.html
+app.js
+style.css
+README.md
+package.json
+manifest.json
+api/
+  health.js
+  scan.js

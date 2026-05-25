@@ -1,3 +1,6 @@
-# Lowcap Radar AI lr24
+# Lowcap Radar AI v23
 
-Full project over stable v23.
+- Убрано мигание Plan + My position.
+- Отключена постоянная перерисовка позиции.
+- Обновляются только PnL/Now.
+- Удаляются дублирующиеся chips.

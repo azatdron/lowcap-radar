@@ -1,1 +1,1 @@
-export default function handler(req,res){res.status(200).json({ok:true,backend:'online',service:'Lowcap Radar AI',version:'v27-candles'})}
+export default function handler(req,res){res.status(200).json({ok:true,backend:'online',service:'Lowcap Radar AI',version:'v29-clean'})}

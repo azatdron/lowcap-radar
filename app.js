@@ -705,197 +705,24 @@ document.addEventListener("DOMContentLoaded",()=>{setTimeout(v23RunStablePass,15
 document.addEventListener("click",()=>{setTimeout(v23RunStablePass,120);setTimeout(v23RunStablePass,500);});
 setInterval(v23UpdateOnlyPnlNumbers,5000);
 
-/* v27 — Minimal Cards + Candles + No Duplicates */
-function v27T(ru,en){
-  try{
-    if(typeof lrLang!=="undefined" && lrLang==="en") return en;
-    const b=document.body.innerText||"";
-    if(b.includes("Start scan") || b.includes("Found")) return en;
-  }catch(e){}
-  return ru;
-}
-function v27N(x){x=Number(x||0);return isFinite(x)?x:0}
-function v27Money(x){
-  x=Number(x||0);if(!isFinite(x))x=0;
-  if(Math.abs(x)>=1e9)return"$"+(x/1e9).toFixed(1)+"B";
-  if(Math.abs(x)>=1e6)return"$"+(x/1e6).toFixed(1)+"M";
-  if(Math.abs(x)>=1e3)return"$"+(x/1e3).toFixed(0)+"K";
-  if(Math.abs(x)<0.01&&x!==0)return"$"+x.toPrecision(3);
-  return"$"+x.toFixed(2);
-}
-function v27Price(x){
-  x=Number(x||0);
-  if(!isFinite(x)||x===0)return"—";
-  if(Math.abs(x)<0.01)return"$"+x.toPrecision(4);
-  return"$"+x.toFixed(4).replace(/0+$/,"").replace(/\.$/,"");
-}
-function v27Change(c){return v27N(c&&c.price_change_percentage_24h)}
-function v27Score(c){
-  const ch=Math.abs(v27Change(c));
-  const vol=v27N(c&&c.total_volume);
-  const liq=v27N(c&&(c.liquidity_usd||c.liquidity||c.liq));
-  const cap=v27N(c&&(c.market_cap||c.mcap));
-  let s=0;
-  s+=Math.min(30,ch*1.15);
-  if(vol>0&&liq>0)s+=Math.min(25,(vol/Math.max(liq,1))*7);
-  if(liq>=50000)s+=12;
-  if(cap>0&&cap<50000000)s+=12;
-  if(cap>=100000&&cap<=15000000)s+=8;
-  if(ch>=7&&ch<=45)s+=10;
-  if(ch>70)s-=12;
-  return Math.max(0,Math.min(100,Math.round(s)));
-}
-function v27Status(c){
-  const s=v27Score(c),ch=v27Change(c);
-  if(s<40)return v27T("Не входить","Avoid");
-  if(s<60)return v27T("Наблюдать","Watch");
-  if(s<75)return ch<0?v27T("Просадка: проверить","Dip: check"):v27T("Возможный вход","Possible entry");
-  if(s<90)return v27T("Сильный сигнал","Strong signal");
-  return v27T("Перегрев, осторожно","Overheated, caution");
-}
-function v27Trend(c){
-  const ch=v27Change(c),t=String((c&&(c._trend||c.trend))||"").toLowerCase();
-  if(t.includes("up")||t.includes("вос")||ch>7)return v27T("восходящий","uptrend");
-  if(t.includes("down")||t.includes("нис")||ch<-7)return v27T("нисходящий","downtrend");
-  return v27T("боковик","sideways");
-}
-function v27Zones(c){
-  const p=v27N(c&&c.current_price);
-  if(!p)return{entry:"—",tp:"—",stop:"—"};
-  return{
-    entry:`${v27Price(p*0.92)}–${v27Price(p*0.97)}`,
-    tp:`${v27Price(p*1.10)} / ${v27Price(p*1.15)} / ${v27Price(p*1.20)}`,
-    stop:v27Price(p*0.88)
-  };
-}
-function v27Url(c,type){
-  try{
-    if(type==="dex"&&c.url)return c.url;
-    if(type==="cmc"&&typeof cmcUrl==="function"){
-      const u=cmcUrl(c);if(u&&u!=="#")return u;
-    }
-    if(type==="cg"&&typeof cgUrl==="function"){
-      const u=cgUrl(c);if(u&&u!=="#")return u;
-    }
-    const name=encodeURIComponent((c.name||c.symbol||"").toString());
-    if(type==="cmc")return"https://coinmarketcap.com/search/?q="+name;
-    if(type==="cg")return"https://www.coingecko.com/en/search?query="+name;
-  }catch(e){}
-  return"#";
-}
-function v27Candles(ch,tf){
-  ch=Number(ch||0);
-  const up=ch>=0;
-  const base=[
-    [18,72,35,66,1],[48,66,40,58,1],[78,74,52,69,0],[108,63,35,45,1],
-    [138,58,44,50,0],[168,48,25,34,1],[198,43,28,38,0],[228,38,20,27,1],
-    [258,34,24,31,0],[288,30,12,19,1],[318,28,14,22,1]
-  ];
-  const down=[
-    [18,25,12,20,0],[48,34,20,29,0],[78,30,16,22,1],[108,43,28,39,0],
-    [138,48,35,41,1],[168,58,44,52,0],[198,55,38,45,1],[228,66,50,60,0],
-    [258,62,47,55,1],[288,72,58,67,0],[318,78,62,72,0]
-  ];
-  const arr=up?base:down;
-  const body=arr.map(([x,h,l,c,green])=>{
-    const color=green?"#22c55e":"#ef4444";
-    const y=Math.min(c,h), height=Math.max(8,Math.abs(c-h));
-    return `<line x1="${x}" y1="${l}" x2="${x}" y2="${h+12}" stroke="${color}" stroke-width="2" stroke-linecap="round"/><rect x="${x-5}" y="${y}" width="10" height="${height}" rx="2" fill="${color}"/>`;
-  }).join("");
-  return `<svg viewBox="0 0 340 112" preserveAspectRatio="none">${body}</svg>`;
-}
-function v27TfKey(k){return"v27_tf_"+k}
-function v27SetTf(k,tf){
-  localStorage.setItem(v27TfKey(k),tf);
-  const card=document.querySelector(`[data-coin-key="${CSS.escape(k)}"]`);
-  if(card){
-    const c=(typeof coinStore!=="undefined"&&coinStore.get(k))||(typeof watchItems==="function"?watchItems().find(x=>key(x)===k):null)||(typeof lastResults!=="undefined"?lastResults.find(x=>key(x)===k):null);
-    if(c){
-      const ch=card.querySelector(".v27Chart");
-      if(ch)ch.innerHTML=v27Candles(v27Change(c),tf);
-      card.querySelectorAll(".v27Tf button").forEach(b=>b.classList.toggle("active",b.dataset.tf===tf));
-    }
-  }
-}
-function v27AiText(c){
-  const cap=v27Money((c&&(c.market_cap||c.mcap))||0),liq=v27Money((c&&(c.liquidity_usd||c.liquidity||c.liq))||0),vol=v27Money((c&&c.total_volume)||0),ch=v27Change(c);
-  return`${v27T("Цена","Price")} ${v27Price(c&&c.current_price)}. ${v27T("Капитализация","Market cap")} ${cap}. ${v27T("Ликвидность","Liquidity")} ${liq}. ${v27T("Объём","Volume")} ${vol}. ${v27T("Движение","Move")} ${(ch>0?"+":"")+ch.toFixed(1)}%. ${v27T("Тренд","Trend")}: ${v27Trend(c)}.`;
-}
-function v27Passport(c,k){
-  const z=v27Zones(c),ch=v27Change(c),score=v27Score(c),tf=localStorage.getItem(v27TfKey(k))||"15m";
-  return`<div class="v27Passport" onclick="event.stopPropagation()">
-    <div class="v27Title">${v27T("Информация о монете","Coin info")}</div>
-    <div class="v27Stats">
-      <div class="v27Stat"><small>${v27T("Цена","Price")}</small><b>${v27Price(c&&c.current_price)}</b></div>
-      <div class="v27Stat"><small>${v27T("Капитализация","Market cap")}</small><b>${v27Money((c&&(c.market_cap||c.mcap))||0)}</b></div>
-      <div class="v27Stat"><small>${v27T("Ликвидность","Liquidity")}</small><b>${v27Money((c&&(c.liquidity_usd||c.liquidity||c.liq))||0)}</b></div>
-      <div class="v27Stat"><small>${v27T("Объём 24ч","Volume 24h")}</small><b>${v27Money((c&&c.total_volume)||0)}</b></div>
-      <div class="v27Stat"><small>${v27T("24ч","24h")}</small><b>${(ch>0?"+":"")+ch.toFixed(1)}%</b></div>
-      <div class="v27Stat"><small>${v27T("Ранг","Rank")}</small><b>${c&&c.market_cap_rank?("#"+c.market_cap_rank):"—"}</b></div>
-    </div>
-    <div class="v27Chart">${v27Candles(ch,tf)}</div>
-    <div class="v27Tf">${["5m","15m","1h","4h"].map(x=>`<button data-tf="${x}" class="${tf===x?"active":""}" onclick="event.stopPropagation();v27SetTf('${k}','${x}')">${x}</button>`).join("")}</div>
-    <div class="v27Live">
-      <div class="v27LiveTop"><div><div class="v27Status">Live Trade Radar</div><div class="v27Status">${v27Status(c)}</div></div><div class="v27LiveScore">${score}/100</div></div>
-      <div class="v27Zones">
-        <div class="v27Zone"><small>${v27T("Зона входа","Entry zone")}</small><b>${z.entry}</b></div>
-        <div class="v27Zone"><small>${v27T("Фиксация","Take profit")}</small><b>${z.tp}</b></div>
-        <div class="v27Zone"><small>${v27T("Отмена идеи","Invalidation")}</small><b>${z.stop}</b></div>
-        <div class="v27Zone"><small>${v27T("Тренд","Trend")}</small><b>${v27Trend(c)}</b></div>
-      </div>
-    </div>
-    <div class="v27Ai"><b>${v27T("AI анализ","AI analysis")}:</b> ${v27AiText(c)}</div>
-    <div class="v27Sources">
-      <a target="_blank" rel="noopener" href="${v27Url(c,'dex')}">Dex ↗</a>
-      <a target="_blank" rel="noopener" href="${v27Url(c,'cmc')}">CMC ↗</a>
-      <a target="_blank" rel="noopener" href="${v27Url(c,'cg')}">CG ↗</a>
-    </div>
-  </div>`;
-}
-function v27MainMetrics(card,c){
-  try{
-    if(!card||!c)return;
-    card.querySelectorAll(".v26MainMetrics,.v27MainMetrics").forEach(el=>el.remove());
-    if(card.classList.contains("open"))return;
-    const ref=card.querySelector(".chips,.badges,.tagRow")||card.querySelector(".details")||card;
-    const div=document.createElement("div");
-    div.className="v27MainMetrics";
-    const ch=v27Change(c);
-    div.innerHTML=`<span class="v27Pill">Price ${v27Price(c.current_price)}</span><span class="v27Pill">Cap ${v27Money((c.market_cap||c.mcap)||0)}</span><span class="v27Pill">Liq ${v27Money((c.liquidity_usd||c.liquidity||c.liq)||0)}</span><span class="v27Pill ${ch>=0?'good':'bad'}">24h ${(ch>0?"+":"")+ch.toFixed(1)}%</span>`;
-    ref.parentNode.insertBefore(div,ref.nextSibling);
-  }catch(e){}
-}
-function v27Decorate(){
-  try{
-    document.querySelectorAll("[data-coin-key]").forEach(card=>{
-      const k=card.getAttribute("data-coin-key");
-      const c=(typeof coinStore!=="undefined"&&coinStore.get(k))||(typeof watchItems==="function"?watchItems().find(x=>key(x)===k):null)||(typeof lastResults!=="undefined"?lastResults.find(x=>key(x)===k):null);
-      if(!c)return;
-      v27MainMetrics(card,c);
-      const name=card.querySelector(".name,.coinName,h3,h2");
-      if(name&&!name.querySelector(".v27ChainLogo")){
-        const chain=String(c.chain||c.platform||"").toLowerCase();
-        if(chain){
-          const badge=document.createElement("span");
-          badge.className="v27ChainLogo";
-          badge.textContent=chain.includes("base")?"BASE":chain.includes("eth")?"ETH":chain.includes("bsc")?"BSC":chain.slice(0,4).toUpperCase();
-          name.appendChild(badge);
-        }
-      }
-      if(card.classList.contains("open")){
-        const details=card.querySelector(".details")||card;
-        details.querySelectorAll(".tradeBox,.aiTrade,.tradeLayer,.positionPanelV19,.positionPanelV20,.positionPanelV21,.tradePositionV18,.portfolioBox,.myPosition,.positionBox,.compactExtraV20,.compactExtraV21,.compactExtraV24,.links,.compactLinksV19,.compactLinksV20,.compactLinksV21,.explain,.v25Passport,.v26Passport").forEach(el=>el.remove());
-        if(!details.querySelector(".v27Passport")){
-          const d=document.createElement("div");
-          d.innerHTML=v27Passport(c,k);
-          details.insertBefore(d.firstElementChild,details.firstChild);
-        }
-      }else{
-        card.querySelectorAll(".v25Passport,.v26Passport,.v27Passport,.tradeSignalV24,.liveBtnV24").forEach(el=>el.remove());
-      }
-    });
-  }catch(e){}
-}
-document.addEventListener("DOMContentLoaded",()=>{setTimeout(v27Decorate,200);setTimeout(v27Decorate,800)});
-document.addEventListener("click",()=>{setTimeout(v27Decorate,120);setTimeout(v27Decorate,550)});
-setInterval(v27Decorate,2500);
+/* v29 clean scanner */
+function v29T(ru,en){try{if(typeof lrLang!=="undefined"&&lrLang==="en")return en;const b=document.body.innerText||"";if(b.includes("Start scan")||b.includes("Found"))return en}catch(e){}return ru}
+function v29N(x){x=Number(x||0);return isFinite(x)?x:0}
+function v29Money(x){x=Number(x||0);if(!isFinite(x))x=0;if(Math.abs(x)>=1e9)return"$"+(x/1e9).toFixed(1)+"B";if(Math.abs(x)>=1e6)return"$"+(x/1e6).toFixed(1)+"M";if(Math.abs(x)>=1e3)return"$"+(x/1e3).toFixed(0)+"K";if(Math.abs(x)<0.01&&x!==0)return"$"+x.toPrecision(3);return"$"+x.toFixed(2)}
+function v29Price(x){x=Number(x||0);if(!isFinite(x)||x===0)return"—";if(Math.abs(x)<0.01)return"$"+x.toPrecision(4);return"$"+x.toFixed(4).replace(/0+$/,"").replace(/\.$/,"")}
+function v29Change(c){return v29N(c&&c.price_change_percentage_24h)}
+function v29Score(c){const ch=Math.abs(v29Change(c)),vol=v29N(c&&c.total_volume),liq=v29N(c&&(c.liquidity_usd||c.liquidity||c.liq)),cap=v29N(c&&(c.market_cap||c.mcap));let s=0;s+=Math.min(30,ch*1.15);if(vol>0&&liq>0)s+=Math.min(25,(vol/Math.max(liq,1))*7);if(liq>=50000)s+=12;if(cap>0&&cap<50000000)s+=12;if(cap>=100000&&cap<=15000000)s+=8;if(ch>=7&&ch<=45)s+=10;if(ch>70)s-=12;return Math.max(0,Math.min(100,Math.round(s)))}
+function v29Status(c){const s=v29Score(c),ch=v29Change(c);if(s<40)return v29T("Не входить","Avoid");if(s<60)return v29T("Наблюдать","Watch");if(s<75)return ch<0?v29T("Просадка: проверить","Dip: check"):v29T("Возможный вход","Possible entry");if(s<90)return v29T("Сильный сигнал","Strong signal");return v29T("Перегрев, осторожно","Overheated, caution")}
+function v29Trend(c){const ch=v29Change(c),t=String((c&&(c._trend||c.trend))||"").toLowerCase();if(t.includes("up")||t.includes("вос")||ch>7)return v29T("восходящий","uptrend");if(t.includes("down")||t.includes("нис")||ch<-7)return v29T("нисходящий","downtrend");return v29T("боковик","sideways")}
+function v29Zones(c){const p=v29N(c&&c.current_price);if(!p)return{entry:"—",tp:"—",stop:"—"};return{entry:`${v29Price(p*0.92)}–${v29Price(p*0.97)}`,tp:`${v29Price(p*1.10)} / ${v29Price(p*1.15)} / ${v29Price(p*1.20)}`,stop:v29Price(p*0.88)}}
+function v29Url(c,type){try{if(type==="dex"&&c.url)return c.url;const name=encodeURIComponent((c.name||c.symbol||"").toString());if(type==="cmc")return"https://coinmarketcap.com/search/?q="+name;if(type==="cg")return"https://www.coingecko.com/en/search?query="+name}catch(e){}return"#"}
+function v29Candles(ch){ch=Number(ch||0);const up=ch>=0;const arr=up?[[18,72,35,66,1],[48,66,40,58,1],[78,74,52,69,0],[108,63,35,45,1],[138,58,44,50,0],[168,48,25,34,1],[198,43,28,38,0],[228,38,20,27,1],[258,34,24,31,0],[288,30,12,19,1],[318,28,14,22,1]]:[[18,25,12,20,0],[48,34,20,29,0],[78,30,16,22,1],[108,43,28,39,0],[138,48,35,41,1],[168,58,44,52,0],[198,55,38,45,1],[228,66,50,60,0],[258,62,47,55,1],[288,72,58,67,0],[318,78,62,72,0]];return`<svg viewBox="0 0 340 112" preserveAspectRatio="none">${arr.map(([x,h,l,c,g])=>{const col=g?"#22c55e":"#ef4444";const y=Math.min(c,h),height=Math.max(8,Math.abs(c-h));return`<line x1="${x}" y1="${l}" x2="${x}" y2="${h+12}" stroke="${col}" stroke-width="2" stroke-linecap="round"/><rect x="${x-5}" y="${y}" width="10" height="${height}" rx="2" fill="${col}"/>`}).join("")}</svg>`}
+function v29AiText(c){const cap=v29Money((c&&(c.market_cap||c.mcap))||0),liq=v29Money((c&&(c.liquidity_usd||c.liquidity||c.liq))||0),vol=v29Money((c&&c.total_volume)||0),ch=v29Change(c);return`${v29T("Цена","Price")} ${v29Price(c&&c.current_price)}. ${v29T("Капитализация","Market cap")} ${cap}. ${v29T("Ликвидность","Liquidity")} ${liq}. ${v29T("Объём","Volume")} ${vol}. ${v29T("Движение","Move")} ${(ch>0?"+":"")+ch.toFixed(1)}%. ${v29T("Тренд","Trend")}: ${v29Trend(c)}.`}
+function v29Passport(c,k){const z=v29Zones(c),ch=v29Change(c),score=v29Score(c);return`<div class="v29Passport" onclick="event.stopPropagation()"><div class="v29Title">${v29T("Информация о монете","Coin info")}</div><div class="v29Stats"><div class="v29Stat"><small>${v29T("Цена","Price")}</small><b>${v29Price(c&&c.current_price)}</b></div><div class="v29Stat"><small>${v29T("Капитализация","Market cap")}</small><b>${v29Money((c&&(c.market_cap||c.mcap))||0)}</b></div><div class="v29Stat"><small>${v29T("Ликвидность","Liquidity")}</small><b>${v29Money((c&&(c.liquidity_usd||c.liquidity||c.liq))||0)}</b></div><div class="v29Stat"><small>${v29T("Объём 24ч","Volume 24h")}</small><b>${v29Money((c&&c.total_volume)||0)}</b></div><div class="v29Stat"><small>${v29T("24ч","24h")}</small><b>${(ch>0?"+":"")+ch.toFixed(1)}%</b></div><div class="v29Stat"><small>${v29T("Ранг","Rank")}</small><b>${c&&c.market_cap_rank?("#"+c.market_cap_rank):"—"}</b></div></div><div class="v29Chart">${v29Candles(ch)}</div><div class="v29Tf"><button class="active">5m</button><button>15m</button><button>1h</button><button>4h</button></div><div class="v29Live"><div class="v29LiveTop"><div><div class="v29Status">Live Trade Radar</div><div class="v29Status">${v29Status(c)}</div></div><div class="v29LiveScore">${score}/100</div></div><div class="v29Zones"><div class="v29Zone"><small>${v29T("Зона входа","Entry zone")}</small><b>${z.entry}</b></div><div class="v29Zone"><small>${v29T("Фиксация","Take profit")}</small><b>${z.tp}</b></div><div class="v29Zone"><small>${v29T("Отмена идеи","Invalidation")}</small><b>${z.stop}</b></div><div class="v29Zone"><small>${v29T("Тренд","Trend")}</small><b>${v29Trend(c)}</b></div></div></div><div class="v29Ai"><b>${v29T("AI анализ","AI analysis")}:</b> ${v29AiText(c)}</div><div class="v29Sources"><a target="_blank" rel="noopener" href="${v29Url(c,'dex')}">Dex ↗</a><a target="_blank" rel="noopener" href="${v29Url(c,'cmc')}">CMC ↗</a><a target="_blank" rel="noopener" href="${v29Url(c,'cg')}">CG ↗</a></div></div>`}
+function v29RemovePnl(){document.querySelectorAll(".pnlBox,.pnlCard,.portfolioSummary,.portfolioTop,.myPnl,#pnlBox,#portfolioSummary,[data-role='pnl']").forEach(el=>el.remove());[...document.querySelectorAll("section,div")].forEach(el=>{const t=(el.textContent||"").trim();if(t.includes("PnL")&&t.includes("Позиции не добавлены"))el.remove()})}
+function v29RemoveTradingPlan(details){[...details.querySelectorAll("*")].forEach(el=>{const t=(el.textContent||"").trim();if((t.startsWith("Торговый план")||t.startsWith("Trading plan"))&&el.parentElement){let p=el;for(let i=0;i<3&&p.parentElement&&!p.classList.contains("details");i++)p=p.parentElement;p.remove()}})}
+function v29Main(card,c){card.querySelectorAll(".v26MainMetrics,.v27MainMetrics,.v28MainMetrics,.v29MainMetrics,.v29Score").forEach(el=>el.remove());if(card.classList.contains("open"))return;const ref=card.querySelector(".chips,.badges,.tagRow")||card.querySelector(".details")||card;const div=document.createElement("div");div.className="v29MainMetrics";div.innerHTML=`<span class="v29Pill">Price ${v29Price(c.current_price)}</span><span class="v29Pill">Cap ${v29Money((c.market_cap||c.mcap)||0)}</span><span class="v29Pill">Liq ${v29Money((c.liquidity_usd||c.liquidity||c.liq)||0)}</span>`;ref.parentNode.insertBefore(div,ref.nextSibling);const sc=document.createElement("div");sc.className="v29Score";sc.innerHTML=`<small>AI Score</small><b>${v29Score(c)}</b>`;card.appendChild(sc)}
+function v29Decorate(){try{v29RemovePnl();document.querySelectorAll("[data-coin-key]").forEach(card=>{const k=card.getAttribute("data-coin-key");const c=(typeof coinStore!=="undefined"&&coinStore.get(k))||(typeof watchItems==="function"?watchItems().find(x=>key(x)===k):null)||(typeof lastResults!=="undefined"?lastResults.find(x=>key(x)===k):null);if(!c)return;v29Main(card,c);if(card.classList.contains("open")){const details=card.querySelector(".details")||card;details.querySelectorAll(".tradeBox,.aiTrade,.tradeLayer,.positionPanelV19,.positionPanelV20,.positionPanelV21,.tradePositionV18,.portfolioBox,.myPosition,.positionBox,.compactExtraV20,.compactExtraV21,.compactExtraV24,.links,.compactLinksV19,.compactLinksV20,.compactLinksV21,.explain,.v25Passport,.v26Passport,.v27Passport,.v28Passport").forEach(el=>el.remove());v29RemoveTradingPlan(details);if(!details.querySelector(".v29Passport")){const d=document.createElement("div");d.innerHTML=v29Passport(c,k);details.insertBefore(d.firstElementChild,details.firstChild)}}else{card.querySelectorAll(".v25Passport,.v26Passport,.v27Passport,.v28Passport,.v29Passport,.tradeSignalV24,.liveBtnV24").forEach(el=>el.remove())}})}catch(e){}}
+document.addEventListener("DOMContentLoaded",()=>{setTimeout(v29Decorate,150);setTimeout(v29Decorate,700);setTimeout(v29RemovePnl,1200)})
+document.addEventListener("click",()=>{setTimeout(v29Decorate,120);setTimeout(v29Decorate,550)})
+setInterval(v29Decorate,2500)

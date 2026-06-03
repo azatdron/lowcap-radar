@@ -651,331 +651,51 @@ button,select,input,a{pointer-events:auto!important;touch-action:manipulation}
 .compactExtraV21 + .compactExtraV21,
 .compactExtraV20 + .compactExtraV20{display:none!important}
 
-/* v27 — Minimal Cards + Candles + No Duplicates */
+/* v29 clean scanner: no PnL, no old score */
+.pnlBox,.pnlCard,.portfolioSummary,.portfolioTop,.myPnl,#pnlBox,#portfolioSummary,[data-role="pnl"],[class*="pnl" i],[class*="portfolio-summary" i]{display:none!important}
 
-/* MAIN CARD: keep only useful quick metrics */
-.coin:not(.open) .trendBtn,
-.coin:not(.open) .openBtn,
-.coin:not(.open) .externalBtn,
-.coin:not(.open) .coinAction,
-.coinCard:not(.open) .trendBtn,
-.coinCard:not(.open) .openBtn,
-.coinCard:not(.open) .externalBtn,
-.coinCard:not(.open) .coinAction{
-  display:none!important;
-}
+.coin:not(.open),.coinCard:not(.open){position:relative!important;min-height:126px!important}
+.coin:not(.open) .trendBtn,.coin:not(.open) .openBtn,.coin:not(.open) .externalBtn,.coin:not(.open) .coinAction,
+.coinCard:not(.open) .trendBtn,.coinCard:not(.open) .openBtn,.coinCard:not(.open) .externalBtn,.coinCard:not(.open) .coinAction{display:none!important}
+.coin:not(.open) .chip,.coin:not(.open) .badge,.coin:not(.open) .tag,
+.coinCard:not(.open) .chip,.coinCard:not(.open) .badge,.coinCard:not(.open) .tag{display:none!important}
+.coin:not(.open) .score,.coinCard:not(.open) .score,.coin:not(.open) .scoreBox,.coinCard:not(.open) .scoreBox{display:none!important}
+.coin:not(.open) .addBtn,.coin:not(.open) .removeBtn,.coin:not(.open) .watchBtn,
+.coinCard:not(.open) .addBtn,.coinCard:not(.open) .removeBtn,.coinCard:not(.open) .watchBtn{
+position:absolute!important;right:18px!important;top:22px!important;width:42px!important;height:42px!important;min-width:42px!important;border-radius:999px!important;z-index:7!important}
+.coin:not(.open) .name,.coin:not(.open) .coinName,.coin:not(.open) h2,.coin:not(.open) h3,
+.coinCard:not(.open) .name,.coinCard:not(.open) .coinName,.coinCard:not(.open) h2,.coinCard:not(.open) h3{
+max-width:calc(100% - 96px)!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
 
-/* Hide old noisy chips on main cards */
-.coin:not(.open) .chip,
-.coin:not(.open) .badge,
-.coin:not(.open) .tag,
-.coinCard:not(.open) .chip,
-.coinCard:not(.open) .badge,
-.coinCard:not(.open) .tag{
-  display:none!important;
-}
+.v29MainMetrics{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;max-width:calc(100% - 76px)}
+.v29Pill{display:inline-flex;align-items:center;justify-content:center;min-height:29px;padding:6px 10px;border-radius:999px;background:rgba(148,163,184,.08);border:1px solid rgba(148,163,184,.22);font-size:12px;font-weight:850;line-height:1;white-space:nowrap}
+.v29Score{position:absolute;right:18px;top:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:58px;line-height:1;z-index:4}
+.v29Score small{font-size:9px;font-weight:900;color:var(--muted,#6b7280);text-transform:uppercase;letter-spacing:.02em;margin-bottom:3px}
+.v29Score b{font-size:28px;font-weight:950;color:#22c55e}
 
-/* Score and plus are fixed, no overlap */
-.coin:not(.open),
-.coinCard:not(.open){
-  position:relative!important;
-}
+.positionPanelV19,.positionPanelV20,.positionPanelV21,.tradePositionV18,.portfolioBox,.myPosition,.positionBox,.tradeBox,.aiTrade,.tradeLayer,.tradePlan,.planBox,.planPanel,.tradePlanV19,.tradePlanV20,.tradePlanV21,.details>h3,.details>h2{display:none!important}
+.coin.open .analysisGrid,.coin.open .metricGrid,.coin.open .metricsGrid,.coin.open .detailGrid,.coin.open .bigMetrics,.coin.open .detailsGrid,.coin.open .details>.metric,.coin.open .details>.metricCard,.coin.open .details>.statCard,.coin.open .compactExtraV20,.coin.open .compactExtraV21,.coin.open .compactExtraV24,.coin.open .v26MainMetrics,.coin.open .v27MainMetrics,.coin.open .v28MainMetrics,.coin.open .v29MainMetrics,.coin.open .explain,.coin.open .links,.coin.open .compactLinksV19,.coin.open .compactLinksV20,.coin.open .compactLinksV21{display:none!important}
 
-.coin:not(.open) .score,
-.coinCard:not(.open) .score{
-  position:absolute!important;
-  right:86px!important;
-  top:50%!important;
-  transform:translateY(-50%)!important;
-  z-index:2!important;
-  min-width:54px!important;
-  text-align:center!important;
-  line-height:1!important;
-  pointer-events:none!important;
-}
-
-.coin:not(.open) .addBtn,
-.coin:not(.open) .removeBtn,
-.coin:not(.open) .watchBtn,
-.coinCard:not(.open) .addBtn,
-.coinCard:not(.open) .removeBtn,
-.coinCard:not(.open) .watchBtn{
-  position:absolute!important;
-  right:22px!important;
-  top:50%!important;
-  transform:translateY(-50%)!important;
-  width:42px!important;
-  height:42px!important;
-  min-width:42px!important;
-  border-radius:999px!important;
-  z-index:5!important;
-}
-
-/* Remove ghost score/buttons after collapse */
-.coin:not(.open) .liveBtnV24,
-.coin:not(.open) .tradeSignalV24,
-.coin:not(.open) .v25Passport,
-.coin:not(.open) .v26Passport,
-.coin:not(.open) .v27Passport,
-.coinCard:not(.open) .liveBtnV24,
-.coinCard:not(.open) .tradeSignalV24,
-.coinCard:not(.open) .v25Passport,
-.coinCard:not(.open) .v26Passport,
-.coinCard:not(.open) .v27Passport{
-  display:none!important;
-}
-
-.v27MainMetrics{
-  display:flex;
-  flex-wrap:wrap;
-  gap:7px;
-  margin-top:10px;
-  max-width:calc(100% - 118px);
-}
-
-.v27Pill{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-height:29px;
-  padding:6px 10px;
-  border-radius:999px;
-  background:rgba(148,163,184,.08);
-  border:1px solid rgba(148,163,184,.22);
-  font-size:12px;
-  font-weight:850;
-  line-height:1;
-  white-space:nowrap;
-}
-
-.v27Pill.good{color:#22c55e;border-color:rgba(34,197,94,.35)}
-.v27Pill.bad{color:#ef4444;border-color:rgba(239,68,68,.35)}
-
-.v27ChainLogo{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-width:24px;
-  height:24px;
-  padding:0 7px;
-  border-radius:999px;
-  background:rgba(96,165,250,.12);
-  border:1px solid rgba(96,165,250,.25);
-  color:#60a5fa;
-  font-size:11px;
-  font-weight:900;
-  margin-left:6px;
-}
-
-/* Expanded card: remove duplicate old blocks */
-.positionPanelV19,
-.positionPanelV20,
-.positionPanelV21,
-.tradePositionV18,
-.portfolioBox,
-.myPosition,
-.positionBox,
-.tradeBox,
-.aiTrade,
-.tradeLayer,
-.details > h3{
-  display:none!important;
-}
-
-.coin.open .analysisGrid,
-.coin.open .metricGrid,
-.coin.open .metricsGrid,
-.coin.open .detailGrid,
-.coin.open .bigMetrics,
-.coin.open .detailsGrid,
-.coin.open .details > .metric,
-.coin.open .details > .metricCard,
-.coin.open .details > .statCard,
-.coin.open .compactExtraV20,
-.coin.open .compactExtraV21,
-.coin.open .compactExtraV24,
-.coin.open .v26MainMetrics,
-.coin.open .v27MainMetrics{
-  display:none!important;
-}
-
-.coin.open .explain,
-.coin.open .links,
-.coin.open .compactLinksV19,
-.coin.open .compactLinksV20,
-.coin.open .compactLinksV21{
-  display:none!important;
-}
-
-.v27Passport{
-  margin-top:14px;
-  padding:14px;
-  border-radius:22px;
-  background:rgba(148,163,184,.055);
-  border:1px solid rgba(148,163,184,.18);
-}
-
-.v27Title{
-  font-size:16px;
-  font-weight:950;
-  margin-bottom:10px;
-}
-
-.v27Stats{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:8px;
-}
-
-.v27Stat{
-  padding:10px 11px;
-  border-radius:16px;
-  background:rgba(255,255,255,.045);
-  border:1px solid rgba(148,163,184,.14);
-}
-
-.v27Stat small{
-  display:block;
-  color:var(--muted,#6b7280);
-  font-size:10px;
-  font-weight:850;
-  margin-bottom:4px;
-}
-
-.v27Stat b{
-  display:block;
-  font-size:15px;
-  line-height:1.12;
-}
-
-/* Candlestick mini chart */
-.v27Chart{
-  margin-top:10px;
-  height:112px;
-  border-radius:18px;
-  background:
-    repeating-linear-gradient(90deg,rgba(148,163,184,.07) 0 1px,transparent 1px 32px),
-    repeating-linear-gradient(0deg,rgba(148,163,184,.06) 0 1px,transparent 1px 24px);
-  border:1px solid rgba(148,163,184,.16);
-  overflow:hidden;
-}
-
-.v27Chart svg{
-  width:100%;
-  height:100%;
-  display:block;
-}
-
-.v27Tf{
-  display:flex;
-  gap:7px;
-  margin-top:9px;
-}
-
-.v27Tf button{
-  flex:1;
-  min-height:30px;
-  border-radius:12px;
-  border:1px solid rgba(148,163,184,.18);
-  background:rgba(255,255,255,.04);
-  color:inherit;
-  font-size:12px;
-  font-weight:850;
-}
-
-.v27Tf button.active{
-  color:#22c55e;
-  border-color:rgba(34,197,94,.35);
-  background:rgba(34,197,94,.08);
-}
-
-.v27Live{
-  margin-top:10px;
-  padding:12px;
-  border-radius:18px;
-  background:rgba(15,23,42,.18);
-  border:1px solid rgba(148,163,184,.18);
-}
-
-.v27LiveTop{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-}
-
-.v27LiveScore{
-  font-size:30px;
-  font-weight:950;
-  color:#22c55e;
-}
-
-.v27Status{
-  color:var(--muted,#6b7280);
-  font-size:13px;
-  font-weight:850;
-}
-
-.v27Zones{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:7px;
-  margin-top:10px;
-}
-
-.v27Zone{
-  padding:9px;
-  border-radius:14px;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(148,163,184,.14);
-}
-
-.v27Zone small{
-  display:block;
-  color:var(--muted,#6b7280);
-  font-size:10px;
-  font-weight:850;
-  margin-bottom:4px;
-}
-
-.v27Zone b{
-  display:block;
-  font-size:13px;
-  line-height:1.15;
-}
-
-.v27Ai{
-  margin-top:10px;
-  padding:12px 13px;
-  border-radius:18px;
-  background:rgba(255,255,255,.035);
-  border:1px solid rgba(148,163,184,.16);
-  color:var(--muted,#6b7280);
-  font-size:13px;
-  line-height:1.38;
-  font-weight:650;
-}
-
-.v27Ai b{color:var(--text,#f9fafb)}
-
-.v27Sources{
-  display:flex;
-  gap:8px;
-  margin-top:10px;
-}
-
-.v27Sources a{
-  min-width:52px;
-  height:32px;
-  padding:0 11px;
-  border-radius:12px;
-  font-size:13px;
-  font-weight:900;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  border:1px solid rgba(148,163,184,.20);
-  background:rgba(255,255,255,.045);
-  color:inherit;
-  text-decoration:none;
-}
+.v29Passport{margin-top:14px;padding:14px;border-radius:22px;background:rgba(148,163,184,.055);border:1px solid rgba(148,163,184,.18)}
+.v29Title{font-size:16px;font-weight:950;margin-bottom:10px}
+.v29Stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.v29Stat{padding:10px 11px;border-radius:16px;background:rgba(255,255,255,.045);border:1px solid rgba(148,163,184,.14)}
+.v29Stat small{display:block;color:var(--muted,#6b7280);font-size:10px;font-weight:850;margin-bottom:4px}
+.v29Stat b{display:block;font-size:15px;line-height:1.12}
+.v29Chart{margin-top:10px;height:112px;border-radius:18px;background:repeating-linear-gradient(90deg,rgba(148,163,184,.07) 0 1px,transparent 1px 32px),repeating-linear-gradient(0deg,rgba(148,163,184,.06) 0 1px,transparent 1px 24px);border:1px solid rgba(148,163,184,.16);overflow:hidden}
+.v29Chart svg{width:100%;height:100%;display:block}
+.v29Tf{display:flex;gap:7px;margin-top:9px}
+.v29Tf button{flex:1;min-height:30px;border-radius:12px;border:1px solid rgba(148,163,184,.18);background:rgba(255,255,255,.04);color:inherit;font-size:12px;font-weight:850}
+.v29Tf button.active{color:#22c55e;border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.08)}
+.v29Live{margin-top:10px;padding:12px;border-radius:18px;background:rgba(15,23,42,.18);border:1px solid rgba(148,163,184,.18)}
+.v29LiveTop{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.v29LiveScore{font-size:30px;font-weight:950;color:#22c55e}
+.v29Status{color:var(--muted,#6b7280);font-size:13px;font-weight:850}
+.v29Zones{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+.v29Zone{padding:9px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(148,163,184,.14)}
+.v29Zone small{display:block;color:var(--muted,#6b7280);font-size:10px;font-weight:850;margin-bottom:4px}
+.v29Zone b{display:block;font-size:13px;line-height:1.15}
+.v29Ai{margin-top:10px;padding:12px 13px;border-radius:18px;background:rgba(255,255,255,.035);border:1px solid rgba(148,163,184,.16);color:var(--muted,#6b7280);font-size:13px;line-height:1.38;font-weight:650}
+.v29Ai b{color:var(--text,#f9fafb)}
+.v29Sources{display:flex;gap:8px;margin-top:10px}
+.v29Sources a{min-width:52px;height:32px;padding:0 11px;border-radius:12px;font-size:13px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(148,163,184,.20);background:rgba(255,255,255,.045);color:inherit;text-decoration:none}

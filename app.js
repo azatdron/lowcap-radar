@@ -705,15 +705,168 @@ document.addEventListener("DOMContentLoaded",()=>{setTimeout(v23RunStablePass,15
 document.addEventListener("click",()=>{setTimeout(v23RunStablePass,120);setTimeout(v23RunStablePass,500);});
 setInterval(v23UpdateOnlyPnlNumbers,5000);
 
-/* v24 Volatility Scanner over v23 */
-const LR24_STATE_KEY="lr24_volatility_mode",LR24_LIVE_KEY="lr24_live_running";
-function lr24T(ru,en){try{if(typeof lrLang!=="undefined"&&lrLang==="en")return en;let b=document.body.innerText||"";if(b.includes("Start scan")||b.includes("Found"))return en}catch(e){}return ru}
-function lr24Num(x){x=Number(x||0);return isFinite(x)?x:0}function lr24FmtPrice(x){x=Number(x||0);if(!isFinite(x)||x===0)return"—";if(Math.abs(x)<.01)return"$"+x.toPrecision(4);return"$"+x.toFixed(4).replace(/0+$/,"").replace(/\.$/,"")}
-function lr24VolScore(c){let ch=Math.abs(lr24Num(c&&c.price_change_percentage_24h)),vol=lr24Num(c&&c.total_volume),liq=lr24Num(c&&(c.liquidity_usd||c.liquidity||c.liq)),cap=lr24Num(c&&(c.market_cap||c.mcap)),s=0;s+=Math.min(35,ch*1.35);if(vol>0&&liq>0)s+=Math.min(25,(vol/Math.max(liq,1))*8);if(liq>=50000)s+=12;if(cap>0&&cap<50000000)s+=10;if(cap>=100000&&cap<=15000000)s+=8;if(ch>=8&&ch<=45)s+=10;if(ch>75)s-=15;return Math.max(0,Math.min(100,Math.round(s)))}
-function lr24Signal(c){let score=lr24VolScore(c),ch=lr24Num(c&&c.price_change_percentage_24h),status=lr24T("наблюдать","watch");if(score<40)status=lr24T("не входить","avoid");else if(score<60)status=lr24T("наблюдать","watch");else if(score<75)status=lr24T("возможный вход","possible entry");else if(score<90)status=lr24T("сильный сигнал","strong signal");else status=lr24T("перегрев / осторожно","overheated / caution");if(ch<0&&score>=55)status=lr24T("просадка: проверить вход","dip: check entry");return{score,status}}
-function lr24Zones(c){let p=lr24Num(c&&c.current_price);if(!p)return{buy:"—",fix:"—",risk:"—"};let risk=lr24VolScore(c)>=75?lr24T("высокий","high"):lr24T("средний","medium");return{buy:lr24FmtPrice(p*.92)+"–"+lr24FmtPrice(p*.97),fix:lr24FmtPrice(p*1.10)+" / "+lr24FmtPrice(p*1.15)+" / "+lr24FmtPrice(p*1.20),risk}}
-function lr24Mode(){return localStorage.getItem(LR24_STATE_KEY)||"24h"}function lr24SetMode(m){localStorage.setItem(LR24_STATE_KEY,m);lr24RenderPanel();if(typeof startScan==="function")setTimeout(()=>startScan(),120)}
-function lr24RenderPanel(){try{let host=document.querySelector(".filters,.filterPanel,.scanPanel,.panel");if(!host)return;let old=document.getElementById("volPanelV24");if(old)old.remove();let m=lr24Mode(),d=document.createElement("div");d.id="volPanelV24";d.className="volPanelV24";d.innerHTML=`<div class="volTitleV24">Volatility Scanner</div><div class="volTabsV24"><button class="volTabV24 ${m==="24h"?"active":""}" onclick="lr24SetMode('24h')">24h</button><button class="volTabV24 ${m==="7d"?"active":""}" onclick="lr24SetMode('7d')">7d</button><button class="volTabV24 ${m==="30d"?"active":""}" onclick="lr24SetMode('30d')">30d</button></div><div class="volHintV24">${lr24T("Ищем монеты с движением, объёмом и достаточной ликвидностью. Не финансовая рекомендация.","Finding coins with movement, volume and enough liquidity. Not financial advice.")}</div>`;host.appendChild(d)}catch(e){}}
-function lr24LiveKey(k){return LR24_LIVE_KEY+"_"+k}function lr24ToggleLive(k){let cur=localStorage.getItem(lr24LiveKey(k))==="1";localStorage.setItem(lr24LiveKey(k),cur?"0":"1");if(typeof renderWatch==="function")renderWatch(window.openCoinKey||k);setTimeout(lr24EnhanceCards,150)}
-function lr24EnhanceCards(){try{document.querySelectorAll("[data-coin-key]").forEach(card=>{let k=card.getAttribute("data-coin-key"),c=(typeof coinStore!=="undefined"&&coinStore.get(k))||(typeof watchItems==="function"?watchItems().find(x=>key(x)===k):null)||(typeof lastResults!=="undefined"?lastResults.find(x=>key(x)===k):null);if(!c)return;let sig=lr24Signal(c),zones=lr24Zones(c),run=localStorage.getItem(lr24LiveKey(k))==="1",host=card.querySelector(".chips,.badges,.tagRow");if(host&&!host.querySelector(".volScoreChipV24")){let chip=document.createElement("span");chip.className="volBadgeV24 volScoreChipV24 "+(sig.score>=75?"good":sig.score>=55?"warn":"");chip.textContent="Vol "+sig.score;host.appendChild(chip)}let btn=card.querySelector(".liveBtnV24");if(!btn){btn=document.createElement("button");btn.className="liveBtnV24";btn.onclick=e=>{e.stopPropagation();lr24ToggleLive(k)};let right=card.querySelector(".right,.coinRight,.actions")||(card.querySelector(".score")||{}).parentElement;if(right)right.appendChild(btn)}btn.classList.toggle("running",run);btn.textContent=run?lr24T("Пауза","Pause"):lr24T("Пуск","Start");let details=card.querySelector(".details");if(details&&card.classList.contains("open")){let block=details.querySelector(".tradeSignalV24");if(!block){block=document.createElement("div");block.className="tradeSignalV24";let explain=details.querySelector(".explain");if(explain)details.insertBefore(block,explain);else details.insertBefore(block,details.firstChild)}block.innerHTML=`<div class="tradeSignalTopV24"><div><div class="signalStatusV24">Live Trade Radar · ${run?lr24T("активен","running"):lr24T("пауза","paused")}</div><div class="signalStatusV24">${sig.status}</div></div><div class="signalScoreV24">${sig.score}/100</div></div><div class="signalGridV24"><div class="signalCellV24"><small>${lr24T("Зона покупки","Buy zone")}</small><b>${zones.buy}</b></div><div class="signalCellV24"><small>${lr24T("Фиксация","Take profit")}</small><b>${zones.fix}</b></div><div class="signalCellV24"><small>${lr24T("Волатильность","Volatility")}</small><b>${Math.abs(lr24Num(c.price_change_percentage_24h)).toFixed(1)}%</b></div><div class="signalCellV24"><small>${lr24T("Риск","Risk")}</small><b>${zones.risk}</b></div></div>`}})}catch(e){}}
-document.addEventListener("DOMContentLoaded",()=>{setTimeout(lr24RenderPanel,200);setTimeout(lr24EnhanceCards,500)});document.addEventListener("click",()=>setTimeout(lr24EnhanceCards,180));setInterval(lr24EnhanceCards,5000);
+
+/* v25 Volatility Scanner + AI Analysis Card */
+function v25T(ru,en){
+  try{
+    if(typeof lrLang!=="undefined" && lrLang==="en") return en;
+    const b=document.body.innerText||"";
+    if(b.includes("Start scan") || b.includes("Found")) return en;
+  }catch(e){}
+  return ru;
+}
+function v25N(x){ x=Number(x||0); return isFinite(x)?x:0; }
+function v25Money(x){
+  x=Number(x||0);
+  if(!isFinite(x)) x=0;
+  if(Math.abs(x)>=1e9) return "$"+(x/1e9).toFixed(1)+"B";
+  if(Math.abs(x)>=1e6) return "$"+(x/1e6).toFixed(1)+"M";
+  if(Math.abs(x)>=1e3) return "$"+(x/1e3).toFixed(0)+"K";
+  if(Math.abs(x)<0.01 && x!==0) return "$"+x.toPrecision(3);
+  return "$"+x.toFixed(2);
+}
+function v25Price(x){
+  x=Number(x||0);
+  if(!isFinite(x)||x===0) return "—";
+  if(Math.abs(x)<0.01) return "$"+x.toPrecision(4);
+  return "$"+x.toFixed(4).replace(/0+$/,"").replace(/\.$/,"");
+}
+function v25Score(c){
+  const ch=Math.abs(v25N(c&&c.price_change_percentage_24h));
+  const vol=v25N(c&&c.total_volume);
+  const liq=v25N(c&&(c.liquidity_usd||c.liquidity||c.liq));
+  const cap=v25N(c&&(c.market_cap||c.mcap));
+  let s=0;
+  s+=Math.min(30,ch*1.15);
+  if(vol>0&&liq>0)s+=Math.min(25,(vol/Math.max(liq,1))*7);
+  if(liq>=50000)s+=12;
+  if(cap>0&&cap<50000000)s+=12;
+  if(cap>=100000&&cap<=15000000)s+=8;
+  if(ch>=7&&ch<=45)s+=10;
+  if(ch>70)s-=12;
+  return Math.max(0,Math.min(100,Math.round(s)));
+}
+function v25Status(c){
+  const s=v25Score(c);
+  const ch=v25N(c&&c.price_change_percentage_24h);
+  if(s<40)return v25T("Не входить","Avoid");
+  if(s<60)return v25T("Наблюдать","Watch");
+  if(s<75)return ch<0?v25T("Просадка: проверить","Dip: check"):v25T("Возможный вход","Possible entry");
+  if(s<90)return v25T("Сильный сигнал","Strong signal");
+  return v25T("Перегрев, осторожно","Overheated, caution");
+}
+function v25Trend(c){
+  const ch=v25N(c&&c.price_change_percentage_24h);
+  const t=String((c&&(c._trend||c.trend))||"").toLowerCase();
+  if(t.includes("up")||t.includes("вос")||ch>7)return v25T("восходящий","uptrend");
+  if(t.includes("down")||t.includes("нис")||ch<-7)return v25T("нисходящий","downtrend");
+  return v25T("боковик","sideways");
+}
+function v25Zones(c){
+  const p=v25N(c&&c.current_price);
+  if(!p)return{buy:"—",fix:"—",stop:"—"};
+  return{
+    buy:`${v25Price(p*0.92)}–${v25Price(p*0.97)}`,
+    fix:`${v25Price(p*1.10)} / ${v25Price(p*1.15)} / ${v25Price(p*1.20)}`,
+    stop:v25Price(p*0.88)
+  };
+}
+function v25AiText(c){
+  const cap=v25Money((c&&(c.market_cap||c.mcap))||0);
+  const liq=v25Money((c&&(c.liquidity_usd||c.liquidity||c.liq))||0);
+  const vol=v25Money((c&&c.total_volume)||0);
+  const ch=v25N(c&&c.price_change_percentage_24h);
+  const score=v25Score(c);
+  const trend=v25Trend(c);
+  let risk=v25T("средний","medium");
+  if(score<45)risk=v25T("высокий","high");
+  if(score>70)risk=v25T("контролируемый","controlled");
+  return `${v25T("Капитализация","Market cap")} ${cap}. ${v25T("Ликвидность","Liquidity")} ${liq}. ${v25T("Объём 24ч","24h volume")} ${vol}. ${v25T("Движение","Move")} ${ch.toFixed(1)}%. ${v25T("Тренд","Trend")}: ${trend}. ${v25T("Риск","Risk")}: ${risk}.`;
+}
+function v25SourceUrl(c,type){
+  try{
+    if(type==="dex" && c.url)return c.url;
+    if(type==="cmc" && typeof cmcUrl==="function")return cmcUrl(c);
+    if(type==="cg" && typeof cgUrl==="function")return cgUrl(c);
+  }catch(e){}
+  return "#";
+}
+function v25Chart(ch){
+  ch=Number(ch||0);
+  const up=ch>=0;
+  const pts=up?"10,62 45,54 80,58 120,38 165,42 215,20 270,26 330,14":"10,24 45,31 80,26 120,45 165,42 215,58 270,52 330,66";
+  const col=up?"#22c55e":"#ef4444";
+  return `<svg viewBox="0 0 340 86" preserveAspectRatio="none"><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><polyline points="${pts} 340,86 0,86" fill="${up?'rgba(34,197,94,.10)':'rgba(239,68,68,.10)'}" stroke="none"/></svg>`;
+}
+function v25PassportHtml(c){
+  const z=v25Zones(c);
+  const ch=v25N(c&&c.price_change_percentage_24h);
+  const score=v25Score(c);
+  const cap=v25Money((c&&(c.market_cap||c.mcap))||0);
+  const liq=v25Money((c&&(c.liquidity_usd||c.liquidity||c.liq))||0);
+  const vol=v25Money((c&&c.total_volume)||0);
+  const age=(c&&c.age_days)?String(c.age_days)+v25T("д","d"):"—";
+  return `<div class="v25Passport" onclick="event.stopPropagation()">
+    <div class="v25SectionTitle">${v25T("Паспорт монеты","Coin passport")}</div>
+    <div class="v25MainStats">
+      <div class="v25Stat"><small>${v25T("Цена","Price")}</small><b>${v25Price(c&&c.current_price)}</b></div>
+      <div class="v25Stat"><small>${v25T("Капитализация","Market cap")}</small><b>${cap}</b></div>
+      <div class="v25Stat"><small>${v25T("Ликвидность","Liquidity")}</small><b>${liq}</b></div>
+      <div class="v25Stat"><small>${v25T("Объём 24ч","Volume 24h")}</small><b>${vol}</b></div>
+      <div class="v25Stat"><small>${v25T("Движение 24ч","Move 24h")}</small><b>${(ch>0?"+":"")+ch.toFixed(1)}%</b></div>
+      <div class="v25Stat"><small>${v25T("Возраст","Age")}</small><b>${age}</b></div>
+    </div>
+
+    <div class="v25MiniChart">${v25Chart(ch)}</div>
+
+    <div class="v25Radar">
+      <div class="v25RadarTop">
+        <div>
+          <div class="v25Status">Live Trade Radar</div>
+          <div class="v25Status">${v25Status(c)}</div>
+        </div>
+        <div class="v25Signal">${score}/100</div>
+      </div>
+      <div class="v25Zones">
+        <div class="v25Zone"><small>${v25T("Зона входа","Entry zone")}</small><b>${z.buy}</b></div>
+        <div class="v25Zone"><small>${v25T("Фиксация","Take profit")}</small><b>${z.fix}</b></div>
+        <div class="v25Zone"><small>${v25T("Отмена идеи","Invalidation")}</small><b>${z.stop}</b></div>
+        <div class="v25Zone"><small>${v25T("Тренд","Trend")}</small><b>${v25Trend(c)}</b></div>
+      </div>
+    </div>
+
+    <div class="v25Ai"><b>${v25T("AI анализ","AI analysis")}:</b> ${v25AiText(c)}</div>
+
+    <div class="v25Sources">
+      <a class="linkBtn" target="_blank" rel="noopener" href="${v25SourceUrl(c,'dex')}">Dex ↗</a>
+      <a class="linkBtn" target="_blank" rel="noopener" href="${v25SourceUrl(c,'cmc')}">CMC ↗</a>
+      <a class="linkBtn" target="_blank" rel="noopener" href="${v25SourceUrl(c,'cg')}">CG ↗</a>
+    </div>
+  </div>`;
+}
+function v25Apply(){
+  try{
+    document.querySelectorAll("[data-coin-key].open").forEach(card=>{
+      const details=card.querySelector(".details")||card;
+      if(details.querySelector(".v25Passport"))return;
+      const k=card.getAttribute("data-coin-key");
+      const c=(typeof coinStore!=="undefined"&&coinStore.get(k))||
+              (typeof watchItems==="function"?watchItems().find(x=>key(x)===k):null)||
+              (typeof lastResults!=="undefined"?lastResults.find(x=>key(x)===k):null);
+      if(!c)return;
+
+      details.querySelectorAll(".tradeBox,.aiTrade,.tradeLayer,.positionPanelV19,.positionPanelV20,.positionPanelV21,.tradePositionV18,.portfolioBox,.myPosition,.positionBox,.compactExtraV20,.compactExtraV21,.compactExtraV24").forEach(el=>el.remove());
+      const oldLinks=details.querySelector(".links,.compactLinksV19,.compactLinksV20,.compactLinksV21");
+      if(oldLinks)oldLinks.remove();
+      const oldExplain=details.querySelector(".explain");
+      if(oldExplain)oldExplain.remove();
+
+      const div=document.createElement("div");
+      div.innerHTML=v25PassportHtml(c);
+      details.insertBefore(div.firstElementChild, details.firstChild);
+    });
+  }catch(e){}
+}
+document.addEventListener("DOMContentLoaded",()=>{setTimeout(v25Apply,200);setTimeout(v25Apply,700);});
+document.addEventListener("click",()=>{setTimeout(v25Apply,120);setTimeout(v25Apply,500);});
+setInterval(v25Apply,2500);

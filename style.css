@@ -651,13 +651,236 @@ button,select,input,a{pointer-events:auto!important;touch-action:manipulation}
 .compactExtraV21 + .compactExtraV21,
 .compactExtraV20 + .compactExtraV20{display:none!important}
 
-/* v24 Volatility Scanner over v23 */
-.volPanelV24{margin:14px 0;padding:14px;border-radius:24px;background:rgba(148,163,184,.06);border:1px solid rgba(148,163,184,.18)}
-.volTitleV24{font-size:18px;font-weight:900;margin-bottom:10px}.volTabsV24{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.volTabV24{min-height:38px;border-radius:16px;border:1px solid rgba(148,163,184,.22);background:rgba(255,255,255,.045);font-size:13px;font-weight:850}.volTabV24.active{border-color:rgba(34,197,94,.48);color:#22c55e;background:rgba(34,197,94,.08)}
-.volHintV24{margin-top:10px;font-size:12px;line-height:1.35;color:var(--muted,#6b7280)}
-.volBadgeV24{display:inline-flex;align-items:center;justify-content:center;min-height:28px;padding:6px 10px;border-radius:999px;border:1px solid rgba(148,163,184,.22);background:rgba(148,163,184,.08);font-size:12px;font-weight:850;white-space:nowrap}.volBadgeV24.good{color:#22c55e;border-color:rgba(34,197,94,.34)}.volBadgeV24.warn{color:#f59e0b;border-color:rgba(245,158,11,.34)}
-.liveBtnV24{min-width:64px!important;height:36px!important;border-radius:14px!important;padding:0 12px!important;font-size:13px!important;font-weight:900!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:5px!important}.liveBtnV24.running{color:#22c55e!important;border-color:rgba(34,197,94,.35)!important;background:rgba(34,197,94,.08)!important}
-.tradeSignalV24{margin-top:12px;padding:12px;border-radius:20px;background:rgba(15,23,42,.18);border:1px solid rgba(148,163,184,.18)}.tradeSignalTopV24{display:flex;justify-content:space-between;align-items:center;gap:10px}.signalScoreV24{font-size:28px;font-weight:950;color:#22c55e}.signalStatusV24{font-size:13px;font-weight:850;color:var(--muted,#6b7280)}
-.signalGridV24{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:10px}.signalCellV24{padding:8px 9px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(148,163,184,.14)}.signalCellV24 small{display:block;font-size:10px;font-weight:850;color:var(--muted,#6b7280);margin-bottom:3px}.signalCellV24 b{display:block;font-size:13px;line-height:1.15}
-.coin.open .details .compactExtraV20,.coin.open .details .compactExtraV21,.coin.open .details .compactExtraV24{display:none!important}
+
+/* v25 Volatility Scanner + AI Analysis Card */
+
+/* Keep v23 compact card, remove old position/trade block */
+.positionPanelV19,
+.positionPanelV20,
+.positionPanelV21,
+.tradePositionV18,
+.portfolioBox,
+.myPosition,
+.positionBox{
+  display:none!important;
+}
+
+/* Hide duplicated old trade layer */
+.tradeBox,
+.aiTrade,
+.tradeLayer,
+.details > h3{
+  display:none!important;
+}
+
+/* Remove extra duplicate chip row from v20/v21 */
+.coin.open .details .compactExtraV20,
+.coin.open .details .compactExtraV21,
+.coin.open .details .compactExtraV24{
+  display:none!important;
+}
+
+/* Better right side alignment: trend icon / score / plus-minus */
+.coin .right,
+.coin .coinRight,
+.coin .actions,
+.coinCard .right,
+.coinCard .coinRight,
+.coinCard .actions,
+.card .right,
+.card .coinRight,
+.card .actions{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:9px!important;
+}
+
+.coin .score,
+.coinCard .score,
+.card .score{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  line-height:1!important;
+  margin:0!important;
+  min-width:54px!important;
+}
+
+.coin .addBtn,
+.coin .removeBtn,
+.coin .watchBtn,
+.coin .trendBtn,
+.coin .openBtn,
+.coin .externalBtn,
+.coin .coinAction,
+.coinCard .addBtn,
+.coinCard .removeBtn,
+.coinCard .watchBtn,
+.coinCard .trendBtn,
+.coinCard .openBtn,
+.coinCard .externalBtn,
+.coinCard .coinAction{
+  width:42px!important;
+  height:42px!important;
+  min-width:42px!important;
+  border-radius:15px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0!important;
+}
+
+/* Simplify old expanded metric grids */
+.coin.open .analysisGrid,
+.coin.open .metricGrid,
+.coin.open .metricsGrid,
+.coin.open .detailGrid,
+.coin.open .bigMetrics,
+.coin.open .detailsGrid,
+.coin.open .details > .metric,
+.coin.open .details > .metricCard,
+.coin.open .details > .statCard{
+  display:none!important;
+}
+
+.v25Passport{
+  margin-top:14px;
+  padding:14px;
+  border-radius:22px;
+  background:rgba(148,163,184,.055);
+  border:1px solid rgba(148,163,184,.18);
+}
+.v25SectionTitle{
+  font-size:15px;
+  font-weight:950;
+  margin-bottom:10px;
+  letter-spacing:-.01em;
+}
+.v25MainStats{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+.v25Stat{
+  padding:10px 11px;
+  border-radius:16px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(148,163,184,.14);
+}
+.v25Stat small{
+  display:block;
+  color:var(--muted,#6b7280);
+  font-size:10px;
+  font-weight:850;
+  margin-bottom:4px;
+}
+.v25Stat b{
+  display:block;
+  font-size:15px;
+  line-height:1.12;
+}
+.v25Radar{
+  margin-top:10px;
+  padding:12px;
+  border-radius:18px;
+  background:rgba(15,23,42,.20);
+  border:1px solid rgba(148,163,184,.18);
+}
+.v25RadarTop{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.v25Signal{
+  font-size:30px;
+  font-weight:950;
+  color:#22c55e;
+  line-height:1;
+}
+.v25Status{
+  color:var(--muted,#6b7280);
+  font-size:13px;
+  font-weight:850;
+}
+.v25Zones{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin-top:10px;
+}
+.v25Zone{
+  padding:9px;
+  border-radius:14px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(148,163,184,.14);
+}
+.v25Zone small{
+  display:block;
+  color:var(--muted,#6b7280);
+  font-size:10px;
+  font-weight:850;
+  margin-bottom:4px;
+}
+.v25Zone b{
+  font-size:13px;
+  line-height:1.15;
+}
+.v25Ai{
+  margin-top:10px;
+  padding:12px 13px;
+  border-radius:18px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(148,163,184,.16);
+  color:var(--muted,#6b7280);
+  font-size:13px;
+  line-height:1.38;
+  font-weight:650;
+}
+.v25Ai b{
+  color:var(--text,#f9fafb);
+}
+.v25MiniChart{
+  margin-top:10px;
+  height:86px;
+  border-radius:18px;
+  background:
+    linear-gradient(180deg,rgba(34,197,94,.07),rgba(34,197,94,0)),
+    repeating-linear-gradient(90deg,rgba(148,163,184,.08) 0 1px,transparent 1px 32px),
+    repeating-linear-gradient(0deg,rgba(148,163,184,.07) 0 1px,transparent 1px 24px);
+  border:1px solid rgba(148,163,184,.16);
+  position:relative;
+  overflow:hidden;
+}
+.v25MiniChart svg{
+  width:100%;
+  height:100%;
+  display:block;
+}
+.v25Sources{
+  display:flex;
+  gap:8px;
+  margin-top:10px;
+}
+.v25Sources a,
+.v25Sources button,
+.coin.open .links .linkBtn,
+.coin.open .compactLinksV19 .linkBtn,
+.coin.open .compactLinksV20 .linkBtn,
+.coin.open .compactLinksV21 .linkBtn{
+  width:auto!important;
+  min-width:52px!important;
+  height:32px!important;
+  padding:0 11px!important;
+  border-radius:12px!important;
+  font-size:13px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+.coin.open .explain{
+  display:none!important;
+}

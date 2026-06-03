@@ -1,6 +1,5 @@
-# Lowcap Radar AI v23
+# Lowcap Radar AI v24 — Volatility Scanner
 
-- Убрано мигание Plan + My position.
-- Отключена постоянная перерисовка позиции.
-- Обновляются только PnL/Now.
-- Удаляются дублирующиеся chips.
+Полная версия поверх стабильной v23.
+
+Добавлено: Volatility Scanner 24h/7d/30d, Vol score, Пуск/Пауза, Live Trade Radar, сигнал 0–100, зоны покупки/фиксации.

@@ -650,3 +650,14 @@ button,select,input,a{pointer-events:auto!important;touch-action:manipulation}
 .compactExtraV21 + .compactExtraV20,
 .compactExtraV21 + .compactExtraV21,
 .compactExtraV20 + .compactExtraV20{display:none!important}
+
+/* v24 Volatility Scanner over v23 */
+.volPanelV24{margin:14px 0;padding:14px;border-radius:24px;background:rgba(148,163,184,.06);border:1px solid rgba(148,163,184,.18)}
+.volTitleV24{font-size:18px;font-weight:900;margin-bottom:10px}.volTabsV24{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.volTabV24{min-height:38px;border-radius:16px;border:1px solid rgba(148,163,184,.22);background:rgba(255,255,255,.045);font-size:13px;font-weight:850}.volTabV24.active{border-color:rgba(34,197,94,.48);color:#22c55e;background:rgba(34,197,94,.08)}
+.volHintV24{margin-top:10px;font-size:12px;line-height:1.35;color:var(--muted,#6b7280)}
+.volBadgeV24{display:inline-flex;align-items:center;justify-content:center;min-height:28px;padding:6px 10px;border-radius:999px;border:1px solid rgba(148,163,184,.22);background:rgba(148,163,184,.08);font-size:12px;font-weight:850;white-space:nowrap}.volBadgeV24.good{color:#22c55e;border-color:rgba(34,197,94,.34)}.volBadgeV24.warn{color:#f59e0b;border-color:rgba(245,158,11,.34)}
+.liveBtnV24{min-width:64px!important;height:36px!important;border-radius:14px!important;padding:0 12px!important;font-size:13px!important;font-weight:900!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:5px!important}.liveBtnV24.running{color:#22c55e!important;border-color:rgba(34,197,94,.35)!important;background:rgba(34,197,94,.08)!important}
+.tradeSignalV24{margin-top:12px;padding:12px;border-radius:20px;background:rgba(15,23,42,.18);border:1px solid rgba(148,163,184,.18)}.tradeSignalTopV24{display:flex;justify-content:space-between;align-items:center;gap:10px}.signalScoreV24{font-size:28px;font-weight:950;color:#22c55e}.signalStatusV24{font-size:13px;font-weight:850;color:var(--muted,#6b7280)}
+.signalGridV24{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:10px}.signalCellV24{padding:8px 9px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(148,163,184,.14)}.signalCellV24 small{display:block;font-size:10px;font-weight:850;color:var(--muted,#6b7280);margin-bottom:3px}.signalCellV24 b{display:block;font-size:13px;line-height:1.15}
+.coin.open .details .compactExtraV20,.coin.open .details .compactExtraV21,.coin.open .details .compactExtraV24{display:none!important}
